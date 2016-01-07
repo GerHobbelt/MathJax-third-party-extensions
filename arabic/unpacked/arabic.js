@@ -28,12 +28,13 @@
  *
  */
 
-(function () {
+(function() {
   /*************************************************************
    * Just a dummy separator between modules.
    * TOOD: Add some documentation for the module bellow.
    *
    */
+  // TODO: Styles aren't being applied well!
   MathJax.Hub.Config({
     'HTML-CSS': {
       // TODO: Make the font configurable by user
@@ -60,7 +61,6 @@
       extensions: ['HTML.js'],
     }
   });
-
 
   /*************************************************************
    * Just a dummy separator between modules.
@@ -464,7 +464,6 @@
       var MML = MathJax.ElementJax.mml;
 
       var mnToHTML = MML.mn.prototype.toHTML;
-
       var flipHorizontalElement = function(token, element) {
         var className = '';
 
@@ -496,6 +495,7 @@
       var miToHTML = MML.mi.prototype.toHTML;
       MML.mi.Augment({
         toHTML: function(span) {
+
           var element = miToHTML.apply(this, [span]);
 
           if (Node.TEXT_NODE === element.firstChild.nodeType) {
@@ -527,5 +527,5 @@
    * TOOD: Add some documentation for the module bellow.
    *
    */
-  MathJax.Ajax.loadComplete("[Contrib]/arabic/arabic.js");
+   MathJax.Ajax.loadComplete("[Contrib]/arabic/unpacked/arabic.js");
 }());
