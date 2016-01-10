@@ -34,27 +34,26 @@
    * TOOD: Add some documentation for the module bellow.
    *
    */
-  // TODO: Styles aren't being applied well!
   MathJax.Hub.Config({
     'HTML-CSS': {
       // TODO: Make the font configurable by user
-      undefinedFamily: 'Amiri'
-    },
-    styles: {
-      '.mfliph': {
-        'display': 'inline-block !important',
-        '-moz-transform': 'scaleX(-1)',
-        '-webkit-transform': 'scaleX(-1)',
-        '-o-transform': 'scaleX(-1)',
-        'transform': 'scaleX(-1)',
-        '-ms-filter': 'fliph',
-        'filter': 'fliph'
-      },
-      '.mar': {
-        // TODO: Make the font configurable by user
-        'font-family': 'Amiri !important',
-        'font-style': 'normal !important',
-      },
+      undefinedFamily: 'Amiri',
+      styles: {
+        '.mfliph': {
+          'display': 'inline-block !important',
+          '-moz-transform': 'scaleX(-1)',
+          '-webkit-transform': 'scaleX(-1)',
+          '-o-transform': 'scaleX(-1)',
+          'transform': 'scaleX(-1)',
+          '-ms-filter': 'fliph',
+          'filter': 'fliph'
+        },
+        '.mar': {
+          // TODO: Make the font configurable by user
+          'font-family': 'Amiri !important',
+          'font-style': 'normal !important',
+        },
+      }
     },
     TeX: {
       // TODO: Review the dependecies!
