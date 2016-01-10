@@ -29,59 +29,59 @@
  */
 
 (function() {
-    function TEX_ARABIC() { // MODULE
-      MathJax.Hub.Config({
-        TeX: {
-          // TODO: Review the dependecies!
-          extensions: ['HTML.js'],
+  var TEX_JAX_ARABIC_SUPPORT = function() {
+    MathJax.Hub.Config({
+      TeX: {
+        // TODO: Review the dependecies!
+        extensions: ['HTML.js'],
+      }
+    });
+
+    MathJax.Hub.Register.StartupHook('TeX HTML Ready', function() {
+      var TEX = MathJax.InputJax.TeX;
+      var TEXDEF = TEX.Definitions;
+
+      TEXDEF.Add({
+        macros: {
+          'ar': 'HandleArabic',
+          'alwaysar': 'MarkAsArabic',
+          'fliph': 'HandleFlipHorizontal'
         }
       });
 
-      MathJax.Hub.Register.StartupHook('TeX HTML Ready', function() {
-          var TEX = MathJax.InputJax.TeX;
-          var TEXDEF = TEX.Definitions;
+      TEX.Parse.Augment({
+        HandleArabic: function(name) {
+          // TODO: Make the `documentElement.lang` check configurable
+          var pageLang = document.documentElement.lang;
+          if (pageLang === 'ar') {
+            this.MarkAsArabic(name);
+          }
+        },
+        MarkAsArabic: function(name) {
+          this.stack.env.lang = 'ar';
 
-          TEXDEF.Add({
-            macros: {
-              'ar': 'HandleArabic',
-              'alwaysar': 'MarkAsArabic',
-              'fliph': 'HandleFlipHorizontal'
-            }
+          var arg = this.GetArgumentMML(name);
+
+          this.Push(this.flipHorizontal(arg).With({
+            lang: 'ar'
+          }));
+        },
+        HandleFlipHorizontal: function(name) {
+          var arg = this.GetArgumentMML(name);
+          this.Push(this.flipHorizontal(arg));
+        },
+        flipHorizontal: function(token) {
+          return token.With({
+            fliph: !token.Get('fliph')
           });
-
-          var texParseMMLToken = TEX.Parse.prototype.mmlToken;
-
-          TEX.Parse.Augment({
-              HandleArabic: function(name) {
-                // TODO: Make the `documentElement.lang` check configurable
-                var pageLang = document.documentElement.lang;
-                if (pageLang === 'ar') {
-                  this.MarkAsArabic(name);
-                }
-              },
-              MarkAsArabic: function(name) {
-                this.stack.env.lang = 'ar';
-
-                var arg = this.GetArgumentMML(name);
-
-                this.Push(this.flipHorizontal(arg).With({
-                  lang: 'ar'
-                }));
-              },
-              HandleFlipHorizontal: function(name) {
-                var arg = this.GetArgumentMML(name);
-                this.Push(this.flipHorizontal(arg));
-              },
-              flipHorizontal: function(token) {
-                return token.With({
-                  fliph: !token.Get('fliph')
-                });
-              });
-          });
+        }
       });
+    });
   };
 
-  function ARABIC_UNITS_GENERATOR() { // MODULE
+  var ARABIC_UNITS_GENERATOR = (function() {
+    var TEX = MathJax.InputJax.TeX;
+
     var ArabicTeX = function(english, arabic) {
       return function(name) {
         var tex;
@@ -197,7 +197,7 @@
       //   'thermalconduct': 'ThermalConductivity': 'K', 'ت_ح',
       //   'area': 'Area': 'A', 'م',
       //   'heattransfcoeff': 'HeatTransferCoefficient': 'h', 'م.ح',
-    }
+    };
 
 
     return {
@@ -226,11 +226,11 @@
       ArabicText: ArabicText,
       ArabicTextWithSpace: ArabicTextWithSpace,
       ArabicSymbols: ArabicSymbols
-    }
-  }();
+    };
+  }());
 
 
-  function HTML_CSS_ARABIC() { // MODULE
+  var HTML_CSS_JAX_ARABIC_SUPORT = function() {
     MathJax.Hub.Config({
       'HTML-CSS': {
         // TODO: Make the font configurable by user
@@ -319,201 +319,204 @@
   };
 
 
-  function ARABIC_TEX_UNITS() { // MODULE
+  var ARABIC_UNITS_TEX_JAX = function() { // MODULE
     MathJax.Hub.Register.StartupHook('TeX HTML Ready', function() {
-        var TEX = MathJax.InputJax.TeX;
-        var TEXDEF = TEX.Definitions;
+      var TEX = MathJax.InputJax.TeX;
+      var TEXDEF = TEX.Definitions;
 
-        TEXDEF.Add({
-          macros: ARABIC_UNITS_GENERATOR.getDefinitions()
-        });
-
-
-        TEX.Parse.Augment(ARABIC_UNITS_GENERATOR.getParsers());
+      TEXDEF.Add({
+        macros: ARABIC_UNITS_GENERATOR.getDefinitions()
+      });
 
 
-        /*************************************************************
-         * Just a dummy separator between modules.
-         * TOOD: Add some documentation for the module bellow.
-         *
-         */
-        var NUMBERS_MAP = {
-          '0': '٠',
-          '1': '١',
-          '2': '٢',
-          '3': '٣',
-          '4': '٤',
-          '5': '٥',
-          '6': '٦',
-          '7': '٧',
-          '8': '٨',
-          '9': '٩',
-          '\\.': '٫' // Decimal mark
-        };
+      TEX.Parse.Augment(ARABIC_UNITS_GENERATOR.getParsers());
 
 
-        /*************************************************************
-         * Just a dummy separator between modules.
-         * TOOD: Add some documentation for the module bellow.
-         *
-         */
-        var OPERATORS_MAP = {
-          // English to Arabic comma
-          ',': '،'
-        };
+      /*************************************************************
+       * Just a dummy separator between modules.
+       * TOOD: Add some documentation for the module bellow.
+       *
+       */
+      var NUMBERS_MAP = {
+        '0': '٠',
+        '1': '١',
+        '2': '٢',
+        '3': '٣',
+        '4': '٤',
+        '5': '٥',
+        '6': '٦',
+        '7': '٧',
+        '8': '٨',
+        '9': '٩',
+        '\\.': '٫' // Decimal mark
+      };
 
 
-        /*************************************************************
-         * Just a dummy separator between modules.
-         * TOOD: Add some documentation for the module bellow.
-         *
-         */
-        // TODO: Perhaps even this should be configurable!
-        var IDENTIFIERS_MAP = {
-          // Math functions
-          'sin': 'جا',
-          'cos': 'جتا',
-          'tan': 'ظا',
-
-          // Variable name
-          'a': 'ا',
-
-          // Variable name
-          // TODO: Use Arabic letter dotless beh 0x66e instead
-          'b': 'ب',
-
-          // Variable name.
-          // Suffixed with Unicdoe Arabic tatweel 0x0640
-          'c': 'حـ',
-
-          // Mixed use (Function, variable and (dx))
-          'd': 'د',
-
-          // Mixed use. With Unicdoe Arabic tatweel 0x0640
-          'e': 'هـ',
-
-          // Energy
-          'E': 'ط',
-
-          // Function name
-          // TODO: Use dotless qaf (ٯ) instead
-          'f': 'ق',
-
-          // Function name
-          'g': 'د',
-
-          // Mixed use
-          'k': 'ك',
-
-          // Variable name
-          'n': 'ن',
-
-          // Meter
-          'm': 'م',
-
-          // Initial charge
-          'q': 'ش',
-
-          // Mixed use
-          'r': 'ر',
-          't': 'ت',
-
-          // Variable names
-          'x': 'س',
-          'y': 'ص',
-          'z': 'ع'
-        };
+      /*************************************************************
+       * Just a dummy separator between modules.
+       * TOOD: Add some documentation for the module bellow.
+       *
+       */
+      var OPERATORS_MAP = {
+        // English to Arabic comma
+        ',': '،'
+      };
 
 
-        TEX.Parse.Augment({
-          arabicNumber: function(token) {
-            var text = token.data[0].data[0];
-            var mapped = text;
+      /*************************************************************
+       * Just a dummy separator between modules.
+       * TOOD: Add some documentation for the module bellow.
+       *
+       */
+      // TODO: Perhaps even this should be configurable!
+      var IDENTIFIERS_MAP = {
+        // Math functions
+        'sin': 'جا',
+        'cos': 'جتا',
+        'tan': 'ظا',
 
-            if ('0' === mapped) {
-              // Special case for the Arabic zero
-              mapped = 'صفر';
-            } else {
-              Object.keys(NUMBERS_MAP).forEach(function(arabicNumber) {
-                var hindiNumber = NUMBERS_MAP[arabicNumber];
-                var regex = new RegExp('' + arabicNumber, 'g');
-                mapped = mapped.replace(regex, hindiNumber);
-              });
-            }
+        // Variable name
+        'a': 'ا',
 
-            if (mapped !== text) {
-              token.data[0].data[0] = mapped;
-              token = token.With({
-                fontLang: 'ar'
-              });
-            }
+        // Variable name
+        // TODO: Use Arabic letter dotless beh 0x66e instead
+        'b': 'ب',
 
-            return this.flipHorizontal(token);
-          },
-          arabicIdentifier: function(token) {
-            var text = token.data[0].data[0];
-            var mapped = text;
+        // Variable name.
+        // Suffixed with Unicdoe Arabic tatweel 0x0640
+        'c': 'حـ',
 
-            if ('chars' === token.data[0].type) {
-              // English Symbols like X and Y
-              Object.keys(IDENTIFIERS_MAP).forEach(function(enChar) {
-                var arChar = IDENTIFIERS_MAP[enChar];
-                var regex = new RegExp(enChar, 'g');
-                mapped = mapped.replace(regex, arChar);
-              });
-            }
+        // Mixed use (Function, variable and (dx))
+        'd': 'د',
 
-            if (mapped !== text) {
-              token.data[0].data[0] = mapped;
-              token = token.With({
-                fontLang: 'ar'
-              });
-            }
+        // Mixed use. With Unicdoe Arabic tatweel 0x0640
+        'e': 'هـ',
 
-            return this.flipHorizontal(token);
-          },
-          arabicOperator: function(token) {
-            var text = token.data[0].data[0];
-            var mapped = text;
+        // Energy
+        'E': 'ط',
 
-            Object.keys(OPERATORS_MAP).forEach(function(enOperator) {
-              var regex = new RegExp('' + enOperator, 'g');
-              var arOperator = OPERATORS_MAP[enOperator];
-              mapped = mapped.replace(regex, arOperator);
+        // Function name
+        // TODO: Use dotless qaf (ٯ) instead
+        'f': 'ق',
+
+        // Function name
+        'g': 'د',
+
+        // Mixed use
+        'k': 'ك',
+
+        // Variable name
+        'n': 'ن',
+
+        // Meter
+        'm': 'م',
+
+        // Initial charge
+        'q': 'ش',
+
+        // Mixed use
+        'r': 'ر',
+        't': 'ت',
+
+        // Variable names
+        'x': 'س',
+        'y': 'ص',
+        'z': 'ع'
+      };
+
+      var texParseMMLToken = TEX.Parse.prototype.mmlToken;
+
+      TEX.Parse.Augment({
+        arabicNumber: function(token) {
+          var text = token.data[0].data[0];
+          var mapped = text;
+
+          if ('0' === mapped) {
+            // Special case for the Arabic zero
+            mapped = 'صفر';
+          } else {
+            Object.keys(NUMBERS_MAP).forEach(function(arabicNumber) {
+              var hindiNumber = NUMBERS_MAP[arabicNumber];
+              var regex = new RegExp('' + arabicNumber, 'g');
+              mapped = mapped.replace(regex, hindiNumber);
+            });
+          }
+
+          if (mapped !== text) {
+            token.data[0].data[0] = mapped;
+            token = token.With({
+              fontLang: 'ar'
+            });
+          }
+
+          return this.flipHorizontal(token);
+        },
+        arabicIdentifier: function(token) {
+          var text = token.data[0].data[0];
+          var mapped = text;
+
+          if ('chars' === token.data[0].type) {
+            // English Symbols like X and Y
+            Object.keys(IDENTIFIERS_MAP).forEach(function(enChar) {
+              var arChar = IDENTIFIERS_MAP[enChar];
+              var regex = new RegExp(enChar, 'g');
+              mapped = mapped.replace(regex, arChar);
+            });
+          }
+
+          if (mapped !== text) {
+            token.data[0].data[0] = mapped;
+            token = token.With({
+              fontLang: 'ar'
+            });
+          }
+
+          return this.flipHorizontal(token);
+        },
+        arabicOperator: function(token) {
+          var text = token.data[0].data[0];
+          var mapped = text;
+
+          Object.keys(OPERATORS_MAP).forEach(function(enOperator) {
+            var regex = new RegExp('' + enOperator, 'g');
+            var arOperator = OPERATORS_MAP[enOperator];
+            mapped = mapped.replace(regex, arOperator);
+          });
+
+          if (mapped !== text) {
+            token = this.flipHorizontal(token).With({
+              fontLang: 'ar'
             });
 
-            if (mapped !== text) {
-              token = this.flipHorizontal(token).With({
-                fontLang: 'ar'
-              });
-
-              token.data[0].data[0] = mapped;
-            }
-
-            return token;
-          },
-          mmlToken: function(token) {
-            // TODO: Check for possible incomparability with boldsymbol
-            // extension
-            var token = texParseMMLToken.apply(this, [token]);
-
-            if ('ar' === this.stack.env.lang) {
-              if ('mn' === token.type) {
-                token = this.arabicNumber(token);
-              } else if ('mi' === token.type) {
-                token = this.arabicIdentifier(token);
-              } else if ('mo' === token.type) {
-                token = this.arabicOperator(token);
-              }
-            }
-
-            return token;
+            token.data[0].data[0] = mapped;
           }
-        });
-      };
-    };
 
+          return token;
+        },
+        mmlToken: function(token) {
+          // TODO: Check for possible incomparability with boldsymbol
+          // extension
+          var parsedToken = texParseMMLToken.apply(this, [token]);
 
+          if ('ar' === this.stack.env.lang) {
+            if ('mn' === token.type) {
+              return this.arabicNumber(parsedToken);
+            } else if ('mi' === parsedToken.type) {
+              return this.arabicIdentifier(parsedToken);
+            } else if ('mo' === parsedToken.type) {
+              return this.arabicOperator(parsedToken);
+            }
+          }
 
-    MathJax.Ajax.loadComplete("[Contrib]/arabic/unpacked/arabic.js");
-  }());
+          return parsedToken;
+        }
+      });
+    });
+  };
+
+  TEX_JAX_ARABIC_SUPPORT();
+  HTML_CSS_JAX_ARABIC_SUPORT();
+  ARABIC_UNITS_TEX_JAX();
+
+  MathJax.Ajax.loadComplete("[Contrib]/arabic/unpacked/arabic.js");
+}());
