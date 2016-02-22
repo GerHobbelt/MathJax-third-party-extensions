@@ -36,10 +36,17 @@ One way to include the font is to add the following CSS from Google Fonts:
 ###Typeset an Arabic Equation
 The extension provides the following additional TeX commands to be typeset an Arabic equation:
 
- - `\alwaysar{EQUATION}`: A macro to translate and RTL'ize an `EQUATION`, where `EQUATION` can be anything from
-   `x = 1` to `e^x=\\lim_{n\\to\\infty}`. Wrap any TeX equation with it, and it *should* just work.
- - `\ar{EQUATION}` (**Recommended**): A similar macro to `\alwaysar{EQUATION}`, but it only translate and RTL'ize
-   the equation if the page is Arabic.
+####`\alwaysar`
+`\alwaysar{EQUATION}`: A macro to translate and RTL'ize an `EQUATION`, where `EQUATION` can be anything from
+`x = 1` to `e^x=\\lim_{n\\to\\infty}`. 
+
+Wrap any TeX equation with it, and it *should* just work.
+
+####`\ar`
+`\ar{EQUATION}` ( **Recommended** )
+
+A similar macro to `\alwaysar{EQUATION}`, but it only translate and RTL'ize
+the equation if the page is Arabic.
 
 Bellow is an example equation:
 
@@ -49,7 +56,7 @@ Bellow is an example equation:
 The above would render **x=1** with beautifully in an English page, while it should render **س=١** in an Arabic page.
 
 
-##Supported Features, so Far
+##Supported Features
  - Flip everything (almost) including:
      * Parentheses `()`, braces `{}`, and brackets `[]`
      * Things that should be flipped like: Integration `∫`, Root `√` and Sigma `Σ`
@@ -118,7 +125,7 @@ at the following extensions:
 Well, just issue a pull request to this repo and ping me (my GitHub username is @OmarIthawi). 
 Even better, grab my docker-based development environment from here so you can have a better development experience:
 
- - [Edraak/arabic-mathjax-dev](https://github.com/Edraak/arabic-mathjax-dev)
+ - [github.com/Edraak/arabic-mathjax-dev](https://github.com/Edraak/arabic-mathjax-dev)
 
 #License
 The MIT License
