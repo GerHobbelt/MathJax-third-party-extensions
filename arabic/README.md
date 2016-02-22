@@ -118,7 +118,7 @@ at the following extensions:
 Well, just issue a pull request to this repo and ping me (my GitHub username is @OmarIthawi). 
 Even better, grab my docker-based development environment from here so you can have a better development experience:
 
- - [arabic-mathjax-dev](https://github.com/Edraak/arabic-mathjax-dev)
+ - [Edraak/arabic-mathjax-dev](https://github.com/Edraak/arabic-mathjax-dev)
 
 #License
 The MIT License
@@ -130,7 +130,7 @@ Copyright (c) 2015-2016 The Queen Rania Foundation for Education and Development
  - Omar Al-Ithawi <i@omardo.com>
 
 
-#A bit of Background
+#A bit of a Background
 Why this plugin exists? Well, I could tell you an interesting story like I wanted to change the world, 
 but frankly we needed it to display Math equations for our Arabic learners at [Edraak.org](https://www.edraak.org), 
 and therefore I made it.
