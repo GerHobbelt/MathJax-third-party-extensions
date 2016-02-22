@@ -53,7 +53,8 @@ Bellow is an example equation:
     \ar{x=1}
 
 
-The above would render **x=1** with beautifully in an English page, while it should render **س=١** in an Arabic page.
+The above would render **x=1** beautifully in an English page, while it should render **س=١** in an Arabic page
+even more beautifully (I you love Arabic).
 
 
 ##Supported Features
