@@ -1,16 +1,17 @@
-#MathJax Arabic Extension
+# MathJax Arabic Extension
 This is an extension to MathJax (v2.5+), that provides basic Arabic support to MathJax.
 
 The extension so far only supports TeX input with HTML-CSS output. However, support to other input and output
 jaxes is possible.
 
-##Key Features
+## Key Features
 It provides the following:
-    - Flip the Equation and render it the Right-to-left (RTL) way!
-    - Translate commonly used identifiers and functions.
 
-##How to Use the Extension
-###Install the Extension
+  - Flip the Equation and render it the Right-to-left (RTL) way!
+  - Translate commonly used identifiers and functions.
+
+## How to Use the Extension
+### Install the Extension
 First you'd like to [install](http://mathjax.readthedocs.org/en/latest/installation.html)
 and [configure](http://mathjax.readthedocs.org/en/latest/configuration.html) the MathJax in your page.
 
@@ -24,8 +25,8 @@ Then you'll need to include the `arabic.js` as an extension, here's an example c
         ]
     });
 
-###The Amiri Font
-The extension relies (sort of) on the 
+### The Amiri Font
+The extension relies (sort of) on the
 [Amiri font](https://www.google.com/fonts#UsePlace:use/Collection:Amiri)
 to render beautifully (kinda).
 
@@ -33,31 +34,28 @@ One way to include the font is to add the following CSS from Google Fonts:
 
     <link href='https://fonts.googleapis.com/css?family=Amiri' rel='stylesheet' type='text/css'>
 
-###Typeset an Arabic Equation
+### Typeset an Arabic Equation
 The extension provides the following additional TeX commands to be typeset an Arabic equation:
 
-####`\alwaysar`
-`\alwaysar{EQUATION}`: A macro to translate and RTL'ize an `EQUATION`, where `EQUATION` can be anything from
-`x = 1` to `e^x=\\lim_{n\\to\\infty}`. 
+1. **`\alwaysar`**
 
-Wrap any TeX equation with it, and it *should* just work.
+   `\alwaysar{EQUATION}` A macro to translate and RTL'ize an `EQUATION`,  where `EQUATION` can be anything from
+   `x = 1` to `e^x=\\lim_{n\\to\\infty}`.
 
-####`\ar`
-`\ar{EQUATION}` ( **Recommended** )
+   Wrap any TeX equation with it, and it *should* just work.
 
-A similar macro to `\alwaysar{EQUATION}`, but it only translate and RTL'ize
-the equation if the page is Arabic.
+2. **`\ar`**
 
-Bellow is an example equation:
+   `\ar{EQUATION}` (**Recommended**) A similar macro to `\alwaysar{EQUATION}`, but it only translate and RTL'ize the equation if  the page is Arabic.
 
-    \ar{x=1}
+   Bellow is an example equation:
 
+       \ar{x=1}
 
-The above would render **x=1** beautifully in an English page, while it should render **س=١** in an Arabic page
-even more beautifully (I you love Arabic).
+   The above would render **x=1** beautifully in an English page, while it  should render **س=١** in an Arabic page
+   even more beautifully (I you love Arabic).
 
-
-##Supported Features
+## Supported Features
  - Flip everything (almost) including:
      * Parentheses `()`, braces `{}`, and brackets `[]`
      * Things that should be flipped like: Integration `∫`, Root `√` and Sigma `Σ`
@@ -65,10 +63,12 @@ even more beautifully (I you love Arabic).
  - Doesn't flip the things that should't be flipped,
    like the following letters: Theta `Θ`, Pi `π`, and Epsilon `ε`
 
- - Translate the basic trigonometric functions:
+ - Translate the basic math functions:
      * `\sin` --> `جا`
      * `\cos` --> `تا`
      * `\tan` --> `ظا`
+     * `\log` --> `لو`
+
 
  - Translate `\lim` into `نها`, Although some would prefer `غــا`, but that's just
    a preference, may someone can patch it to support `ar_IQ` for the Iraqi people!
@@ -77,12 +77,23 @@ even more beautifully (I you love Arabic).
      * Render the Arabic `0` as `صفر`, which is  usually preferred by Arabic Math textbooks.
      * One still can use the `0` in both languages using the command `\zero`.
 
+
+ - The following new commands:
+     * **Circle radius:** `\radius` Translates to `r` and `نق`
+     * **Area of circle:** (and other stuff) `\Area` Translates to `A` and `م`
+
+
  - Basic variable translation:
+     * `A` --> `أ`
+     * `B` --> `ب`
+     * `C` --> `حـ`
      * `a` --> `ا`
      * `b` --> `ب`
      * `c` --> `حـ`
      * `d` --> `د`
      * `e` --> `هـ`
+     * `m` --> `م`
+     * `l` --> `ل`
      * `n` --> `ن`
      * `f` --> `ق`
      * `g` --> `د`
@@ -93,16 +104,18 @@ even more beautifully (I you love Arabic).
      * `y` --> `ص`
      * `z` --> `ع`
 
+
  - Translation to other identifiers and operators like limits (`\lim`), sine, cosine and tan.
+
 
  - A very configurable translation utility to provide English/Arabic TeX
    commands (same command, with language-dependent output).
 
- - A configurable page language detection (defaults to the `lang` attribute of `<html>` tag.
+ - A configurable page language detection (defaults to the `lang` attribute of `<html>` tag).
 
  - It is generally configurable, but I haven't documented how to do it!
 
-##Experimental Stuff
+## Experimental Stuff
 Additional extensions for Physics and some Chemistry units and symbols exists,
 however, it is not tested/developed well. If you're curious, you can take a look
 at the following extensions:
@@ -110,37 +123,35 @@ at the following extensions:
  - [`phys1.js`](https://github.com/Edraak/arabic-mathjax-dev/blob/master/testcases/test-extensions/phys1.js):
    Contains general physics units like Farad and speed of light. Interesting stuff, but haven't had proper
    testing and usage (yet).
- 
+
  - [`phys2.js`](https://github.com/Edraak/arabic-mathjax-dev/blob/master/testcases/test-extensions/phys2.js):
    Additional advanced physics units that I don't understand as much!
- 
+
  - [`hacks.js`](https://github.com/Edraak/arabic-mathjax-dev/blob/master/testcases/test-extensions/hacks.js):
-   A hack to convert the English decimal mark from `.` to `٫` 
-   ([Arabic decimal mark, Unicode 0x066b](http://www.unicodemap.org/details/0x066B/index.html)). 
-   Although the Arabic decimal mark exists, I'm not sure if it is 
-   [common enough](https://en.wikipedia.org/wiki/Decimal_mark#Countries_using_Arabic_numerals_with_decimal_comma) 
+   A hack to convert the English decimal mark from `.` to `٫`
+   ([Arabic decimal mark, Unicode 0x066b](http://www.unicodemap.org/details/0x066B/index.html)).
+   Although the Arabic decimal mark exists, I'm not sure if it is
+   [common enough](https://en.wikipedia.org/wiki/Decimal_mark#Countries_using_Arabic_numerals_with_decimal_comma)
    to include it in the main installation.
 
-
-#How to Contribute
-Well, just issue a pull request to this repo and ping me (my GitHub username is @OmarIthawi). 
+# How to Contribute
+Well, just issue a pull request to this repo and ping me (my GitHub username is @OmarIthawi).
 Even better, grab my docker-based development environment from here so you can have a better development experience:
 
  - [github.com/Edraak/arabic-mathjax-dev](https://github.com/Edraak/arabic-mathjax-dev)
 
-#License
+# License
 The MIT License
 
 Copyright (c) 2015-2016 The Queen Rania Foundation for Education and Development
 
-#Author
+# Author
 
  - Omar Al-Ithawi <i@omardo.com>
 
-
-#A bit of a Background
-Why this plugin exists? Well, I could tell you an interesting story like I wanted to change the world, 
-but frankly we needed it to display Math equations for our Arabic learners at [Edraak.org](https://www.edraak.org), 
+# A bit of a Background
+Why this plugin exists? Well, I could tell you an interesting story like I wanted to change the world,
+but frankly we needed it to display Math equations for our Arabic learners at [Edraak.org](https://www.edraak.org),
 and therefore I made it.
 
 Well, it does change the world somehow, at the least in the eyes of our learners ^_^
