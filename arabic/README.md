@@ -52,8 +52,8 @@ The extension provides the following additional TeX commands to be typeset an Ar
 
        \ar{x=1}
 
-   The above would render **x=1** beautifully in an English page, while it  should render **س=١** in an Arabic page
-   even more beautifully (I you love Arabic).
+   The above would render **x=1** beautifully in an English page, while it should render **س=١** in an Arabic page
+   even more beautifully ( in my openion :) ).
 
 ## Supported Features
  - Flip everything (almost) including:

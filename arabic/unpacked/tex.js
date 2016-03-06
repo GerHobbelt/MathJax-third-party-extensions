@@ -2,6 +2,7 @@ MathJax.Hub.Register.StartupHook('Arabic TeX Startup', function () {
   MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
     var TEX = MathJax.InputJax.TeX;
     var texParseMMLToken = TEX.Parse.prototype.mmlToken;
+    var texParseAlignedArray = TEX.Parse.prototype.AlignedArray;
     var dict = MathJax.Hub.config.Arabic.dict;
 
 
@@ -72,24 +73,32 @@ MathJax.Hub.Register.StartupHook('Arabic TeX Startup', function () {
           return b.length - a.length;
         });
 
-        var text = token.data[0].data[0];
-        var mapped = text;
+        token.data.forEach(function (elem) {
+          elem.data.map(function (text) {
+            var mapped = text;
 
-        if ('chars' === token.data[0].type) {
-          // English Symbols like X and Y
-          identifiersKeys.forEach(function (enChar) {
-            var arChar = identifiersMap[enChar];
-            var regex = new RegExp(enChar, 'g');
-            mapped = mapped.replace(regex, arChar);
-          });
-        }
+            if ('chars' === elem.type) {
+              // English Symbols like X and Y
+              identifiersKeys.forEach(function (enChar) {
+                var arChar = identifiersMap[enChar];
+                var regex = new RegExp(enChar, 'g');
+                mapped = mapped.replace(regex, arChar);
+              });
+            }
 
-        if (mapped !== text) {
-          token.data[0].data[0] = mapped;
-          token = token.With({
-            fontLang: 'ar'
+            if (mapped !== text) {
+              token.With({
+                fontLang: 'ar'
+              });
+
+              elem.With({
+                fontLang: 'ar'
+              })
+            }
+
+            return mapped;
           });
-        }
+        });
 
         return this.flipHorizontal(token);
       },
@@ -132,15 +141,40 @@ MathJax.Hub.Register.StartupHook('Arabic TeX Startup', function () {
         var parsedToken = texParseMMLToken.apply(this, [token]);
 
         if ('ar' === this.stack.env.lang) {
-          if ('mn' === token.type) {
-            return this.arabicNumber(parsedToken);
-          } else if ('mi' === parsedToken.type) {
-            return this.arabicIdentifier(parsedToken);
-          } else if ('mo' === parsedToken.type) {
-            return this.arabicOperator(parsedToken);
-          }
+          this.makeItArabic(parsedToken);
         }
+
         return parsedToken;
+      },
+      makeItArabic: function (token) {
+        if ('mn' === token.type) {
+          return this.arabicNumber(token);
+        } else if ('mi' === token.type) {
+          return this.arabicIdentifier(token);
+        } else if ('mo' === token.type) {
+          return this.arabicOperator(token);
+        }
+      },
+      AlignedArray: function () {
+        var array = texParseAlignedArray.apply(this, arguments);
+        var _this = this;
+
+        var arrayEndTable = array.EndTable;
+        array.EndTable = function () {
+          var retVal = arrayEndTable.apply(this, arguments);
+
+          // Slice, to skip the first row, because
+          // It is always Arabic, not sure why!
+          array.table.slice(1).forEach(function (token) {
+            var rowTokens = token.data[0].data[0].data;
+
+            rowTokens.map(_this.makeItArabic, _this);
+          });
+
+          return retVal;
+        };
+
+        return array;
       },
       HandleArabic: function (name) {
         if (MathJax.Hub.config.Arabic.isArabicPage) {

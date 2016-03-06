@@ -53,20 +53,23 @@ MathJax.Hub.Register.StartupHook('mml Jax Ready', function () {
         }
       };
 
-      var miToHTML = MML.mi.prototype.toHTML;
-      MML.mi.Augment({
-        toHTML: function (span) {
+      ['mi'].forEach(function (name) {
+        var originalToHTML = MML[name].prototype.toHTML;
 
-          var element = miToHTML.apply(this, [span]);
+          MML[name].Augment({
+          toHTML: function (span) {
 
-          if (Node.TEXT_NODE === element.firstChild.nodeType) {
-            flipHorizontalElement(this, element);
-          } else {
-            flipHorizontalElement(this, element.firstChild);
+            var element = originalToHTML.apply(this, [span]);
+
+            if (Node.TEXT_NODE === element.firstChild.nodeType) {
+              flipHorizontalElement(this, element);
+            } else {
+              flipHorizontalElement(this, element.firstChild);
+            }
+
+            return element;
           }
-
-          return element;
-        }
+        });
       });
 
       ['mn', 'mo', 'mtext', 'msubsup', 'mrow', 'mfrac'].forEach(function (name) {
