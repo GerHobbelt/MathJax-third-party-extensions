@@ -32,8 +32,8 @@ or equivalently,
     <script type="text/javascript">
       window.MathJax = {
         AuthorInit: function () {
-                MathJax.Ajax.config.path["Contrib"] = "//cdn.mathjax.org/mathjax/contrib";
-            }
+          MathJax.Ajax.config.path["Contrib"] = "//cdn.mathjax.org/mathjax/contrib";
+        }
       };
     </script>
 
