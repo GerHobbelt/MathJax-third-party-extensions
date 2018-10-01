@@ -51,7 +51,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   TEXDEF.macros.iftoggle = 'IFTOGGLE_toggles';
   TEXDEF.macros.nottoggle = 'NOTTOGGLE_toggles';
   
-  var togglearray = [];
+  var togglearray = {};      // hash table
 
   TEX.Parse.Augment({
 
