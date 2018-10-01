@@ -1,6 +1,6 @@
 {
-  "name": "mathjax-siunitx",
-  "version": "0.1.0",
+  "name": "@gerhobbelt/mathjax-siunitx",
+  "version": "0.1.0-1",
   "description": "A MathJax extension that emulates LaTeX's siunitx package",
   "main": "siunitx.js",
   "directories": {
@@ -8,7 +8,8 @@
   },
   "scripts": {
     "prepublish": "grunt build",
-    "test": "grunt test"
+    "test": "grunt test",
+    "pub": "npm public --access public"
   },
   "repository": {
     "type": "git",
