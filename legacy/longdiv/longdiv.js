@@ -25,4 +25,88 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-MathJax.Extension["TeX/longdiv"]={version:"0.1",padtol:function(a,n){for(var t="",r=a;n>r;r++)t+="\\?";return t},SimpleLongDiv:function(a,n){il=a.length,jl=n.length,j=parseInt(n,10),ia=a.substr(0,jl),parseInt(ia,10)<j&&(jl+=1);var t=n.length+1;ans="",work="",work=n+"& \\hspace{-0.5em} \\enclose{longdiv}{"+a+"}",pad="";var e="";rstr=a.substr(0,jl);for(var s=jl;il>=s;s++){r=parseInt(rstr,10),a1=Math.floor(r/j),ans+=a1;var l=j*a1;rstr=r-j*a1+"",work=work+"\\\\\n&"+pad+"\\underline{"+this.padtol((l+"").length,s==jl?jl:t)+l+"}",work=work+"\\\\\n&"+pad+this.padtol(rstr.length,s==jl?jl:t)+rstr+a.substr(s,1),rstr+=a.substr(s,1),pad=(s==jl&&t>jl?"":"\\?")+pad}for(var o="",i=0;jl-1>i;i++)o="\\?"+o;return"\n\\def\\?{\\phantom{0}}\n\\begin{array}{r@{}l}\n&"+o+ans+"\\\\"+e+"\n"+work+"\n\\end{array}\n"}},MathJax.Hub.Register.StartupHook("TeX enclose Ready",function(){var a=MathJax.InputJax.TeX,n=(MathJax.ElementJax.mml,MathJax.Extension["TeX/longdiv"]);n.TEX=a,a.Definitions.Add({macros:{longdiv:"LongDiv"}},null,!0),a.Parse.Augment({LongDiv:function(t){var r=this.GetArgument(t),e=this.GetArgument(t);this.Push(a.Parse(n.SimpleLongDiv(r,e),this.stack.env).mml())}}),MathJax.Hub.Startup.signal.Post("TeX longdiv Ready")}),MathJax.Callback.Queue(["Require",MathJax.Ajax,"[MathJax]/extensions/TeX/enclose.js"],["loadComplete",MathJax.Ajax,"[Contrib]/longdiv/longdiv.js"]););
+MathJax.Extension["TeX/longdiv"] = {
+    version: "0.1",
+
+    padtol: function (s, l) {
+        var v = "";
+        for (var tmp = s; tmp < l; tmp++) {
+            v = v + "\\?";
+        }
+        return v;
+    },
+
+    SimpleLongDiv: function (istr, jstr) {
+        var il = istr.length;
+        var jl = jstr.length;
+
+        var j = parseInt(jstr, 10);
+
+        var ia = istr.substr(0, jl);
+
+        if (parseInt(ia, 10) < j) {
+            jl = jl + 1;
+        }
+
+        var jpadl = jstr.length + 1;
+
+        var ans = "";
+        var work = "";
+        var work = jstr + "& \\hspace{-0.5em} \\enclose{longdiv}{" + istr + "}";
+        var pad = "";
+
+        var ansline = "";
+        var rstr = istr.substr(0, jl);
+
+        for (var k = jl; k <= il; k++) {
+            var r = parseInt(rstr, 10);
+            var a1 = Math.floor(r / j);
+            ans = ans + a1;
+            var jtimes = j * a1;
+            rstr = (r - j * a1) + "";
+            work = work + "\\\\\n&" + pad + "\\underline{" + this.padtol((jtimes + "").length, (k == jl ? jl : jpadl)) + jtimes + "}";
+            work = work + "\\\\\n&" + pad + this.padtol(rstr.length, (k == jl ? jl : jpadl)) + rstr + istr.substr(k, 1);
+            rstr = rstr + istr.substr(k, 1);
+            pad = ((k == jl && jl < jpadl) ? "" : "\\?") + pad;
+        }
+
+        var anspad = "";
+        for (var tmp = 0; tmp < jl - 1; tmp++) {
+            anspad = "\\?" + anspad;
+        }
+
+        return "\n\\def\\?{\\phantom{0}}\n\\begin{array}{r@{}l}\n&" + anspad + ans + "\\\\" + ansline + "\n" + work + "\n\\end{array}\n";
+    }
+};
+
+MathJax.Hub.Register.StartupHook("TeX enclose Ready", function () {
+    var TEX = MathJax.InputJax.TeX,
+        MML = MathJax.ElementJax.mml;
+    var LONGDIV = MathJax.Extension["TeX/longdiv"];
+
+    LONGDIV.TEX = TEX; // for reference in longDiv above
+    //
+    //  Set up control sequenecs
+    //
+    TEX.Definitions.Add({
+        macros: {
+            longdiv: 'LongDiv'
+        }
+    }, null, true);
+
+    TEX.Parse.Augment({
+        LongDiv: function (name) {
+            var num = this.GetArgument(name),
+                den = this.GetArgument(name);
+            this.Push(TEX.Parse(LONGDIV.SimpleLongDiv(num, den), this.stack.env).mml());
+        }
+
+    });
+
+    MathJax.Hub.Startup.signal.Post("TeX longdiv Ready");
+});
+
+MathJax.Callback.Queue(
+  ["Require",MathJax.Ajax,"[MathJax]/extensions/TeX/enclose.js"],
+  ["loadComplete",MathJax.Ajax,"[Contrib]/longdiv/longdiv.js"]
+);

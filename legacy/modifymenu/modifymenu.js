@@ -22,4 +22,129 @@
  *  limitations under the License.
  *
  */
-MathJax.Callback.Queue(MathJax.Hub.Register.StartupHook("MathMenu Ready",function(){MathJax.Menu.Augment({appendItem:function(t){this.items.push(t)},addItemAtIndex:function(t,e){this.items.splice(e,0,t)},addItemFirst:function(t){this.items.splice(0,0,t)},addItemLast:function(t){this.appendItem(t)},addItemAfterIndex:function(t,e){this.items.splice(e+1,0,t)},addItemAfter:function(t,e){this.addItemAfterIndex(t,this.items.indexOf(e))},getItemIndexByName:function(t){for(var e=0;e<this.items.length;e++)if(this.items[e].name==t)return e;return-1},getItemByName:function(t){return this.items[this.getItemIndexByName(t)]},addItemAfterByName:function(t,e){this.addItemAfterIndex(t,this.getItemIndexByName(e))},deleteItemAtIndex:function(t){this.items.splice(t,1)},deleteItem:function(t){this.deleteItemAtIndex(this.items.indexOf(t))},deleteItemByName:function(t){this.deleteItem(this.getItemByName(t))},hideItemAtIndex:function(t){this.items[t].hidden=!0},hideItem:function(t){this.hideItemAtIndex(this.items.indexOf(t))},hideItemByName:function(t){this.hideItem(this.getItemByName(t))},showItemAtIndex:function(t){this.items[t].hidden=!1},showItem:function(t){this.showItemAtIndex(this.items.indexOf(t))},showItemByName:function(t){this.showItem(this.getItemByName(t))},disableItemAtIndex:function(t){this.items[t].disabled=!0},disableItem:function(t){this.disableItemAtIndex(this.items.indexOf(t))},disableItemByName:function(t){this.disableItem(this.getItemByName(t))},enableItemAtIndex:function(t){this.items[t].disabled=!1},enableItem:function(t){this.enableItemAtIndex(this.items.indexOf(t))},enableItemByName:function(t){this.enableItem(this.getItemByName(t))}}),MathJax.Menu.ITEM.CHECKBOX.Augment({check:function(t){this.disabled||(MathJax.Hub.config.MathMenu.settings[this.variable]=t)}}),MathJax.Menu.ITEM.RADIO.Augment({select:function(){this.disabled||(MathJax.Hub.config.MathMenu.settings[this.variable]=this.value)}}),MathJax.Hub.Startup.signal.Post("MathMenu modifymenu Ready")})),MathJax.Ajax.loadComplete("[Contrib]/modifymenu/modifymenu.js");
+MathJax.Callback.Queue(
+MathJax.Hub.Register.StartupHook("MathMenu Ready",function () {
+
+MathJax.Menu.Augment({
+
+ appendItem: function(item) {
+    this.items.push(item);
+  },
+
+  addItemAtIndex: function(additem,index) {
+      this.items.splice(index,0,additem);
+  },
+
+  addItemFirst: function(additem) {
+      this.items.splice(0,0,additem);
+  },
+
+  addItemLast: function(additem) {
+      this.appendItem(additem);
+  },
+
+  addItemAfterIndex: function(additem,index) {
+      this.items.splice(index+1,0,additem);
+  },
+
+  addItemAfter: function(additem,afteritem) {
+    this.addItemAfterIndex(additem,this.items.indexOf(afteritem));
+  },
+
+  getItemIndexByName: function(itemname) {
+    for (var i=0;i<this.items.length;i++) 
+      if (this.items[i].name == itemname) return i;
+    return -1; // if no previous return
+  },
+
+  getItemByName: function(itemname) {
+    return this.items[this.getItemIndexByName(itemname)]
+  },
+
+  addItemAfterByName: function(additem,aftername) {
+    this.addItemAfterIndex(additem,
+        this.getItemIndexByName(aftername));
+  },
+
+  deleteItemAtIndex: function(index) {
+    this.items.splice(index,1);
+  },
+
+  deleteItem: function(item) {
+    this.deleteItemAtIndex(this.items.indexOf(item));
+  },
+
+  deleteItemByName: function(name) {
+    this.deleteItem(this.getItemByName(name));
+  },
+
+  hideItemAtIndex: function(index) {
+    this.items[index].hidden=true;
+  },
+
+  hideItem: function(item) {
+    this.hideItemAtIndex(this.items.indexOf(item));
+  },
+
+  hideItemByName: function(name) {
+    this.hideItem(this.getItemByName(name));
+  },
+
+  showItemAtIndex: function(index) {
+    this.items[index].hidden=false;
+  },
+
+  showItem: function(item) {
+    this.showItemAtIndex(this.items.indexOf(item));
+  },
+
+  showItemByName: function(name) {
+    this.showItem(this.getItemByName(name));
+  },
+
+  disableItemAtIndex: function(index) {
+    this.items[index].disabled=true;
+  },
+
+  disableItem: function(item) {
+    this.disableItemAtIndex(this.items.indexOf(item));
+  },
+
+  disableItemByName: function(name) {
+    this.disableItem(this.getItemByName(name));
+  },
+
+  enableItemAtIndex: function(index) {
+    this.items[index].disabled=false;
+  },
+
+  enableItem: function(item) {
+    this.enableItemAtIndex(this.items.indexOf(item));
+  },
+
+  enableItemByName: function(name) {
+    this.enableItem(this.getItemByName(name));
+  }
+
+});
+
+MathJax.Menu.ITEM.CHECKBOX.Augment({
+  check: function(bool) {
+      if (!this.disabled) 
+        MathJax.Hub.config.MathMenu.settings[this.variable] = bool;
+  }
+});
+
+MathJax.Menu.ITEM.RADIO.Augment({
+  select: function() {
+      if (!this.disabled) 
+        MathJax.Hub.config.MathMenu.settings[this.variable] = this.value;
+  }
+});
+
+  MathJax.Hub.Startup.signal.Post("MathMenu modifymenu Ready");
+
+}));
+
+MathJax.Ajax.loadComplete("[Contrib]/modifymenu/modifymenu.js");
+

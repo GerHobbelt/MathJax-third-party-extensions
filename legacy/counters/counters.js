@@ -1,10 +1,29 @@
-/****************************************************
+/*************************************************************
  *
  *  counters.js
  *  
  *  Implements LaTeX counters and related macros for MathJax.
  * 
-  *  ---------------------------------------------------------------------
+ *  Macros implemented:
+ *  \newcounter{name}[depend]
+ *  \setcounter{name}{number}
+ *  \addtocounter{name}{number}
+ *  \arabic{name}
+ *  \alph{name}
+ *  \Alph{name}
+ *  \roman{name}
+ *  \Roman{name}
+ *  \value{name}  -- *only* in number arguments of 
+ *                 \setcounter, \addtocounter
+ *
+ *  Be sure to change the loadComplete() address to the URL
+ *  of the location of this file on your server. 
+ *  
+ *  You can load it via the config=file parameter on the script
+ *  tag that loads MathJax.js, or by including it in the extensions
+ *  array in your configuration.
+ *  
+ *  ---------------------------------------------------------------------
  *  
  *  Copyright (c) 2011-2014 Tom Leathrum <https://github.com/leathrum/>.
  * 
@@ -21,4 +40,186 @@
  *  limitations under the License.
  *
  */
-MathJax.Callback.Queue(MathJax.Hub.Register.StartupHook("TeX Jax Ready",function(){var r=MathJax.InputJax.TeX,t=r.Definitions;t.macros.newcounter="NEWCOUNTER_counters",t.macros.setcounter="SETCOUNTER_counters",t.macros.addtocounter="ADDTOCOUNTER_counters",t.macros.arabic="ARABIC_counters",t.macros.value="VALUE_counters",t.macros.alph="ALPH_counters",t.macros.Alph="CAP_ALPH_counters",t.macros.roman="ROMAN_counters",t.macros.Roman="CAP_ROMAN_counters",counterarray=[];var a=[];r.Parse.Augment({NEWCOUNTER_counters:function(t){var e=this.trimSpaces(this.GetArgument(t)),s=this.trimSpaces(this.GetBrackets(t));""===s&&(s=null),"\\"===e.charAt(0)&&(e=e.substr(1)),e.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name for "+t),null==s||s.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name dependency for "+t),counterarray[e]=1,a[e]=[],null!=s&&(null==a[s]?a[s]=[e]:a[s].push(e))},ARABIC_counters:function(t){var a=this.trimSpaces(this.GetArgument(t));a.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name for "+t),MML=MathJax.ElementJax.mml,this.Push(this.mmlToken(MML.mo(""+counterarray[a])))},ALPH_counters:function(t){var a=this.trimSpaces(this.GetArgument(t));a.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name for "+t),MML=MathJax.ElementJax.mml;var e=counterarray[a];for(s="";e>0;)y=(e-1)%26+1,s=String.fromCharCode(96+y)+s,e=Math.floor((e-1)/26);this.Push(this.mmlToken(MML.mo(s)))},CAP_ALPH_counters:function(t){var a=this.trimSpaces(this.GetArgument(t));a.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name for "+t),MML=MathJax.ElementJax.mml;var e=counterarray[a];for(s="";e>0;)y=(e-1)%26+1,s=String.fromCharCode(64+y)+s,e=Math.floor((e-1)/26);this.Push(this.mmlToken(MML.mo(s)))},CAP_ROMAN_counters:function(t){var a=this.trimSpaces(this.GetArgument(t));a.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name for "+t),MML=MathJax.ElementJax.mml;var e=counterarray[a];for(s="";e>=1e3;)s+="M",e-=1e3;for(e>=900&&(s+="CM",e-=900),e>=500&&(s+="D",e-=500),e>=400&&(s+="CD",e-=400);e>=100;)s+="C",e-=100;for(e>=90&&(s+="XC",e-=90),e>=50&&(s+="L",e-=50),e>=40&&(s+="XL",e-=40);e>=10;)s+="X",e-=10;for(e>=9&&(s+="IX",e-=9),e>=5&&(s+="V",e-=5),e>=4&&(s+="IV",e-=4);e>=1;)s+="I",e-=1;this.Push(this.mmlToken(MML.mo(s)))},ROMAN_counters:function(t){var a=this.trimSpaces(this.GetArgument(t));a.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name for "+t),MML=MathJax.ElementJax.mml;var e=counterarray[a];for(s="";e>=1e3;)s+="m",e-=1e3;for(e>=900&&(s+="cm",e-=900),e>=500&&(s+="d",e-=500),e>=400&&(s+="cd",e-=400);e>=100;)s+="c",e-=100;for(e>=90&&(s+="xc",e-=90),e>=50&&(s+="l",e-=50),e>=40&&(s+="xl",e-=40);e>=10;)s+="x",e-=10;for(e>=9&&(s+="ix",e-=9),e>=5&&(s+="v",e-=5),e>=4&&(s+="iv",e-=4);e>=1;)s+="i",e-=1;this.Push(this.mmlToken(MML.mo(s)))},SETCOUNTER_counters:function(t){var a=this.trimSpaces(this.GetArgument(t));a.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name for "+t);var e=this.trimSpaces(this.GetArgument(t)),s=Number.NaN;0===e.indexOf("\\value{")?(e=e.substring(7,e.indexOf("}")),e.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name for "+e),s=counterarray[e]):s=parseInt(e),s===Number.NaN&&r.Error("Illegal number format"),counterarray[a]=s},ADDTOCOUNTER_counters:function(t){var e=this.trimSpaces(this.GetArgument(t)),s=this.trimSpaces(this.GetArgument(t)),o=Number.NaN;if(0===s.indexOf("\\value{")?(s=s.substring(7,s.indexOf("}")),s.match(/^(.|[a-z]+)$/i)||r.Error("Illegal counter name for "+s),o=counterarray[s]):o=parseInt(s),o===Number.NaN&&r.Error("Illegal number format"),counterarray[e]+=o,null!=a&&null!=a[e])for(i=0;i<a[e].length;i++)counterarray[a[e][i]]=1}}),MathJax.Hub.Startup.signal.Post("TeX counters Ready")})),MathJax.Ajax.loadComplete("[Contrib]/counters/counters.js");
+MathJax.Callback.Queue(
+MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+  var VERSION = "1.0";
+
+  var TEX = MathJax.InputJax.TeX;
+  var TEXDEF = TEX.Definitions;
+  TEXDEF.macros.newcounter = 'NEWCOUNTER_counters';
+  TEXDEF.macros.setcounter = 'SETCOUNTER_counters';
+  TEXDEF.macros.addtocounter = 'ADDTOCOUNTER_counters';
+  TEXDEF.macros.arabic = 'ARABIC_counters';
+  TEXDEF.macros.value = 'VALUE_counters';
+  TEXDEF.macros.alph = 'ALPH_counters';
+  TEXDEF.macros.Alph = 'CAP_ALPH_counters';
+  TEXDEF.macros.roman = 'ROMAN_counters';
+  TEXDEF.macros.Roman = 'CAP_ROMAN_counters';
+  
+  counterarray = [];
+  var dependencyarray = [];
+
+  TEX.Parse.Augment({
+
+    //
+    //  Implements \newcounter{name}[depend]
+    //
+    NEWCOUNTER_counters: function (name) {
+      var cn = this.trimSpaces(this.GetArgument(name)),
+          d  = this.trimSpaces(this.GetBrackets(name));
+      if (d === '') {d = null}
+      if (cn.charAt(0) === "\\") {cn = cn.substr(1)}
+      if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
+      if (d != null && !d.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name dependency for "+name)}
+      counterarray[cn] = 1;
+      dependencyarray[cn]=[];
+      if (d != null) {
+        if (dependencyarray[d] == null) 
+          dependencyarray[d] = [cn];
+        else {
+          dependencyarray[d].push(cn);
+        }
+      }
+    },
+
+    //
+    //  Implements \arabic{name}
+    //
+    ARABIC_counters: function (name) {
+      var cn = this.trimSpaces(this.GetArgument(name));
+      if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
+      MML = MathJax.ElementJax.mml;
+      this.Push(this.mmlToken(MML.mo(''+counterarray[cn])));
+    },
+
+    //
+    //  Implements \alph{name}
+    //
+    ALPH_counters: function (name) {
+      var cn = this.trimSpaces(this.GetArgument(name));
+      if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
+      MML = MathJax.ElementJax.mml;
+      var n = counterarray[cn]; s = "";
+      while (n>0) {
+        y = ((n-1)%26)+1;
+        // if (y==0) y=26;
+        s = String.fromCharCode(96+y)+s;
+        n = Math.floor((n-1)/26);
+      }
+      this.Push(this.mmlToken(MML.mo(s)));
+    },
+
+    //
+    //  Implements \Alph{name}
+    //
+    CAP_ALPH_counters: function (name) {
+      var cn = this.trimSpaces(this.GetArgument(name));
+      if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
+      MML = MathJax.ElementJax.mml;
+      var n = counterarray[cn]; s = "";
+      while (n>0) {
+        y = ((n-1)%26)+1;
+        // if (y==0) y=26;
+        s = String.fromCharCode(64+y)+s;
+        n = Math.floor((n-1)/26);
+      }
+      this.Push(this.mmlToken(MML.mo(s)));
+    },
+
+    //
+    //  Implements \Roman{name}
+    //
+    CAP_ROMAN_counters: function (name) {
+      var cn = this.trimSpaces(this.GetArgument(name));
+      if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
+      MML = MathJax.ElementJax.mml;
+      var n = counterarray[cn]; s = "";
+      while (n>=1000) { s += "M"; n -= 1000; }
+      if (n>=900) { s += "CM"; n -= 900; }
+      if (n>=500) { s += "D"; n -= 500; }
+      if (n>=400) { s += "CD"; n -= 400; }
+      while (n>=100) { s += "C"; n -= 100; }
+      if (n>=90) { s += "XC"; n -= 90; }
+      if (n>=50) { s += "L"; n -= 50; }
+      if (n>=40) { s += "XL"; n -= 40; }
+      while (n>=10) { s += "X"; n -= 10; }
+      if (n>=9) { s += "IX"; n -= 9; }
+      if (n>=5) { s += "V"; n -= 5; }
+      if (n>=4) { s += "IV"; n -= 4; }
+      while (n>=1) { s += "I"; n -= 1; }
+      this.Push(this.mmlToken(MML.mo(s)));
+    },
+
+    //
+    //  Implements \roman{name}
+    //
+    ROMAN_counters: function (name) {
+      var cn = this.trimSpaces(this.GetArgument(name));
+      if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
+      MML = MathJax.ElementJax.mml;
+      var n = counterarray[cn]; s = "";
+      while (n>=1000) { s += "m"; n -= 1000; }
+      if (n>=900) { s += "cm"; n -= 900; }
+      if (n>=500) { s += "d"; n -= 500; }
+      if (n>=400) { s += "cd"; n -= 400; }
+      while (n>=100) { s += "c"; n -= 100; }
+      if (n>=90) { s += "xc"; n -= 90; }
+      if (n>=50) { s += "l"; n -= 50; }
+      if (n>=40) { s += "xl"; n -= 40; }
+      while (n>=10) { s += "x"; n -= 10; }
+      if (n>=9) { s += "ix"; n -= 9; }
+      if (n>=5) { s += "v"; n -= 5; }
+      if (n>=4) { s += "iv"; n -= 4; }
+      while (n>=1) { s += "i"; n -= 1; }
+      this.Push(this.mmlToken(MML.mo(s)));
+    },
+
+    //
+    //  Implements \setcounter{name}{number}
+    //
+    SETCOUNTER_counters: function (name) {
+      var cn = this.trimSpaces(this.GetArgument(name));
+      if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
+      var ns = this.trimSpaces(this.GetArgument(name));
+      var n = Number.NaN;
+      if (ns.indexOf("\\value{")===0) {
+        ns = ns.substring(7,ns.indexOf("}"));
+        if (!ns.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+ns)}
+        n = counterarray[ns];
+      } else {
+        n = parseInt(ns);
+      }
+      if (n === Number.NaN) {TEX.Error("Illegal number format")}
+      counterarray[cn] = n;
+    },
+
+    //
+    //  Implements \addtocounter{name}{number}
+    //
+    ADDTOCOUNTER_counters: function (name) {
+      var cn = this.trimSpaces(this.GetArgument(name));
+      var ns = this.trimSpaces(this.GetArgument(name));
+      var n = Number.NaN;
+      if (ns.indexOf("\\value{")===0) {
+        ns = ns.substring(7,ns.indexOf("}"));
+        if (!ns.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+ns)}
+        n = counterarray[ns];
+      } else {
+        n = parseInt(ns);
+      }
+      if (n === Number.NaN) {TEX.Error("Illegal number format")}
+      counterarray[cn] += n;
+      if (dependencyarray != null && dependencyarray[cn]!= null)
+        for (i=0;i<dependencyarray[cn].length;i++) {  
+          counterarray[dependencyarray[cn][i]]=1;
+        } // ****
+    }
+
+  });
+
+  MathJax.Hub.Startup.signal.Post("TeX counters Ready");
+  
+}));
+
+MathJax.Ajax.loadComplete("[Contrib]/counters/counters.js");
+

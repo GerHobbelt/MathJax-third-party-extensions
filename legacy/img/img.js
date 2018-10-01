@@ -6,7 +6,9 @@
  *
  *  Usage:
  *
- *  \img{URL}{vertical alignment}{width}{height}
+ *  \img[valign=<vertical alignment>,width=<width>,height=<height>]{URL}
+ *  or
+ *  \img[<valign>][<width>][<height>]{URL}
  *
  *  ---------------------------------------------------------------------
  *
@@ -24,4 +26,59 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-MathJax.Extension["TeX/img"]={version:"0.1"},MathJax.Hub.Register.StartupHook("TeX Jax Ready",function(){var a=MathJax.InputJax.TeX,b=MathJax.ElementJax.mml,c=function(b){return""===b||b.match(/^\s*([-+]?(\.\d+|\d+(\.\d*)?))\s*(pt|em|ex|mu|px|mm|cm|in|pc)\s*$/)?b.replace(/ /g,""):(a.Error("Bad dimension for image: "+b),void 0)};a.Definitions.macros.img="myImage",a.Parse.Augment({myImage:function(d){var e=this.GetBrackets(d,""),f={valign:"",width:"",height:""};if(-1!==e.indexOf(",")||-1!==e.indexOf("="))for(var g=e.split(","),h=0,i=g.length;i>h;++h){var j=g[h].split("="),k=j[0].replace(/^ +/,"").replace(/ +$/,"");f.hasOwnProperty(k)||a.Error(["UnknownKey","Unknown parameter in %1",k]);var l=j.slice(1).join("=");l=c(l),f[k]=l}else f.valign=c(e),f.width=c(this.GetBrackets(d,"")),f.height=c(this.GetBrackets(d,""));f.src=this.GetArgument(d),f.valign||delete f.valign,f.width||delete f.width,f.height||delete f.height,this.Push(this.mmlToken(b.mglyph().With(f)))}})}),MathJax.Callback.Queue(["loadComplete",MathJax.Ajax,"[Contrib]/img/img.js"]);
+MathJax.Extension["TeX/img"] = {
+  version: "0.1",
+};
+
+MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+  var TEX = MathJax.InputJax.TeX,
+      MML = MathJax.ElementJax.mml;
+  var CheckDimen = function (dimen) {
+    if (dimen === "" ||
+        dimen.match(/^\s*([-+]?(\.\d+|\d+(\.\d*)?))\s*(pt|em|ex|mu|px|mm|cm|in|pc)\s*$/)) {
+      return dimen.replace(/ /g,"");
+    }
+    TEX.Error("Bad dimension for image: "+dimen);
+  };
+  TEX.Definitions.macros.img = "myImage";
+  TEX.Parse.Augment({
+    myImage: function (name) {
+      var optarg = this.GetBrackets(name,'');
+      var def = {
+        valign: '',
+        width: '',
+        height: ''
+      };
+      if(optarg.indexOf(',') !== -1 || optarg.indexOf('=') !== -1){
+        // keyval param
+        var opts = optarg.split(',');
+        for(var i=0,l=opts.length;i<l;++i){
+          var parts = opts[i].split('=');
+          var key = parts[0].replace(/^ +/,"").replace(/ +$/,"");
+          /* empty values are ok:
+          if(parts.length<2)
+            TEX.Error('Empty value for parameter "'+key+'"');
+          */
+          if(!def.hasOwnProperty(key)) {
+            TEX.Error(['UnknownKey','Unknown parameter in %1',key]);
+          }
+          var val = parts.slice(1).join('=');
+          val = CheckDimen(val);
+          def[key] = val;
+        }
+      } else {
+        def.valign = CheckDimen(optarg);
+        def.width = CheckDimen(this.GetBrackets(name,''));
+        def.height = CheckDimen(this.GetBrackets(name,''));
+      }
+      def.src = this.GetArgument(name);
+      if (!def.valign) { delete def.valign; }
+      if (!def.width)  { delete def.width; }
+      if (!def.height) { delete def.height; }
+      this.Push(this.mmlToken(MML.mglyph().With(def)));
+    }
+  });
+});
+MathJax.Callback.Queue(
+  ["loadComplete",MathJax.Ajax,"[Contrib]/img/img.js"]
+);
