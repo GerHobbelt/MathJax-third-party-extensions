@@ -1,17 +1,21 @@
 # MathJax Arabic Extension
+
 This is an extension to MathJax (v2.5+), that provides basic Arabic support to MathJax.
 
 The extension so far only supports TeX input with HTML-CSS output. However, support to other input and output
 jaxes is possible.
 
 ## Key Features
+
 It provides the following:
 
   - Flip the Equation and render it the Right-to-left (RTL) way!
   - Translate commonly used identifiers and functions.
 
 ## How to Use the Extension
+
 ### Install the Extension
+
 First you'd like to [install](http://mathjax.readthedocs.org/en/latest/installation.html)
 and [configure](http://mathjax.readthedocs.org/en/latest/configuration.html) the MathJax in your page.
 
@@ -27,6 +31,7 @@ Then you'll need to include the `arabic.js` as an extension, here's an example c
 
 
 ### The Amiri Font
+
 The extension relies (sort of) on the
 [Amiri font](https://www.google.com/fonts#UsePlace:use/Collection:Amiri)
 to render beautifully (kinda).
@@ -46,6 +51,7 @@ font-family e.g. use `Amiri` or `serif` but not `Amiri, serif`.
     });
 
 ### Typeset an Arabic Equation
+
 The extension provides the following additional TeX commands to be typeset an Arabic equation:
 
 1. **`\alwaysar`**
@@ -67,6 +73,7 @@ The extension provides the following additional TeX commands to be typeset an Ar
    even more beautifully ( in my opinion :) ).
 
 ## Supported Features
+
  - Flip everything (almost) including:
      * Parentheses `()`, braces `{}`, and brackets `[]`
      * Things that should be flipped like: Integration `∫`, Root `√` and Sigma `Σ`
@@ -128,7 +135,6 @@ The extension provides the following additional TeX commands to be typeset an Ar
 
  - Translation to other identifiers and operators like limits (`\lim`), sine, cosine and tan.
 
-
  - A very configurable translation utility to provide English/Arabic TeX
    commands (same command, with language-dependent output).
 
@@ -137,6 +143,7 @@ The extension provides the following additional TeX commands to be typeset an Ar
  - It is generally configurable, but I haven't documented how to do it!
 
 ## Experimental Stuff
+
 Additional extensions for Physics and some Chemistry units and symbols exists,
 however, it is not tested/developed well. If you're curious, you can take a look
 at the following extensions:
@@ -156,12 +163,14 @@ at the following extensions:
    to include it in the main installation.
 
 # How to Contribute
+
 Well, just issue a pull request to this repo and ping me (my GitHub username is @OmarIthawi).
 Even better, grab my docker-based development environment from here so you can have a better development experience:
 
  - [github.com/Edraak/arabic-mathjax-dev](https://github.com/Edraak/arabic-mathjax-dev)
 
 # License
+
 The MIT License
 
 Copyright (c) 2015-2016 The Queen Rania Foundation for Education and Development
@@ -171,8 +180,10 @@ Copyright (c) 2015-2016 The Queen Rania Foundation for Education and Development
  - Omar Al-Ithawi <i@omardo.com>
 
 # A bit of a Background
+
 Why this plugin exists? Well, I could tell you an interesting story like I wanted to change the world,
 but frankly we needed it to display Math equations for our Arabic learners at [Edraak.org](https://www.edraak.org),
 and therefore I made it.
 
 Well, it does change the world somehow, at the least in the eyes of our learners ^_^
+
