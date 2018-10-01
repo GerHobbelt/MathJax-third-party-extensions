@@ -27,6 +27,7 @@
  */
 MathJax.Extension["TeX/longdiv"] = {
     version: "0.1",
+
     padtol: function (s, l) {
         var v = "";
         for (var tmp = s; tmp < l; tmp++) {
@@ -36,12 +37,12 @@ MathJax.Extension["TeX/longdiv"] = {
     },
 
     SimpleLongDiv: function (istr, jstr) {
-        il = istr.length;
-        jl = jstr.length;
+        var il = istr.length;
+        var jl = jstr.length;
 
-        j = parseInt(jstr, 10);
+        var j = parseInt(jstr, 10);
 
-        ia = istr.substr(0, jl);
+        var ia = istr.substr(0, jl);
 
         if (parseInt(ia, 10) < j) {
             jl = jl + 1;
@@ -49,17 +50,17 @@ MathJax.Extension["TeX/longdiv"] = {
 
         var jpadl = jstr.length + 1;
 
-        ans = "";
-        work = "";
-        work = jstr + "& \\hspace{-0.5em} \\enclose{longdiv}{" + istr + "}";
-        pad = "";
+        var ans = "";
+        var work = "";
+        var work = jstr + "& \\hspace{-0.5em} \\enclose{longdiv}{" + istr + "}";
+        var pad = "";
 
         var ansline = "";
-        rstr = istr.substr(0, jl);
+        var rstr = istr.substr(0, jl);
 
         for (var k = jl; k <= il; k++) {
-            r = parseInt(rstr, 10);
-            a1 = Math.floor(r / j);
+            var r = parseInt(rstr, 10);
+            var a1 = Math.floor(r / j);
             ans = ans + a1;
             var jtimes = j * a1;
             rstr = (r - j * a1) + "";
