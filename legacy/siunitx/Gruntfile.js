@@ -36,7 +36,11 @@ module.exports = function(grunt) {
             var stop_pos = stop_mark.index; // + stop_mark[0].length;
             var cleaned = amdclean.clean({
               'filePath': outputFile
-            });
+            })
+            // strip off outer IIFE code as that's gonna be useless as we wrap the main code
+            // in a MathJax registration template afterwards:
+            .replace(/^\n*\s*;\(function\(\) \{/, '')
+            .replace(/\n\}\(\)\);\n*$/, '');
             main = main.substring(0,start_pos)
               + cleaned
               + main.substring(stop_pos).replace(
@@ -49,7 +53,7 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
-      options: {mangle: true, beautify: false},
+      options: {mangle: true, beautify: true},
       main: {
         files: {
           'siunitx.js': ['unpacked/siunitx.js']
@@ -58,7 +62,7 @@ module.exports = function(grunt) {
     },
     copy: {
       main: {
-          src: 'siunitx.js',
+          src: 'unpacked/siunitx.js',
           dest:'siunitx.js',
           options: {
             process: function (content, srcpath) {
@@ -84,7 +88,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-mocha-test');
-  grunt.registerTask('build', ['peg','requirejs','uglify','copy']);
+  grunt.registerTask('build', ['peg','requirejs','copy']);
   grunt.registerTask('test', ['mochaTest']);
   grunt.registerTask('default', ['build','test']);
 };

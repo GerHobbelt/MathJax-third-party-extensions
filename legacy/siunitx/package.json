@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "prepublish": "grunt build",
+    "prepare": "grunt build",
     "test": "grunt test",
     "pub": "npm public --access public"
   },
@@ -23,15 +23,15 @@
   "homepage": "https://github.com/burnpanck/MathJax-third-party-extension/tree/add-siunitx-tex-extension/siunitx",
   "private": true,
   "devDependencies": {
-    "amdclean": "^2.7.0",
-    "chai": "^3.5.0",
-    "grunt": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-requirejs": "^1.0.0",
-    "grunt-contrib-uglify": "^1.0.1",
-    "grunt-mocha-test": "^0.12.7",
-    "grunt-peg": "^2.0.1",
-    "mocha": "^2.5.3",
-    "requirejs": "^2.2.0"
+    "amdclean": "2.7.0",
+    "chai": "4.2.0",
+    "grunt": "1.0.3",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-contrib-requirejs": "1.0.0",
+    "grunt-contrib-uglify": "4.0.0",
+    "grunt-mocha-test": "0.13.3",
+    "grunt-peg": "2.0.1",
+    "mocha": "5.2.0",
+    "requirejs": "2.3.6"
   }
 }
