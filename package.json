@@ -7,12 +7,13 @@
     "test": "npm run build && npm run lint && echo 'No tests here!'",
     "lint": "eslint .",
     "fix": "eslint --fix .",
+    "clean": "find ./legacy/ -name package-lock.json -delete  &&  find ./legacy/ -name '*.js' ! -path '*/unpacked/*' -a ! -path '*/node_modules/*'",
     "pub": "npm publish --access public"
   },
   "author": "MathJax Consortium and others",
   "license": "MIT",
   "devDependencies": {
-    "@gerhobbelt/mathjax-dev": "^1.0.1-15",
+    "@gerhobbelt/mathjax-dev": "1.0.1-15",
     "eslint": "5.6.1"
   }
 }
