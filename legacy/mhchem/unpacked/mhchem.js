@@ -125,7 +125,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 
     var lastInput, watchdog;
     var output = [];
-    while (true) {
+    for (;;) {
       if (lastInput !== input) {
         watchdog = 10;
         lastInput = input;
