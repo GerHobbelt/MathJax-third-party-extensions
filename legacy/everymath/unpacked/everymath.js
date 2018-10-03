@@ -46,7 +46,7 @@ MathJax.Extension["TeX/everymath"] = {
 
 MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   var TEX = MathJax.InputJax.TeX,
-      TEXDEF = TEX.Definitions;
+      TEXDEF = TEX.Definitions,
       EVERYMATH = MathJax.Extension["TeX/everymath"],
       CONFIG = EVERYMATH.config;
   //
@@ -57,7 +57,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   EVERYMATH.config = MathJax.Hub.config.TeX;
   for (var id in CONFIG) {
     if (CONFIG.hasOwnProperty(id) && EVERYMATH.config[id] == null) {
-      EVERYMATH.config[id] = config[id];
+      EVERYMATH.config[id] = CONFIG[id];
     }
   }
   CONFIG = EVERYMATH.config;
