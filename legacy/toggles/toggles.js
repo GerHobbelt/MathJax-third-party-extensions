@@ -182,7 +182,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   
 }));
 
-MathJax.Ajax.loadComplete("[Contrib]/toggles/unpacked/toggles.js");
+MathJax.Ajax.loadComplete("[Contrib]/toggles/toggles.js");
 
 
 

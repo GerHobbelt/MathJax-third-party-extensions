@@ -164,6 +164,6 @@ MathJax.Menu.ITEM.RADIO.Augment({
 
 }));
 
-MathJax.Ajax.loadComplete("[Contrib]/modifymenu/unpacked/modifymenu.js");
+MathJax.Ajax.loadComplete("[Contrib]/modifymenu/modifymenu.js");
 
 

@@ -89,6 +89,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   
 }));
 
-MathJax.Ajax.loadComplete("[Contrib]/forminput/unpacked/forminput.js");
+MathJax.Ajax.loadComplete("[Contrib]/forminput/forminput.js");
 
 

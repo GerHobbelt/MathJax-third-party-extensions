@@ -243,6 +243,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   
 }));
 
-MathJax.Ajax.loadComplete("[Contrib]/counters/unpacked/counters.js");
+MathJax.Ajax.loadComplete("[Contrib]/counters/counters.js");
 
 

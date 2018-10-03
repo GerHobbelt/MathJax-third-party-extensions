@@ -138,5 +138,5 @@
     });
 });
 
-MathJax.Ajax.loadComplete("[Contrib]/physics/unpacked/physics.js");
+MathJax.Ajax.loadComplete("[Contrib]/physics/physics.js");
 

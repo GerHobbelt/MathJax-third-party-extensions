@@ -106,6 +106,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   
 });
 
-MathJax.Ajax.loadComplete("[Contrib]/everymath/unpacked/everymath.js");
+MathJax.Ajax.loadComplete("[Contrib]/everymath/everymath.js");
 
 

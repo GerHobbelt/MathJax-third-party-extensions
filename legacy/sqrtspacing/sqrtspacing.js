@@ -25,7 +25,7 @@
  *  To load it include
  *  
  *     MathJax.Hub.Config({
- *       extensions: ["[Contrib]/sqrtspacing/unpacked/sqrtspacing.js"],
+ *       extensions: ["[Contrib]/sqrtspacing/sqrtspacing.js"],
  *     });
  *  
  *  in your configuration.
@@ -154,6 +154,6 @@ MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
   MathJax.Hub.Startup.signal.Post("SVG sqrtspacing Ready");
 });
 
-MathJax.Ajax.loadComplete("[Contrib]/sqrtspacing/unpacked/sqrtspacing.js");
+MathJax.Ajax.loadComplete("[Contrib]/sqrtspacing/sqrtspacing.js");
 
 

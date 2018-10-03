@@ -164,7 +164,7 @@ MathJax.Callback.Queue(
   ["Post",MathJax.Hub.Startup.signal,"TeX knowl ready"]
 );
 
-MathJax.Ajax.loadComplete("[Contrib]/knowl/unpacked/knowl.js");
+MathJax.Ajax.loadComplete("[Contrib]/knowl/knowl.js");
 
 
 

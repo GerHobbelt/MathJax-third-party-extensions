@@ -94,6 +94,6 @@
 
 })(MathJax.Ajax,MathJax.Callback,MathJax.Hub,MathJax.HTML);
 
-MathJax.Ajax.loadComplete("[Contrib]/InputToDataAttr/unpacked/InputToDataAttr.js");
+MathJax.Ajax.loadComplete("[Contrib]/InputToDataAttr/InputToDataAttr.js");
 
 

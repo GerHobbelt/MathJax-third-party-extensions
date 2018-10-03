@@ -1730,5 +1730,5 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 
 });
 
-MathJax.Ajax.loadComplete("[Contrib]/mhchem/unpacked/mhchem.js");
+MathJax.Ajax.loadComplete("[Contrib]/mhchem/mhchem.js");
 

@@ -114,6 +114,6 @@ MathJax.Hub.Register.StartupHook("TeX counters Ready",function () {
   MathJax.Hub.Startup.signal.Post("TeX forloop Ready");
 }));  // end StartupHook function def
 
-MathJax.Ajax.loadComplete("[Contrib]/forloop/unpacked/forloop.js");
+MathJax.Ajax.loadComplete("[Contrib]/forloop/forloop.js");
 
 

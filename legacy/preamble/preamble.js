@@ -100,6 +100,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   return null;
 });
 
-MathJax.Ajax.loadComplete("[Contrib]/preamble/unpacked/preamble.js");
+MathJax.Ajax.loadComplete("[Contrib]/preamble/preamble.js");
 
 
