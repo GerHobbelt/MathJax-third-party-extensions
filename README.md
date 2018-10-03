@@ -79,3 +79,18 @@ MathJax.Hub.Config({
 The MathJax documentation [contains a tutorial on extension writing](http://docs.mathjax.org/en/latest/advanced/extension-writing.html).
 
 Afterwards, you might want to start by looking at some of the extensions here and [the MathJax core extensions](http://github.com/mathjax/MathJax/tree/master/unpacked/extensions).
+
+## Building / Regenerating extensions
+
+```
+npm install
+
+# remove old cruft:
+npm run clean
+
+# implies a rebuild
+npm test
+```
+
+Note that the `MathJax-siunitx` extension has its own package.json, which you must update separately when newer releases of npm packages become available, but for (re)building `siunitx` from scratch, all you need is invocing `npm run clean; npm test` in the base directory.
+ 
