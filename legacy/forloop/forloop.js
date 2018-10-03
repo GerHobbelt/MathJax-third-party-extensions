@@ -1,3 +1,21 @@
+/*
+ *  ../../../../legacy/forloop/forloop.js
+ *
+ *  Copyright (c) 2009-2018 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 /*************************************************************
  *
  * forloop
@@ -26,4 +44,76 @@
  *  limitations under the License.
  *
  */
-MathJax.Ajax.Require("http://cs.jsu.edu/mathjax-ext/github/counters/counters.js"),MathJax.Callback.Queue(MathJax.Hub.Register.StartupHook("TeX counters Ready",function(){var t=MathJax.InputJax.TeX,a=t.Definitions,e=MathJax.ElementJax.mml;a.macros.forloop="FORLOOP",a.macros.ForArray="FORARRAY";var r=[],s=[],i=0;t.Parse.Augment({FORLOOP:function(a){var e=this.trimSpaces(this.GetBrackets(a)),r=parseInt(this.trimSpaces(this.GetArgument(a))),s=parseInt(this.trimSpaces(this.GetArgument(a))),i=this.trimSpaces(this.GetArgument(a)),h=this.trimSpaces(this.GetArgument(a)),m=1;e&&""!==e&&(m=parseInt(e));for(var p=r;s>=p;p+=m)counterarray[i]=p,this.Push(t.Parse(h).mml())},FORARRAY:function(a){var h=this.trimSpaces(this.GetBrackets(a)),m=parseInt(this.trimSpaces(this.GetArgument(a))),p=parseInt(this.trimSpaces(this.GetArgument(a))),n=this.trimSpaces(this.GetArgument(a)),o=this.trimSpaces(this.GetArgument(a)),u=1;r=[],h&&""!==h&&(u=parseInt(h)),i++;for(var c=m;p>=c;c+=u)counterarray[n]=c,r.push(e.mtd.apply(e,[t.Parse(o).mml()]));i--,0==i?(this.Push(e.mtable.apply(e,s)),s=[]):s.push(e.mtr.apply(e,r))}}),MathJax.Hub.Startup.signal.Post("TeX forloop Ready")})),MathJax.Ajax.loadComplete("[Contrib]/forloop/forloop.js");
+MathJax.Ajax.Require("http://cs.jsu.edu/mathjax-ext/github/counters/counters.js");
+MathJax.Callback.Queue(
+MathJax.Hub.Register.StartupHook("TeX counters Ready",function () {
+  var VERSION = "1.0";
+
+  var TEX = MathJax.InputJax.TeX;
+  var TEXDEF = TEX.Definitions;
+  var MML = MathJax.ElementJax.mml;
+  TEXDEF.macros.forloop = 'FORLOOP';
+  TEXDEF.macros.ForArray = 'FORARRAY';
+  var row = [], table = [];
+  var forarraydepth = 0;
+  var counterarray = {};   // hash table
+
+  TEX.Parse.Augment({
+   
+    //
+    //  Implements \forloop[step]{start}{stop}{ctr}{code}
+    //
+    FORLOOP: function (name) {
+      var stepstr = this.trimSpaces(this.GetBrackets(name)),
+          start  = parseInt(this.trimSpaces(this.GetArgument(name))),
+          stop  = parseInt(this.trimSpaces(this.GetArgument(name))),
+          ctrname  = this.trimSpaces(this.GetArgument(name)),
+          code  = this.trimSpaces(this.GetArgument(name));
+      var step = 1;
+  
+      // may need to revisit this in MJv2.0 with new GetBrackets()
+      // fixed by adding "stepstr &&" below, compatible with v1.1
+      if (stepstr && stepstr !== "") step = parseInt(stepstr);
+      for (var i = start; 
+           i <= stop;
+           i += step) {
+        counterarray[ctrname] = i;
+        this.Push(TEX.Parse(code).mml());        
+      }
+    }, // end FORLOOP function def
+
+    FORARRAY: function (name) {
+      var stepstr = this.trimSpaces(this.GetBrackets(name)),
+          start  = parseInt(this.trimSpaces(this.GetArgument(name))),
+          stop  = parseInt(this.trimSpaces(this.GetArgument(name))),
+          ctrname  = this.trimSpaces(this.GetArgument(name)),
+          code  = this.trimSpaces(this.GetArgument(name));
+      var step = 1;
+      row = []; 
+  
+      // may need to revisit this in MJv2.0 with new GetBrackets()
+      // "stepstr &&" here, too
+      if (stepstr && stepstr !== "") step = parseInt(stepstr);
+      forarraydepth++;
+      for (var i = start; 
+           i <= stop;
+           i += step) {
+        counterarray[ctrname] = i;
+        row.push(MML.mtd.apply(MML,[TEX.Parse(code).mml()]));        
+      }
+      forarraydepth--;
+      if (forarraydepth==0) {
+        this.Push(MML.mtable.apply(MML,table));
+        table=[];
+      }
+      else  table.push(MML.mtr.apply(MML,row));
+
+    } // end FORARRAY function def
+
+  });  // end TEX.Parse.Augment
+  MathJax.Hub.Startup.signal.Post("TeX forloop Ready");
+}));  // end StartupHook function def
+
+MathJax.Ajax.loadComplete("[Contrib]/forloop/unpacked/forloop.js");
+
+

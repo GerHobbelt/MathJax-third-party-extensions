@@ -1,3 +1,21 @@
+/*
+ *  ../../../../legacy/xyjax/xypic.js
+ *
+ *  Copyright (c) 2009-2018 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 /*************************************************************
  *
  *  xypic.js
@@ -5203,7 +5221,6 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       HUB.config.errorSettings.message = origMessage;
     } else {
       throw err;
-      hub_formatError.apply(HUB, [script, err]);
     }
   }
   
@@ -5463,14 +5480,14 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
         svg.style.width = xypic.Em(width);
         svg.style.height = xypic.Em(height + depth);
       }
-      var def = {
+      var stddef = {
         fill:"none", stroke:color, "stroke-linecap":"round",
         "stroke-width":xypic.em2px(strokeWidth)
       };
       this.drawArea = xypic.Graphics.createElement("g");
-      for (var id in def) {
-        if (def.hasOwnProperty(id)) {
-          this.drawArea.setAttribute(id, def[id].toString());
+      for (var id in stddef) {
+        if (stddef.hasOwnProperty(id)) {
+          this.drawArea.setAttribute(id, stddef[id].toString());
         }
       }
       svg.appendChild(this.drawArea);
@@ -6095,7 +6112,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
         var dxm = xm0 - x;
         var dym = ym0 - y;
         
-        if (sign(xp0 - cx) === sign(x - cx) && sign(yp0 - cy) === sign(y - cy)) {
+        if (Math.sign(xp0 - cx) === Math.sign(x - cx) && Math.sign(yp0 - cy) === Math.sign(y - cy)) {
           return xypic.Frame.Point(xm0, ym0);
         } else {
           return xypic.Frame.Point(xp0, yp0);
@@ -8478,7 +8495,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       var delta = h/3;
       lengthArray[0] = 0;
       sum = this.velocity(0) + 4*this.velocity(h);
-      lastv = this.velocity(2*h);
+      var lastv = this.velocity(2*h);
       lengthArray[1] = delta*(sum + lastv);
       for (i = 2; i <= n; i++) {
         sum += 2*lastv + 4*this.velocity((2*i-1)*h);
@@ -9071,7 +9088,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
               t = this.tOfLength(s + dropLen + cl);
               dummyEnv.c = this.position(t);
               dummyEnv.angle = this.angle(t);
-              bbox = objectForConnect.toDropShape(dummyContext).draw(svg);
+              objectForConnect.toDropShape(dummyContext).draw(svg);
             }
         }
       } else {
@@ -9938,8 +9955,8 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       var i = 0, n = this.cbs.length;
       for (i = 0; i < n; i++) {
         var cb = this.cbs[i];
-        unnormalizedTs = cb.tOfIntersections(frame);
-        for (j = 0; j < unnormalizedTs.length; j++) {
+        var unnormalizedTs = cb.tOfIntersections(frame);
+        for (var j = 0; j < unnormalizedTs.length; j++) {
           ts.push((unnormalizedTs[j] + i) / n);
         }
       }
@@ -10751,7 +10768,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       if (p0.x !== pn.x || p0.y !== pn.y) {
         a = p0.y-pn.y;
         b = pn.x-p0.x;
-        l = Math.sqrt(a*a+b*b);
+        var l = Math.sqrt(a*a+b*b);
         a /= l;
         b /= l;
         c = (p0.x*pn.y-p0.y*pn.x)/l;
@@ -10774,6 +10791,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       return {min:[a, b, cmin], max:[a, b, cmax]};
     }, 
     clippedLineRange: function (ps, lineMin, lineMax) {
+      var v;
       var n = ps.length - 1;
       var es = new Array(n+1);
       var extProd = xypic.Util.extProd;
@@ -10958,8 +10976,8 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       var xmin = this.p0.x;
       var xmax = this.p1.x;
       xypic.svgForDebug.createSVGElement("line", {
-        x1:xypic.em2px(xmin), y1:-xypic.em2px(y(xmin, lmax)),
-        x2:xypic.em2px(xmax), y2:-xypic.em2px(y(xmax, lmax)),
+        x1:xypic.em2px(xmin), y1:-xypic.em2px(y(xmin, xmax)),
+        x2:xypic.em2px(xmax), y2:-xypic.em2px(y(xmax, xmax)),
         "stroke-width":xypic.em2px(0.02 * xypic.oneem), stroke:"red"
       });
     }
@@ -11600,6 +11618,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       this.macro = macro;
     },
     position: function (context) {
+      var env = context.env;
       env.c = this.macro.position(context);
       return env.c;
     },
@@ -14400,7 +14419,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
   AST.Command.Ar.Form.CurveWithControlPoints.Augment({
     toShape: function (context) {
       var env = context.env;
-      tmpEnv = env.duplicate();
+      var tmpEnv = env.duplicate();
       tmpEnv.startCapturePositions();
       var tmpContext = xypic.DrawingContext(xypic.Shape.none, tmpEnv);
       this.coord.position(tmpContext);
@@ -15062,6 +15081,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       
       var colsep = subEnv.xymatrixColSepEm;
       var xs = [];
+      var r, l;
       var x = origEnv.c.x;
       xs.push(x);
       if (subEnv.xymatrixFixedCol) {
@@ -15090,6 +15110,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       
       var rowsep = subEnv.xymatrixRowSepEm;
       var ys = [];
+      var u, d;
       var y = origEnv.c.y;
       ys.push(y);
       if (subEnv.xymatrixFixedRow) {
@@ -15122,7 +15143,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       var sin = Math.sin(orientation);
       var rowIndex = 0;
       matrix.rows.foreach(function (row) {
-        colIndex = 0;
+        var colIndex = 0;
         row.entries.foreach (function (entry) {
           var x0 = xs[colIndex];
           var y0 = ys[rowIndex];
@@ -15141,7 +15162,7 @@ MathJax.Hub.Register.StartupHook("Device-Independent Xy-pic Require",function ()
       subcontext = xypic.DrawingContext(xypic.Shape.none, subEnv);
       var rowIndex = 0;
       matrix.rows.foreach(function (row) {
-        colIndex = 0;
+        var colIndex = 0;
         row.entries.foreach (function (entry) {
           var x0 = xs[colIndex];
           var y0 = ys[rowIndex];
@@ -16530,7 +16551,7 @@ MathJax.Hub.Register.StartupHook("SVG Xy-pic Require",function () {
   BBOX.PPATH = BBOX.Subclass({
     type: "path", removeable: false,
     Init: function (h,d,w,p,t,color,def) {
-      if (def == null) {def = {}}; def.fill = "none";
+      if (def == null) {def = {}} def.fill = "none";
       if (color) {def.stroke = color}
       def["stroke-width"] = t.toFixed(2).replace(/\.?0+$/,"");
       def.d = p;
@@ -16766,4 +16787,5 @@ MathJax.Hub.Register.StartupHook("SVG Xy-pic Require",function () {
   MathJax.Hub.Startup.signal.Post("SVG Xy-pic Ready");
 });
 
-MathJax.Ajax.loadComplete("[Contrib]/xyjax/xypic.js");
+MathJax.Ajax.loadComplete("[Contrib]/xyjax/unpacked/xypic.js");
+

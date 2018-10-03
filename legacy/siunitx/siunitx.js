@@ -1,2 +1,2472 @@
-MathJax.Extension["TeX/siunitx"]={version:"0.1.0"},MathJax.Hub.Register.StartupHook("TeX Jax Ready",function(){!function(){var a,b,c,d,e,f,g,h;a=function(){var a={},b=MathJax.InputJax.TeX,c=a.ValidationError=MathJax.Object.Subclass({Init:function(a,b,c,d){this._errormsg='ValidationError: Error validating "'+b+'" of "'+a.constructor+'" (a "'+c+'") to "'+d+'": ';for(var e=4;e<arguments.length;++e)this._errormsg+=arguments[e].toString();console.log(this._errormsg)},toString:function(){return this._errormsg}}),d=a.ValidationBase=MathJax.Object.Subclass({PropertyDescriptor:function(a,b){var c=this;return{get:function(){return c.Get(this,b)},set:function(a){c.Set(this,b,a)}}},Get:function(a,b){var c=a._values[b];return void 0!==c?c:this._default},Set:function(a,b,c){a._values[b]=this.Validate(a,b,c)},Validate:function(a,b,c){return c}}),e=a.Choice=d.Subclass({Init:function(){this._default=arguments[0];for(var a={},b=0;b<arguments.length;b++)a[arguments[b]]=!0;this._choices=a},Validate:function(a,b,d){if(!this._choices.hasOwnProperty(d))throw c(a,b,this,d,'must be one of ["'+Object.getOwnPropertyNames(this._choices).join('", "')+'"]');return d}}),f=(a.SwitchChoice=e.Subclass({Init:function(){this._switchchoice=arguments[1],e.prototype.Init.apply(this,arguments)},Validate:function(a,b,c){return void 0===c&&(c=this._switchchoice),e.prototype.Validate.call(this,a,b,c)}}),a.Integer=d.Subclass({Init:function(a){void 0===a&&(a=0),this._default=a},Validate:function(a,b,d){if(d=parseInt(d),!Number.isInteger(d))throw c(a,b,this,d,"must be an integer");return d}}),a.Literal=d.Subclass({Init:function(a){this._default=a},Validate:function(a,b,c){return c}}));a.TeXParsedLiteral=f.Subclass({Init:function(a){this._default=a},Get:function(a,c){return val=arguments.callee.SUPER.Get.call(this,a,c),b.Parse("\\text{"+val+"}").mml()}}),a.Math=f.Subclass({}),a.Length=d.Subclass({Init:function(a){this._default=a},Validate:function(a,b,c){return c}}),a.Macro=d.Subclass({Init:function(a){this._default=a},Validate:function(a,b,c){return c}}),a.Switch=d.Subclass({Init:function(a){void 0===a&&(a=!1),this._default=a},Validate:function(a,b,d){if(void 0===d&&(d=!0),("string"==typeof d||d instanceof String)&&(d=d.toLowerCase(),"true"==d?d=!0:"false"==d&&(d=!1)),d!==!0&&d!==!1)throw c(a,b,this,d,"must be a boolean");return d}}),a.ConfigData=MathJax.Object.Subclass({Init:function(a){this._values={},void 0!=a&&this.SetMany(a)},Set:function(a,b){if(void 0===this._options[a])throw TypeError(this.constructor+' has no attribute named "'+a+'"');this[a]=b},SetMany:function(a){for(var b in a)this.Set(b,a[b])},Derived:function(a){var b=this.constructor();return b._values.__proto__=this._values.__proto__,void 0!=a&&b.SetMany(a),b},listSettings:function(a,b){void 0===b&&(b=",\n");var c=[];for(var d in this._options)a&&!this._values.hasOwnProperty(d)||c.push(d+" = "+this[d]);return c.join(b)}},{Define:function(a){var b=this.Subclass({_options:a});b.ParseOptions=this.ParseOptions;for(var c in a)Object.defineProperty(b.prototype,c,a[c].PropertyDescriptor(b,c));return b},ParseOptions:function(a){var c={};if(a=a.trim(),!a)return this(c);for(var d=a.split(","),e=0,f=d.length;e<f;++e){var g=d[e].split("="),h=g[0].trim();if(h||b.Error('Empty key in "'+a+'"'),g.length<2)c[h]=void 0;else{for(var i=g.slice(1).join("="),j=0,k=-1;;){for(;;){var l=k+1,m=i.indexOf("{",l),n=i.indexOf("}",l);if(k=n>=0&&(n<m||m==-1)?n:m,k<0)break;k>0&&"\\"==i[k-1]||("}"==i[k]?(j--,j<0&&b.Error('Too many closing braces in "'+a+'"')):j++)}if(!j)break;k=i.length,e++,e>=f&&b.Error('Not enough closing braces in "'+a+'"'),i+=","+d[e]}i=i.trim(),"{"==i[0]&&"}"==i[i.length-1]&&(i=i.slice(1,-1)),c[h]=i}}return this(c)}});return a}(),b=function(a){var b=a.ConfigData,c=a.Switch,d=a.SwitchChoice,e=a.Choice,f=a.Literal,g=a.Macro,h=a.Integer,i=a.Math,j=a.TeXParsedLiteral,k=b.Define({"detect-display-math":c(),"detect-family":c(),"detect-inline-family":e("text","math"),"detect-inline-weight":e("text","math"),"detect-mode":c(),"detect-shape":c(),"detect-weight":c(),color:f(""),"math-rm":g("\\mathrm"),"math-sf":g("\\mathsf"),"math-tt":g("\\mathtt"),mode:e("math","text"),"text-rm":g("\\rmfamily"),"text-sf":g("\\sffamily"),"text-tt":g("\\ttfamily"),"unit-color":f(""),"unit-math-rm":g("\\mathrm"),"unit-math-sf":g("\\mathsf"),"unit-math-tt":g("\\mathtt"),"unit-mode":e("math","text"),"unit-text-rm":g("\\rmfamily"),"unit-text-sf":g("\\sffamily"),"unit-text-tt":g("\\ttfamily"),"number-color":f(""),"number-math-rm":g("\\mathrm"),"number-math-sf":g("\\mathsf"),"number-math-tt":g("\\mathtt"),"number-mode":e("math","text"),"number-text-rm":g("\\rmfamily"),"number-text-sf":g("\\sffamily"),"number-text-tt":g("\\ttfamily"),"input-close-uncertainty":f(")"),"input-comparators":f("<=>\\approx\\ge\\geq\\gg\\le\\leq\\ll\\sim"),"input-complex-roots":f("ij"),"input-decimal-markers":f(",."),"input-digits":f("0123456789"),"input-exponent-markers":f("dDeE"),"input-ignore":f(""),"input-open-uncertainty":f("("),"input-protect-tokens":f("\\approx\\dots\\ge\\geq\\gg\\le\\leq\\ll\\mp\\pi\\pm\\sim"),"input-signs":f("+-\\pm\\mp"),"input-uncertainty-signs":f("\\pm"),"input-symbols":f("\\pi\\dots"),"parse-numbers":c(!0),"add-decimal-zero":c(!0),"add-integer-zero":c(!0),"explicit-sign":f(""),"fixed-exponent":h(),"minimum-integer-digits":h(),"omit-uncertainty":c(),"retain-explicit-plus":c(),"retain-unity-mantissa":c(!0),"retain-zero-exponent":c(),"round-half":e("up","even"),"round-integer-to-decimal":c(),"round-minimum":f("0"),"round-mode":e("off","figures","places"),"round-precision":h(2),"scientific-notation":d("false","true","fixed","engineering"),"zero-decimal-to-integer":c(),"bracket-negative-numbers":c(),"bracket-numbers":c(!0),"close-bracket":f(")"),"complex-root-position":e("after-number","before-number"),"copy-complex-root":c(!1),"copy-decimal-marker":c(!1),"exponent-base":f("10"),"exponent-product":i("\\times"),"group-digits":e("true","false","decimal","integer"),"group-minimum-digits":h(5),"group-separator":f("\\,"),"negative-color":f(""),"open-bracket":f("("),"output-close-uncertainty":f(")"),"output-complex-root":f("\\mathrm{i}"),"output-decimal-marker":f("."),"output-exponent-marker":f(""),"output-open-uncertainty":f("("),"separate-uncertainty":c(!1),"tight-spacing":c(!1),"uncertainty-separator":f(""),"fraction-function":g("\\frac"),"input-product":f("x"),"input-quotient":f("/"),"output-product":i("\\times"),"output-quotient":f("/"),"quotient-mode":e("symbol","fraction"),"list-final-separator":f(" and "),"list-pair-separator":f(" and "),"list-separator":f(", "),"range-phrase":j(" to "),"add-arc-degree-zero":c(!1),"add-arc-minute-zero":c(!1),"add-arc-second-zero":c(!1),"angle-symbol-over-decimal":c(!1),"arc-separator":f(!1),"number-angle-product":f(""),"free-standing-units":c(!1),"overwrite-functions":c(!1),"space-before-unit":c(!1),"unit-optional-argument":c(!1),"use-xspace":c(!1),abbreviations:c(!0),"binary-units":c(),"bracket-unit-denominator":c(!0),"forbid-literal-units":c(!1),"literal-superscript-as-power":c(!0),"inter-unit-product":f("\\,"),"parse-units":c(!0),"per-mode":e("reciprocal","reciprocal-positive-first","symbol","repeated-symbol","fraction","symbol-or-fraction"),"per-symbol":f("/"),"power-font":e("number","unit"),"prefixes-as-symbols":c(!0),"qualifier-mode":e("subscript","brackets","phrase","space","text"),"sticky-per":c(!1),"allow-number-unit-breaks":c(!1),"exponent-to-prefix":c(!1),"list-units":e("repeat","brackets","single"),"multi-part-units":e("brackets","repeat","single"),"number-unit-product":f("\\,"),"product-units":e("repeat","brackets","brackets-power","power","single"),"range-units":e("repeat","brackets","single")});return k}(a),c=function(){function a(a,b){var c=[];for(var d in b){var e=b[d];c.push({name:d,category:a,symbol:e[0],abbrev:e[1]})}return c}function b(a){var b=k[a],c="";if(void 0===b){if(b=k[a.slice(1)],void 0===b)return void console.log("cannot parse abbreviation",a);if(c=j[a[0]],void 0===c)return void console.log("cannot parse prefix ",a[0]," on unit ",b," (",a,")");c="\\"+c}return c+="\\"+b}var c={},d=MathJax.ElementJax.mml,e=c.UNITSMACROS={per:["Per",-1],square:["PowerPfx",2],cubic:["PowerPfx",3],raiseto:["PowerPfx",void 0],squared:["PowerSfx",2],cubed:["PowerSfx",3],tothe:["PowerSfx",void 0],meter:["Macro","\\metre"],deka:["Macro","\\deca"],celsius:["Macro","\\degreeCelsius"],kg:["Macro","\\kilogram"],amu:["Macro","\\atomicmassunit"],kWh:["Macro","\\kilo\\watt\\hour"],of:"Of",cancel:"Unsupported",highlight:"Highlight"},f=MathJax.Extension["TeX/siunitx"].SIPrefixes=c.SIPrefixes=function(a){var b={};for(var c in a){var d=a[c];b[c]={name:c,power:d[0],abbrev:d[1],pfx:d.length>=3?d[2]:d[1]}}return b}({yocto:[-24,"y"],zepto:[-21,"z"],atto:[-18,"a"],femto:[-15,"f"],pico:[-12,"p"],nano:[-9,"n"],micro:[-6,"u",d.entity("#x03bc")],milli:[-3,"m"],centi:[-2,"c"],deci:[-1,"d"],deca:[1,"da"],hecto:[2,"h"],kilo:[3,"k"],mega:[6,"M"],giga:[9,"G"],tera:[12,"T"],peta:[15,"P"],exa:[18,"E"],zetta:[21,"Z"],yotta:[24,"Y"]});for(var g in f)g=f[g],e[g.name]=["SIPrefix",g];var h=MathJax.Extension["TeX/siunitx"].SIUnits=c.SIUnits=function(a){var b={};return a.forEach(function(a){b[a.name]=a}),b}([].concat(a("SI base",{ampere:["A","A"],candela:["cd"],kelvin:["K","K"],kilogram:["kg"],gram:["g","g"],metre:["m","m"],mole:["mol","mol"],second:["s","s"]}),a("coherent derived",{becquerel:["Bq"],degreeCelsius:[d.entity("#x2103")],coulomb:["C"],farad:["F","F"],gray:["Gy"],hertz:["Hz","Hz"],henry:["H"],joule:["J","J"],katal:["kat"],lumen:["lm"],lux:["lx"],newton:["N","N"],ohm:[d.entity("#x03a9"),"ohm"],pascal:["Pa","Pa"],radian:["rad"],siemens:["S"],sievert:["Sv"],steradian:["sr"],tesla:["T"],volt:["V","V"],watt:["W","W"],weber:["Wb"]}),a("accepted non-SI",{day:["d"],degree:[d.entity("#x00b0")],hectare:["ha"],hour:["h"],litre:["l","l"],liter:["L","L"],arcminute:[d.entity("#x2032")],minute:["min"],arcsecond:[d.entity("#x2033")],tonne:["t"]}),a("experimental non-SI",{astronomicalunit:["ua"],atomicmassunit:["u"],bohr:[d.msub(d.mi(d.chars("a")).With({mathvariant:d.VARIANT.NORMAL}),d.mn(0))],clight:["c0"],dalton:["Da"],electronmass:["me"],electronvolt:["eV","eV"],elementarycharge:["e"],hartree:["Eh"],planckbar:[d.entity("#x0127")]}),a("other non-SI",{angstrom:[d.entity("#x212b")],bar:["bar"],barn:["b"],bel:["B"],decibel:["dB","dB"],knot:["kn"],mmHg:["mmHg"],nauticmile:[";"],neper:["Np"]})));h.percent={name:"percent",symbol:"%",category:"non-unit",abbrev:void 0};for(var i in h)i=h[i],e[i.name]=["SIUnit",i];var j={};for(var g in f)g=f[g],g.abbrev&&(j[g.abbrev]=g.name);var k={};for(var i in h)i=h[i],i.abbrev&&(k[i.abbrev]=i.name);return["fg pg ng ug mg g","pm nm um mm cm dm m km","as fs ps ns us ms s","fmol pmol nmol umol mmol mol kmol","pA nA uA mA A kA","ul ml l hl uL mL L hL","mHz Hz kHz MHz GHz THz","mN N kN MN","Pa kPa MPa GPa","mohm kohm Mohm","pV nV uV mV V kV","uW mW W kW MW GW","J kJ","meV eV keV MeV GeV TeV","fF pF F","K","dB"].forEach(function(a){a.split(" ").forEach(function(a){e[a]=["Macro",b(a)]})}),c}(),d=function(a){var b=MathJax.InputJax.TeX,c=b.Stack,d=c.Item,e=MathJax.ElementJax.mml,f=a.UNITSMACROS,g=MathJax.Extension["TeX/siunitx"].SIUnitParser=b.Parse.Subclass({Init:function(a,b,c){this.cur_prefix=void 0,this.cur_pfxpow=void 0,this.per_active=!1,this.has_literal=!1,this.literal_chars="",this.units=[],this.options=b,arguments.callee.SUPER.Init.call(this,a,c)},mml:function(){if(!this.has_literal){var a=b.Stack({},!0),c=this.options["per-mode"],f=this,g=[],h=[],i=[];if(this.units.forEach(function(a){var b=void 0===a.power?1:a.power;a.inverse&&(b=-b),b>0?h.push(a):i.push(a),g.push(a)}),"reciprocal"!==c&&i.length)if("symbol"===c)if(h.forEach(function(b){a.Push(f.UnitMML(b))}),a.Push(this.mmlToken(e.mo(e.chars(this.options["per-symbol"]).With({fence:!1,stretchy:!1})))),1===i.length){var j=i[0];j.inverse=!1,a.Push(this.UnitMML(j))}else a.Push(this.mmlToken(e.mo(e.chars("(").With({fence:!1,stretchy:!1})))),i.forEach(function(b){b.inverse=!1,a.Push(f.UnitMML(b))}),a.Push(this.mmlToken(e.mo(e.chars(")").With({fence:!1,stretchy:!1}))));else if("fraction"===c){var k=b.Stack({},!0),l=b.Stack({},!0);h.forEach(function(a){k.Push(f.UnitMML(a))}),i.forEach(function(a){a.inverse=!1,l.Push(f.UnitMML(a))}),k.Push(d.stop()),l.Push(d.stop()),a.Push(e.mfrac(k.Top().data[0],l.Top().data[0]))}else b.Error("Unimplemented per-mode "+c);else g.forEach(function(b){a.Push(f.UnitMML(b))});return a.Push(d.stop()),"mml"!==a.Top().type?null:a.Top().data[0]}return"mml"!==this.stack.Top().type?null:this.stack.Top().data[0]},Push:function(){this.finishLiteralUnit();for(var a=0;a<arguments.length;a++){var b=arguments[a];b instanceof d.stop||(this.has_literal=!0),this.stack.Push.call(this.stack,b)}},PushUnitFallBack:function(){this.stack.Push.apply(this.stack,arguments)},csFindMacro:function(a){this.finishLiteralUnit();var b=f[a];return b?b:arguments.callee.SUPER.csFindMacro.call(this,a)},Variable:function(a){this.literal_chars+=a},Number:function(a){return"."==a?this.finishLiteralUnit():void arguments.callee.SUPER.Number.call(this,a)},Tilde:function(a){this.finishLiteralUnit()},Superscript:function(a){this.finishLiteralUnit(),arguments.callee.SUPER.Superscript.call(this,a)},Subscript:function(a){this.finishLiteralUnit(),arguments.callee.SUPER.Subscript.call(this,a)},Unsupported:function(){},Of:function(a){var c=this.GetArgument(a);this.has_literal&&b.Error(["SIunitx","NotImplementedYet"]),this.units.length||b.Error(["SIunitx","Qualification suffix with no unit"]);var d=this.units[this.units.length-1];void 0!==d.power&&b.Error(["SIunitx","double qualification",d.qual,c]),d.qual=c},Highlight:function(a){var b=this.GetArgument(a);this.cur_highlight=b},Per:function(a){return this.per_active?void b.Error(["SIunitx","double \\per"]):void(this.per_active=!0)},PowerPfx:function(a,c){void 0===c&&(c=this.GetArgument(a)),this.cur_pfxpow&&b.Error(["SIunitx","double power prefix",this.cur_pfxpow,c]),this.cur_pfxpow=c},PowerSfx:function(a,c){void 0===c&&(c=this.GetArgument(a)),this.has_literal&&b.Error(["SIunitx","NotImplementedYet"]),this.units.length||b.Error(["SIunitx","Power suffix with no unit"]);var d=this.units[this.units.length-1];void 0!==d.power&&b.Error(["SIunitx","double power",d.power,c]),d.power=c},SIPrefix:function(a,c){this.cur_prefix&&b.Error(["SIunitx","double SI prefix",this.cur_prefix,c]),this.cur_prefix=c},UnitMML:function(a){var b=[];a.prefix&&(b=b.concat(a.prefix.pfx)),b=b.concat(a.unit.symbol);var c="",d=[];b.forEach(function(a){"string"==typeof a||a instanceof String?c+=a:(c&&(d.push(e.chars(c)),c=""),d.push(a))}),c&&d.push(e.chars(c));var f={mathvariant:e.VARIANT.NORMAL},g=e.mi.apply(e.mi,d).With(f),h=void 0===a.power?1:a.power;return a.inverse&&(h=-h),1!=h?g=void 0===a.qual?e.msup(g,e.mn(h)):e.msubsup(g,e.mtext(a.qual),e.mn(h)):void 0!==a.qual&&(g=e.msub(g,e.mtext(a.qual))),this.mmlToken(g)},SIUnit:function(a,b){this.pushUnit(b)},finishLiteralUnit:function(){this.literal_chars&&(this.pushUnit({symbol:this.literal_chars,name:void 0,category:"literal",abbrev:this.literal_chars}),this.literal_chars="")},pushUnit:function(a){this.units.push({unit:a,prefix:this.cur_prefix,power:this.cur_pfxpow,inverse:this.per_active,qual:void 0});var b=[];this.cur_prefix&&(b=b.concat(this.cur_prefix.pfx)),b=b.concat(a.symbol);var c="",d=[];b.forEach(function(a){"string"==typeof a||a instanceof String?c+=a:(c&&(d.push(e.chars(c)),c=""),d.push(a))}),c&&d.push(e.chars(c));var f={mathvariant:e.VARIANT.NORMAL};this.PushUnitFallBack(this.mmlToken(e.mi.apply(e.mi,d).With(f))),this.cur_prefix=void 0,this.cur_pfxpow=void 0,this.options["sticky-per"]||(this.per_active=!1)}});return g}(c),e=function(){"use strict";function a(a,b){function c(){this.constructor=a}c.prototype=b.prototype,a.prototype=new c}function b(a,c,d,e){this.message=a,this.expected=c,this.found=d,this.location=e,this.name="SyntaxError","function"==typeof Error.captureStackTrace&&Error.captureStackTrace(this,b)}function c(a){function c(){return a.substring(s,r)}function d(b){var c,d,e=t[b];if(e)return e;for(c=b-1;!t[c];)c--;for(e=t[c],e={line:e.line,column:e.column,seenCR:e.seenCR};c<b;)d=a.charAt(c),"\n"===d?(e.seenCR||e.line++,e.column=1,e.seenCR=!1):"\r"===d||"\u2028"===d||"\u2029"===d?(e.line++,e.column=1,e.seenCR=!0):(e.column++,e.seenCR=!1),c++;return t[b]=e,e}function e(a,b){var c=d(a),e=d(b);return{start:{offset:a,line:c.line,column:c.column},end:{offset:b,line:e.line,column:e.column}}}function f(a){r<u||(r>u&&(u=r,v=[]),v.push(a))}function g(a,c,d,e){function f(a){var b=1;for(a.sort(function(a,b){return a.description<b.description?-1:a.description>b.description?1:0});b<a.length;)a[b-1]===a[b]?a.splice(b,1):b++}function g(a,b){function c(a){function b(a){return a.charCodeAt(0).toString(16).toUpperCase()}return a.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\x08/g,"\\b").replace(/\t/g,"\\t").replace(/\n/g,"\\n").replace(/\f/g,"\\f").replace(/\r/g,"\\r").replace(/[\x00-\x07\x0B\x0E\x0F]/g,function(a){return"\\x0"+b(a)}).replace(/[\x10-\x1F\x80-\xFF]/g,function(a){return"\\x"+b(a)}).replace(/[\u0100-\u0FFF]/g,function(a){return"\\u0"+b(a)}).replace(/[\u1000-\uFFFF]/g,function(a){return"\\u"+b(a)})}var d,e,f,g=new Array(a.length);for(f=0;f<a.length;f++)g[f]=a[f].description;return d=a.length>1?g.slice(0,-1).join(", ")+" or "+g[a.length-1]:g[0],e=b?'"'+c(b)+'"':"end of input","Expected "+d+" but "+e+" found."}return null!==c&&f(c),new b(null!==a?a:g(c,d),c,d,e)}function h(a){var b,c=new Array(a.length);for(b=0;b<a.length;b++)c[b]=a.charCodeAt(b)-32;return c}function i(b){for(var c,d,e=q[b],g=0,h=[],j=e.length,k=[],l=[];;){for(;g<j;)switch(e[g]){case 0:l.push(p[e[g+1]]),g+=2;break;case 1:l.push(void 0),g++;break;case 2:l.push(null),g++;break;case 3:l.push(m),g++;break;case 4:l.push([]),g++;break;case 5:l.push(r),g++;break;case 6:l.pop(),g++;break;case 7:r=l.pop(),g++;break;case 8:l.length-=e[g+1],g+=2;break;case 9:l.splice(-2,1),g++;break;case 10:l[l.length-2].push(l.pop()),g++;break;case 11:l.push(l.splice(l.length-e[g+1],e[g+1])),g+=2;break;case 12:l.push(a.substring(l.pop(),r)),g++;break;case 13:k.push(j),h.push(g+3+e[g+1]+e[g+2]),l[l.length-1]?(j=g+3+e[g+1],g+=3):(j=g+3+e[g+1]+e[g+2],g+=3+e[g+1]);break;case 14:k.push(j),h.push(g+3+e[g+1]+e[g+2]),l[l.length-1]===m?(j=g+3+e[g+1],g+=3):(j=g+3+e[g+1]+e[g+2],g+=3+e[g+1]);break;case 15:k.push(j),h.push(g+3+e[g+1]+e[g+2]),l[l.length-1]!==m?(j=g+3+e[g+1],g+=3):(j=g+3+e[g+1]+e[g+2],g+=3+e[g+1]);break;case 16:l[l.length-1]!==m?(k.push(j),h.push(g),j=g+2+e[g+1],g+=2):g+=2+e[g+1];break;case 17:k.push(j),h.push(g+3+e[g+1]+e[g+2]),a.length>r?(j=g+3+e[g+1],g+=3):(j=g+3+e[g+1]+e[g+2],g+=3+e[g+1]);break;case 18:k.push(j),h.push(g+4+e[g+2]+e[g+3]),a.substr(r,p[e[g+1]].length)===p[e[g+1]]?(j=g+4+e[g+2],g+=4):(j=g+4+e[g+2]+e[g+3],g+=4+e[g+2]);break;case 19:k.push(j),h.push(g+4+e[g+2]+e[g+3]),a.substr(r,p[e[g+1]].length).toLowerCase()===p[e[g+1]]?(j=g+4+e[g+2],g+=4):(j=g+4+e[g+2]+e[g+3],g+=4+e[g+2]);break;case 20:k.push(j),h.push(g+4+e[g+2]+e[g+3]),p[e[g+1]].test(a.charAt(r))?(j=g+4+e[g+2],g+=4):(j=g+4+e[g+2]+e[g+3],g+=4+e[g+2]);break;case 21:l.push(a.substr(r,e[g+1])),r+=e[g+1],g+=2;break;case 22:l.push(p[e[g+1]]),r+=p[e[g+1]].length,g+=2;break;case 23:l.push(m),0===w&&f(p[e[g+1]]),g+=2;break;case 24:s=l[l.length-1-e[g+1]],g+=2;break;case 25:s=r,g++;break;case 26:for(c=e.slice(g+4,g+4+e[g+3]),d=0;d<e[g+3];d++)c[d]=l[l.length-1-c[d]];l.splice(l.length-e[g+2],e[g+2],p[e[g+1]].apply(null,c)),g+=4+e[g+3];break;case 27:l.push(i(e[g+1])),g+=2;break;case 28:w++,g++;break;case 29:w--,g++;break;default:throw new Error("Invalid opcode: "+e[g]+".")}if(!(k.length>0))break;j=k.pop(),g=h.pop()}return l[0]}function j(a,b){if(b<1)return"";for(var c="";b>1;)1&b&&(c+=a),b>>=1,a+=a;return c+a}var k,l=arguments.length>1?arguments[1]:{},m={},n={start:0},o=0,p=[function(a){return a},{type:"other",description:"complex root"},function(a){return l["input-complex-roots"].indexOf(a)>=0},function(a){return a},{type:"other",description:"decimal marker"},function(a){return l["input-decimal-markers"].indexOf(a)>=0},{type:"other",description:"exponent marker"},function(a){return l["input-exponent-markers"].indexOf(a)>=0},{type:"any",description:"any character"},function(a,b){var c=[a];return b.forEach(function(a){c.push(a[1])}),c},"x",{type:"literal",value:"x",description:'"x"'},function(a){return a},"/",{type:"literal",value:"/",description:'"/"'},function(a,b){return{num:a,denom:b&&b[3]}},function(a,b,c){return b.exp=c&&c[1],b.rel=a&&a[0],b},function(a,b,c){var d={sign:b&&b[0],exp:c,rel:a&&a[0]};return d},function(a,b){var c=a[0]&&a[0][0];a=a[1],a.sign=c;var d=b&&b[1];return b=b&&b[3],b&&(b.sign=d),{re:a,im:b}},function(a,b){return b.sign=a&&a[0],{re:b}},function(a,b,c){var d=b.frac.length,e=c.frac.length;return b.frac=b.frac+j("0",Math.max(0,e-d)),c.frac=c.frac+j("0",Math.max(0,d-e)),b.uncert=c["int"]+c.frac,b.sign=a&&a[0],{re:b}},function(a,b){return a.root=b,a},function(a,b){return b.root=a,b},function(a,b){return b.sign=a&&a[0],b},/^[+\-]/,{type:"class",value:"[+-]",description:"[+-]"},function(){return c()},"+-",{type:"literal",value:"+-",description:'"+-"'},"\\pm",{type:"literal",value:"\\pm",description:'"\\\\pm"'},function(){return"\\pm"},"-+",{type:"literal",value:"-+",description:'"-+"'},"\\mp",{type:"literal",value:"\\mp",description:'"\\\\mp"'},function(){return"\\mp"},"<<",{type:"literal",value:"<<",description:'"<<"'},"\\ll",{type:"literal",value:"\\ll",description:'"\\\\ll"'},function(){return"\\ll"},"<",{type:"literal",value:"<",description:'"<"'},function(){return"<"},"<=",{type:"literal",value:"<=",description:'"<="'},"\\le",{type:"literal",value:"\\le",description:'"\\\\le"'},"q",{type:"literal",value:"q",description:'"q"'},function(){return"\\le"},">>",{type:"literal",value:">>",description:'">>"'},"\\gg",{type:"literal",value:"\\gg",description:'"\\\\gg"'},function(){return"\\gg"},">",{type:"literal",value:">",description:'">"'},function(){return">"},">=",{type:"literal",value:">=",description:'">="'},"\\ge",{type:"literal",value:"\\ge",description:'"\\\\ge"'},function(){return"\\ge"},"(",{type:"literal",value:"(",description:'"("'},")",{type:"literal",value:")",description:'")"'},function(a,b){return b=b&&b[3],a.uncert=b,a},{type:"other",description:"decimal"},function(a,b){var c=b&&b[1],d=b&&b[2]&&b[2][1];return{"int":a,sep:c,frac:d||""}},function(a,b){return{"int":"",sep:a,frac:b}},{type:"other",description:"integer"},function(){return parseInt(c(),10)},/^[0-9]/,{type:"class",value:"[0-9]",description:"[0-9]"},function(){return c()},{type:"other",description:"whitespace"},/^[ \t\n\r]/,{type:"class",value:"[ \\t\\n\\r]",description:"[ \\t\\n\\r]"}],q=[h("%;D/:#;%/1$;D/($8#: #!!)(#'#(\"'#&'#"),h('<%;$/<#9:" ! -""&!&#/($8":#"!!)("\'#&\'#=." 7!'),h('<%;$/<#9:% ! -""&!&#/($8":#"!!)("\'#&\'#=." 7$'),h('<%;$/<#9:\' ! -""&!&#/($8":#"!!)("\'#&\'#=." 7&'),h('1""5!7('),h('%;\'/_#$%;D/,#;&/#$+")("\'#&\'#06*%;D/,#;&/#$+")("\'#&\'#&/)$8":)""! )("\'#&\'#'),h("%2*\"\"6*7+/:#;D/1$;'/($8#:,#! )(#'#(\"'#&'#"),h('%;(/b#%;D/D#2-""6-7./5$;D/,$;(/#$+$)($\'#(#\'#("\'#&\'#." &"/)$8":/""! )("\'#&\'#'),h(";*.# &;)"),h('%%;=/,#;D/#$+")("\'#&\'#." &"/T#;+/K$%;D/,#;2/#$+")("\'#&\'#." &"/*$8#:0##"! )(#\'#("\'#&\'#'),h('%%;=/,#;D/#$+")("\'#&\'#." &"/T#%;6/,#;D/#$+")("\'#&\'#." &"/3$;2/*$8#:1##"! )(#\'#("\'#&\'#'),h(";,.) &;..# &;-"),h('%%%;6/,#;D/#$+")("\'#&\'#." &"/,#;>/#$+")("\'#&\'#/W#%;D/>#;6/5$;D/,$;//#$+$)($\'#(#\'#("\'#&\'#/)$8":2""! )("\'#&\'#'),h('%%;6/,#;D/#$+")("\'#&\'#." &"/2#;>/)$8":3""! )("\'#&\'#'),h("%%;6/,#;D/#$+\")(\"'#&'#.\" &\"/W#;?/N$;D/E$;4/<$;D/3$;?/*$8&:4&#%$ )(&'#(%'#($'#(#'#(\"'#&'#"),h(";0.# &;1"),h("%;>/;#;D/2$;!/)$8#:5#\"\" )(#'#(\"'#&'#"),h("%;!/;#;D/2$;>/)$8#:6#\"\" )(#'#(\"'#&'#"),h("%;#/\\#;D/S$%;3/,#;D/#$+\")(\"'#&'#.\" &\"/2$;?/)$8$:7$\"! )($'#(#'#(\"'#&'#"),h('%48""5!79/& 8!::! )'),h('%2;""6;7<.) &2=""6=7>/& 8!:?! )'),h('%2@""6@7A.) &2B""6B7C/& 8!:D! )'),h(";4.) &;5.# &;3"),h('%2E""6E7F.) &2G""6G7H/& 8!:I! )'),h('%2J""6J7K/& 8!:L! )'),h('%2M""6M7N.G &%2O""6O7P/7#2Q""6Q7R." &"/#$+")("\'#&\'#/& 8!:S! )'),h('%2T""6T7U.) &2V""6V7W/& 8!:X! )'),h('%2Y""6Y7Z/& 8!:[! )'),h('%2\\""6\\7].G &%2^""6^7_/7#2Q""6Q7R." &"/#$+")("\'#&\'#/& 8!:`! )'),h(";7.; &;9.5 &;8./ &;:.) &;<.# &;;"),h('%;?/z#%;D/\\#2a""6a7b/M$;D/D$;C/;$;D/2$2c""6c7d/#$+&)(&\'#(%\'#($\'#(#\'#("\'#&\'#." &"/)$8":e""! )("\'#&\'#'),h('<;@.# &;A=." 7f'),h('%;C/k#%;D/M#;"/D$%;D/,#;C/#$+")("\'#&\'#." &"/#$+#)(#\'#("\'#&\'#." &"/)$8":g""! )("\'#&\'#'),h('%;"/;#;D/2$;C/)$8#:h#"" )(#\'#("\'#&\'#'),h('<%;C/& 8!:j! )=." 7i'),h('%$4k""5!7l/,#0)*4k""5!7l&&&#/& 8!:m! )'),h('<$4o""5!7p0)*4o""5!7p&=." 7n')],r=0,s=0,t=[{line:1,column:1,seenCR:!1}],u=0,v=[],w=0;if("startRule"in l){if(!(l.startRule in n))throw new Error("Can't start parsing from rule \""+l.startRule+'".');o=n[l.startRule]}if(k=i(o),k!==m&&r===a.length)return k;throw k!==m&&r<a.length&&f({type:"end",description:"end of input"}),g(null,v,u<a.length?a.charAt(u):null,u<a.length?e(u,u+1):e(u,u))}return a(b,Error),{SyntaxError:b,parse:c}}(),f=function(){function a(a){for(var b=a.length,c=b-1;c>=0&&"9"===a[c];)c--;return a=c>=0?a.slice(0,c)+"123456789"[parseInt(a[c])]+"0".repeat(b-c-1):"1"+"0".repeat(b)}function b(b,c,d,e){if(console.log(c),c){var f;if(null===c.sign?c.sign=b["explicit-sign"]:e||"+"!==c.sign||b["retain-explicit-plus"]||(c.sign=null),c["int"]=c["int"].replace(/^00*/,""),!c["int"]&&b["add-integer-zero"]&&(c["int"]="0"),c.sep&&!c.frac&&b["add-decimal-zero"]&&(c.frac="0"),f=b["minimum-integer-digits"]-c["int"].length,f>0&&(c["int"]="0".repeat(f)+c["int"]),!d&&null===c.uncert&&"off"!==b["round-mode"])switch("figures"===b["round-mode"]?(f=c["int"].replace(/^00*/,"").length,f?f+=c.frac.length:f=c.frac.replace(/^00*/,"").length):f=c.frac.length,f-=b["round-precision"],Math.sign(f)){case 1:var g=c["int"]+c.frac,h=Math.sign(parseInt(g[g.length-f])-5);if(!h&&f>1&&parseInt(g.slice(1-f))&&(h=1),g=g.slice(0,-f),!h)switch(b["round-half"]){case"up":h=1;break;default:case"even":h=1&parseInt(g[g.length-1])?1:-1}1===h&&(g=a(g)),f<c.frac.length?(c["int"]=g.slice(0,f-c.frac.length),c.frac=g.slice(f-c.frac.length)):(c["int"]=g+"0".repeat(f-c.frac.length),c.sep=null,c.frac="");break;case-1:(c.sep||b["round-integer-to-decimal"])&&(c.sep=c.sep||b["output-decimal-marker"],c.frac+="0".repeat(-f))}!b["zero-decimal-to-integer"]||c.frac&&parseInt(c.frac)||(c.frac=null,c.sep=null)}}function c(a,c){b(a,c.re),b(a,c.im,!1,!0),b(a,c.exp,!0)}function d(a,b){b.forEach(function(b){[b.num,b.denom].forEach(function(b){b&&c(a,b)})})}function e(a,b){var c=b["int"],d=b.frac,e=a["group-digits"],f=a["group-minimum-digits"],g="{"+a["group-separator"]+"}",h="{"+(a["copy-decimal-marker"]?b.sep:a["output-decimal-marker"])+"}",i=b.sign||"",j=c.length;if(j>=f&&("true"===e||"integer"===e))for(j-=3;j>0;j-=3)c=c.slice(0,j)+g+c.slice(j);if(!b.sep)return i+c;if(j=d.length,j>=f&&("true"===e||"decimal"===e))for(j-=1+(j-1)%3;j>0;j-=3)d=d.slice(0,j)+g+d.slice(j);return i+c+h+d}function f(a,b){var c="",d="";b.exp&&a["bracket-numbers"]&&(c=(a["open-bracket"]||"(")+" ",d=" "+(a["close-bracket"]||")"));var f=b.re&&e(a,b.re),g=null;if(b.im){var h=a["copy-complex-root"]?b.im.root:a["output-complex-root"];g=e(a,b.im),"before-number"===a["complex-root-position"]?g=h+g:g+=h}var i=b.rel?b.rel+" ":"";if(f?i+=g?c+f+" "+g+d:f:g&&(i+=g),b.sign&&((b.re||b.im)&&error("sign but also re or im given"),i+=" "+b.sign),b.exp){var j=e(a,b.exp),k=a["output-exponent-marker"];i+=k?" "+k+" "+j:" "+(f||g?a["exponent-product"]||"\\times":"")+" "+(a["exponent-base"]||"10")+"^{"+j+"}"}return i}function g(a,b){return b.map(function(b){var d=[b.num,b.denom].map(function(b){if(!b)return b;var d={};for(var e in b)b.hasOwnProperty(e)&&(d[e]=b);return c(a,b),f(a,b)});return{num:d[0],denom:d[1]}})}return{postprocDecimal:b,postprocComplExp:c,postprocAll:d,fmtDecimal:e,fmtComplExp:f,processAll:g}}(),g=function(a,b,c){var d={},e=MathJax.InputJax.TeX,f=d.SINumberParser=MathJax.Object.Subclass({Init:function(b,c){if(this.string=b,this.i=0,void 0===c)c=a();else if(!(c instanceof a))throw console.log(c,a),"SINumberParser expects an options object";this.options=c,this.Parse()},Parse:function(){var a=this.string.replace(/\s+/gi,""),d={"+-":"\\pm","-+":"\\mp","<=":"\\leq",">=":"\\geq","<<":"\\ll",">>":"\\gg"};for(var e in d)d.hasOwnProperty(e)&&(a=a.replace(e,d[e]));this.parsed=b.parse(a,this.options),this.preformatted=c.processAll(this.options,this.parsed)}});d.SINumberListParser=f.Subclass({Parse:function(){for(var a=this.string.replace(/\s+/gi,""),b=a.split(";"),c=[],d=0;d<b.length;++d)d==b.length-1?1==d?c.push("\\text{"+this.options["list-pair-separator"]+"}"):d&&c.push("\\text{"+this.options["list-final-separator"]+"}"):d&&c.push("\\text{"+this.options["list-separator"]+"}"),c.push(this._parse_multi_part_number(b[d]));this.parsed=c},mml:function(){return e.Parse(this.parsed.join("")).mml()}});return d}(b,e,f),h=function(a,b,c,d){var e=MathJax.InputJax.TeX,f=MathJax.ElementJax.mml,g=b.UNITSMACROS,h=d.SINumberParser,i=d.SINumberListParser,j=MathJax.Extension["TeX/siunitx"].SIunitxCommands={sisetup:function(a){this.GetArgument(a)},si:function(b){var d=a.ParseOptions(this.GetBrackets(b,"")),e=this.GetArgument(b);this.Push(c(e,d,this.stack.env).mml())},SI:function(b){var d=a.ParseOptions(this.GetBrackets(b,"")),e=this.GetArgument(b),g=this.GetBrackets(b,""),i=this.GetArgument(b);g&&(this.Push(c(g,d,this.stack.env).mml()),this.Push(f.mspace().With({width:f.LENGTH.MEDIUMMATHSPACE,mathsize:f.SIZE.NORMAL,scriptlevel:0}))),this.Push(h(e,d,this.stack.env).mml()[0].num),this.Push(f.mspace().With({width:f.LENGTH.MEDIUMMATHSPACE,mathsize:f.SIZE.NORMAL,scriptlevel:0})),this.Push(c(i,d,this.stack.env).mml())},SIlist:function(b){function d(){return f.mspace().With({width:f.LENGTH.MEDIUMMATHSPACE,mathsize:f.SIZE.NORMAL,scriptlevel:0})}var g=a.ParseOptions(this.GetBrackets(b,"")),h=this.GetArgument(b),j=this.GetBrackets(b,""),k=this.GetArgument(b);j&&(j=c(j,g,this.stack.env)),h=i(h,g,this.stack.env).parsed,k=c(k,g,this.stack.env);for(var l=0;l<h.length;++l){var m=h[l];1&l?this.Push(e.Parse(m).mml()):(j&&(this.Push(j.mml()),this.Push(d())),this.Push(e.Parse(m).mml()),this.Push(d()),this.Push(k.mml()))}},SIrange:function(b){var d=a.ParseOptions(this.GetBrackets(b,"")),e=this.GetArgument(b),g=this.GetArgument(b),i=this.GetBrackets(b,""),j=this.GetArgument(b);j=c(j,d,this.stack.env),i&&(i=c(i,d,this.stack.env)),i&&(this.Push(i.mml()),this.Push(f.mspace().With({width:f.LENGTH.MEDIUMMATHSPACE,mathsize:f.SIZE.NORMAL,scriptlevel:0}))),this.Push(h(e,d,this.stack.env).mml()),this.Push(f.mspace().With({width:f.LENGTH.MEDIUMMATHSPACE,mathsize:f.SIZE.NORMAL,scriptlevel:0})),this.Push(j.mml()),this.Push(d["range-phrase"]),i&&(this.Push(i.mml()),this.Push(f.mspace().With({width:f.LENGTH.MEDIUMMATHSPACE,mathsize:f.SIZE.NORMAL,scriptlevel:0}))),this.Push(h(g,d,this.stack.env).mml()),this.Push(f.mspace().With({width:f.LENGTH.MEDIUMMATHSPACE,mathsize:f.SIZE.NORMAL,scriptlevel:0})),this.Push(j.mml())},num:function(b){var c=a.ParseOptions(this.GetBrackets(b,"")),d=this.GetArgument(b),f=h(d,c,this.stack.env).preformatted.map(function(a){return null===a.denom?a.num:"symbol"==c["quotient-mode"]?a.num+c["output-quotient"]+a.denom:c["fraction-function"]+"{"+a.num+"}{"+a.denom+"}"}).join(c["output-product"]);this.Push(e.Parse(f).mml())},ang:function(b){var c=a.ParseOptions(this.GetBrackets(b,"")),d=this.GetArgument(b);d=i(d,c,this.stack.env).parsed,d.length>5&&e.Error("More than three elements in angle specification");for(var h=["degree",void 0,"arcminute",void 0,"arcsecond"],j={mathvariant:f.VARIANT.NORMAL},k=0;k<d.length;++k){var l=d[k];if(1&k);else{if(!l)continue;this.Push(e.Parse(l).mml());var m=g[h[k]][1],n=f.mi.apply(f.mi,[m.symbol]).With(j);this.Push(this.mmlToken(n))}}},numlist:function(b){var c=a.ParseOptions(this.GetBrackets(b,"")),d=this.GetArgument(b);this.Push(i(d,c,this.stack.env).mml())},numrange:function(b){var c=a.ParseOptions(this.GetBrackets(b,"")),d=this.GetArgument(b),e=this.GetArgument(b);this.Push(h(d,c,this.stack.env).mml()),this.Push(c["range-phrase"]),
-this.Push(h(e,c,this.stack.env).mml())}};return e.Definitions.Add({macros:{sisetup:"SIunitx",si:"SIunitx",SI:"SIunitx",SIlist:"SIunitx",SIrange:"SIunitx",num:"SIunitx",ang:"SIunitx",numlist:"SIunitx",numrange:"SIunitx"}},null,!0),e.Parse.Augment({SIunitx:function(a){j[a.slice(1)].call(this,a)}}),MathJax.Hub.Startup.signal.Post("TeX siunitx Ready"),j}(b,c,d,g)}()}),MathJax.Ajax.loadComplete("[Contrib]/siunitx/siunitx.js");
+/*
+ *  ../../../../legacy/siunitx/siunitx.js
+ *
+ *  Copyright (c) 2009-2018 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+/*************************************************************
+ *
+ *  MathJax/extensions/TeX/siunitx.js
+ *
+ *  Implements some of the features provided by the siunitx LaTeX package.
+ *
+ *  ---------------------------------------------------------------------
+ *
+ *  Copyright (c) 2015 Yves Delley, https://github.com/burnpanck
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+MathJax.Extension["TeX/siunitx"] = {
+  version: "0.1.0"
+};
+
+MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
+  // amd-replace-start
+
+/*************************************************************
+ *
+ *  MathJax/extensions/TeX/siunitx/keyvalue-option-validation.js
+ *
+ *  Generic validation framework to parse key-value pairs a la LaTeX
+ *
+ *  ---------------------------------------------------------------------
+ *
+ *  Copyright (c) 2016 Yves Delley, https://github.com/burnpanck
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+/* eslint-env amd */
+var keyvalue_option_validation, siunitx_options_definition, unit_definitions, unit_parser, number_parser_peg, number_preformatter, number_parser, siunitx_commands;
+keyvalue_option_validation = function () {
+  var exports = {};
+  var TEX = MathJax.InputJax.TeX;
+  var ValidationError = exports.ValidationError = MathJax.Object.Subclass({
+    Init: function (obj, name, validator, val) {
+      this._errormsg = 'ValidationError: Error validating "' + name + '" of "' + obj.constructor + '" (a "' + validator + '") to "' + val + '": ';
+      for (var idx = 4; idx < arguments.length; ++idx)
+        this._errormsg += arguments[idx].toString();
+      console.log(this._errormsg);
+    },
+    toString: function () {
+      return this._errormsg;
+    }
+  });
+  var ValidationBase = exports.ValidationBase = MathJax.Object.Subclass({
+    PropertyDescriptor: function (cls, propname) {
+      var descriptor = this;
+      return {
+        get: function () {
+          return descriptor.Get(this, propname);
+        },
+        set: function (val) {
+          descriptor.Set(this, propname, val);
+        }
+      };
+    },
+    Get: function (obj, propname) {
+      var ret = obj._values[propname];
+      if (ret !== undefined)
+        return ret;
+      return this._default;
+    },
+    Set: function (obj, propname, val) {
+      obj._values[propname] = this.Validate(obj, propname, val);
+    },
+    Validate: function (obj, propname, val) {
+      return val;
+    }
+  });
+  var Choice = exports.Choice = ValidationBase.Subclass({
+    Init: function () {
+      this._default = arguments[0];
+      var choices = {};
+      for (var idx = 0; idx < arguments.length; idx++)
+        choices[arguments[idx]] = true;
+      this._choices = choices;
+    },
+    Validate: function (obj, name, val) {
+      if (!this._choices.hasOwnProperty(val))
+        throw ValidationError(obj, name, this, val, 'must be one of ["' + Object.getOwnPropertyNames(this._choices).join('", "') + '"]');
+      return val;
+    }
+  });
+  // SwitchChoice is similar to choice, but can be used as switch;
+  // undefined is interpreted as selecting the second option
+  var SwitchChoice = exports.SwitchChoice = Choice.Subclass({
+    Init: function () {
+      this._switchchoice = arguments[1];
+      Choice.prototype.Init.apply(this, arguments);
+    },
+    Validate: function (obj, name, val) {
+      if (val === undefined)
+        val = this._switchchoice;
+      return Choice.prototype.Validate.call(this, obj, name, val);
+    }
+  });
+  var Integer = exports.Integer = ValidationBase.Subclass({
+    Init: function (def) {
+      if (def === undefined)
+        def = 0;
+      this._default = def;
+    },
+    Validate: function (obj, name, val) {
+      val = parseInt(val);
+      if (!Number.isInteger(val))
+        throw ValidationError(obj, name, this, val, 'must be an integer');
+      return val;
+    }
+  });
+  var Literal = exports.Literal = ValidationBase.Subclass({
+    Init: function (def) {
+      this._default = def;
+    },
+    Validate: function (obj, name, val) {
+      return val;
+    }
+  });
+  // This-literal is interpreted as text-mode TeX and the corresponding mml is stored
+  var TeXParsedLiteral = exports.TeXParsedLiteral = Literal.Subclass({
+    Init: function (def) {
+      this._default = def;
+    },
+    Get: function (obj, name) {
+      // TODO: find out how to clone Jax-MML, such that we can store the parsed MML instead
+      var val = arguments.callee.SUPER.Get.call(this, obj, name);
+      return TEX.Parse('\\text{' + val + '}').mml();
+    }
+  });
+  var Math = exports.Math = Literal.Subclass({});
+  var Length = exports.Length = ValidationBase.Subclass({
+    Init: function (def) {
+      this._default = def;
+    },
+    Validate: function (obj, name, val) {
+      return val;  // TODO: proper validation
+    }
+  });
+  var Macro = exports.Macro = ValidationBase.Subclass({
+    Init: function (def) {
+      this._default = def;
+    },
+    Validate: function (obj, name, val) {
+      return val;  // TODO: proper validation
+    }
+  });
+  var Switch = exports.Switch = ValidationBase.Subclass({
+    Init: function (def) {
+      if (def === undefined)
+        def = false;
+      this._default = def;
+    },
+    Validate: function (obj, name, val) {
+      if (val === undefined)
+        val = true;
+      if (typeof val == 'string' || val instanceof String) {
+        val = val.toLowerCase();
+        if (val == 'true')
+          val = true;
+        else if (val == 'false')
+          val = false;
+      }
+      if (val !== true && val !== false)
+        throw ValidationError(obj, name, this, val, 'must be a boolean');
+      return val;
+    }
+  });
+  var ConfigData = exports.ConfigData = MathJax.Object.Subclass({
+    Init: function (values) {
+      this._values = {};
+      if (values != undefined)
+        this.SetMany(values);
+    },
+    Set: function (prop, value) {
+      if (this._options[prop] === undefined) {
+        throw TypeError(this.constructor + ' has no attribute named "' + prop + '"');
+      } else {
+        this[prop] = value;
+      }
+    },
+    SetMany: function (values) {
+      for (var prop in values)
+        this.Set(prop, values[prop]);
+    },
+    Derived: function (values) {
+      var ret = this.constructor();
+      ret._values.__proto__ = this._values.__proto__;
+      if (values != undefined) {
+        ret.SetMany(values);
+      }
+      return ret;
+    },
+    listSettings: function (skip_initial, sep) {
+      if (sep === undefined)
+        sep = ',\n';
+      var ret = [];
+      for (var prop in this._options) {
+        if (skip_initial && !this._values.hasOwnProperty(prop))
+          continue;
+        ret.push(prop + ' = ' + this[prop]);
+      }
+      return ret.join(sep);
+    }
+  }, {
+    Define: function (definition) {
+      var ret = this.Subclass({ _options: definition });
+      ret.ParseOptions = this.ParseOptions;
+      for (var prop in definition) {
+        Object.defineProperty(ret.prototype, prop, definition[prop].PropertyDescriptor(ret, prop));
+      }
+      return ret;
+    },
+    ParseOptions: function (str) {
+      var ret = {};
+      str = str.trim();
+      if (!str)
+        return this(ret);
+      var opts = str.split(',');
+      for (var i = 0, l = opts.length; i < l; ++i) {
+        var parts = opts[i].split('=');
+        var key = parts[0].trim();
+        if (!key)
+          TEX.Error('Empty key in "' + str + '"');
+        if (parts.length < 2) {
+          ret[key] = undefined;
+          continue;
+        }
+        var val = parts.slice(1).join('=');
+        var count = 0;
+        var pos = -1;
+        for (;;) {
+          for (;;) {
+            var start = pos + 1;
+            var open = val.indexOf('{', start);
+            var close = val.indexOf('}', start);
+            if (close >= 0 && (close < open || open == -1))
+              pos = close;
+            else
+              pos = open;
+            if (pos < 0)
+              break;
+            if (pos > 0 && val[pos - 1] == '\\') {
+              continue;
+            }
+            if (val[pos] == '}') {
+              count--;
+              if (count < 0)
+                TEX.Error('Too many closing braces in "' + str + '"');
+            } else {
+              count++;
+            }
+          }
+          if (!count)
+            break;
+          pos = val.length;
+          i++;
+          if (i >= l)
+            TEX.Error('Not enough closing braces in "' + str + '"');
+          val += ',' + opts[i];
+        }
+        val = val.trim();
+        if (val[0] == '{' && val[val.length - 1] == '}')
+          val = val.slice(1, -1);
+        ret[key] = val;
+      }
+      return this(ret);
+    }
+  });
+  return exports;
+}();
+siunitx_options_definition = function (KEYVAL) {
+  var ConfigData = KEYVAL.ConfigData;
+  var Switch = KEYVAL.Switch;
+  var SwitchChoice = KEYVAL.SwitchChoice;
+  var Choice = KEYVAL.Choice;
+  var Literal = KEYVAL.Literal;
+  var Macro = KEYVAL.Macro;
+  var Integer = KEYVAL.Integer;
+  var MJMath = KEYVAL.Math;
+  var TeXParsedLiteral = KEYVAL.TeXParsedLiteral;
+  var SIunitxOptions = ConfigData.Define({
+    // Font detection
+    //    'detect-all': Meta({'detect-weight':true,'detect-family':true,'detect-shape':true,'detect-mode':true}),
+    'detect-display-math': Switch(),
+    'detect-family': Switch(),
+    'detect-inline-family': Choice('text', 'math'),
+    'detect-inline-weight': Choice('text', 'math'),
+    'detect-mode': Switch(),
+    //    'detect-none': Meta({'detect-weight':false,'detect-family':false,'detect-shape':false,'detect-mode':false}),
+    'detect-shape': Switch(),
+    'detect-weight': Switch(),
+    // Font options
+    'color': Literal(''),
+    'math-rm': Macro('\\mathrm'),
+    'math-sf': Macro('\\mathsf'),
+    'math-tt': Macro('\\mathtt'),
+    'mode': Choice('math', 'text'),
+    'text-rm': Macro('\\rmfamily'),
+    'text-sf': Macro('\\sffamily'),
+    'text-tt': Macro('\\ttfamily'),
+    'unit-color': Literal(''),
+    'unit-math-rm': Macro('\\mathrm'),
+    'unit-math-sf': Macro('\\mathsf'),
+    'unit-math-tt': Macro('\\mathtt'),
+    'unit-mode': Choice('math', 'text'),
+    'unit-text-rm': Macro('\\rmfamily'),
+    'unit-text-sf': Macro('\\sffamily'),
+    'unit-text-tt': Macro('\\ttfamily'),
+    'number-color': Literal(''),
+    'number-math-rm': Macro('\\mathrm'),
+    'number-math-sf': Macro('\\mathsf'),
+    'number-math-tt': Macro('\\mathtt'),
+    'number-mode': Choice('math', 'text'),
+    'number-text-rm': Macro('\\rmfamily'),
+    'number-text-sf': Macro('\\sffamily'),
+    'number-text-tt': Macro('\\ttfamily'),
+    // Number parsing
+    'input-close-uncertainty': Literal(')'),
+    'input-comparators': Literal('<=>\\approx\\ge\\geq\\gg\\le\\leq\\ll\\sim'),
+    'input-complex-roots': Literal('ij'),
+    'input-decimal-markers': Literal(',.'),
+    'input-digits': Literal('0123456789'),
+    'input-exponent-markers': Literal('dDeE'),
+    'input-ignore': Literal(''),
+    'input-open-uncertainty': Literal('('),
+    'input-protect-tokens': Literal('\\approx\\dots\\ge\\geq\\gg\\le\\leq\\ll\\mp\\pi\\pm\\sim'),
+    'input-signs': Literal('+-\\pm\\mp'),
+    'input-uncertainty-signs': Literal('\\pm'),
+    'input-symbols': Literal('\\pi\\dots'),
+    'parse-numbers': Switch(true),
+    // Number post-processing options
+    'add-decimal-zero': Switch(true),
+    'add-integer-zero': Switch(true),
+    'explicit-sign': Literal(''),
+    'fixed-exponent': Integer(),
+    'minimum-integer-digits': Integer(),
+    'omit-uncertainty': Switch(),
+    'retain-explicit-plus': Switch(),
+    'retain-unity-mantissa': Switch(true),
+    'retain-zero-exponent': Switch(),
+    'round-half': Choice('up', 'even'),
+    'round-integer-to-decimal': Switch(),
+    'round-minimum': Literal('0'),
+    // Should be a Real! (does not exist in LaTeX's siunitx)
+    'round-mode': Choice('off', 'figures', 'places'),
+    'round-precision': Integer(2),
+    'scientific-notation': SwitchChoice('false', 'true', 'fixed', 'engineering'),
+    'zero-decimal-to-integer': Switch(),
+    // Number output
+    'bracket-negative-numbers': Switch(),
+    'bracket-numbers': Switch(true),
+    'close-bracket': Literal(')'),
+    'complex-root-position': Choice('after-number', 'before-number'),
+    // done
+    'copy-complex-root': Switch(false),
+    'copy-decimal-marker': Switch(false),
+    'exponent-base': Literal('10'),
+    // done
+    'exponent-product': MJMath('\\times'),
+    // done
+    'group-digits': Choice('true', 'false', 'decimal', 'integer'),
+    // done
+    'group-minimum-digits': Integer(5),
+    // done
+    'group-separator': Literal('\\,'),
+    // done
+    'negative-color': Literal(''),
+    'open-bracket': Literal('('),
+    'output-close-uncertainty': Literal(')'),
+    'output-complex-root': Literal('\\mathrm{i}'),
+    // done
+    'output-decimal-marker': Literal('.'),
+    // done
+    'output-exponent-marker': Literal(''),
+    'output-open-uncertainty': Literal('('),
+    'separate-uncertainty': Switch(false),
+    'tight-spacing': Switch(false),
+    'uncertainty-separator': Literal(''),
+    // Multi-part number options
+    'fraction-function': Macro('\\frac'),
+    'input-product': Literal('x'),
+    // done
+    'input-quotient': Literal('/'),
+    // done
+    'output-product': MJMath('\\times'),
+    // done
+    'output-quotient': Literal('/'),
+    // done
+    'quotient-mode': Choice('symbol', 'fraction'),
+    // lists and ranges of numbers
+    'list-final-separator': Literal(' and '),
+    // done
+    'list-pair-separator': Literal(' and '),
+    // done
+    'list-separator': Literal(', '),
+    // done
+    'range-phrase': Literal(' to '),
+    // done
+    // angle options
+    'add-arc-degree-zero': Switch(false),
+    'add-arc-minute-zero': Switch(false),
+    'add-arc-second-zero': Switch(false),
+    'angle-symbol-over-decimal': Switch(false),
+    'arc-separator': Literal(false),
+    'number-angle-product': Literal(''),
+    // unit creation
+    'free-standing-units': Switch(false),
+    'overwrite-functions': Switch(false),
+    'space-before-unit': Switch(false),
+    'unit-optional-argument': Switch(false),
+    'use-xspace': Switch(false),
+    // additional units
+    'abbreviations': Switch(true),
+    'binary-units': Switch(),
+    // Unit output options
+    'bracket-unit-denominator': Switch(true),
+    'forbid-literal-units': Switch(false),
+    'literal-superscript-as-power': Switch(true),
+    'inter-unit-product': Literal('\\,'),
+    'parse-units': Switch(true),
+    // per-mode: partially done: reciprocal, symbol, fraction
+    'per-mode': Choice('reciprocal', 'reciprocal-positive-first', 'symbol', 'repeated-symbol', 'fraction', 'symbol-or-fraction'),
+    'per-symbol': Literal('/'),
+    // done
+    'power-font': Choice('number', 'unit'),
+    'prefixes-as-symbols': Switch(true),
+    'qualifier-mode': Choice('subscript', 'brackets', 'phrase', 'space', 'text'),
+    'sticky-per': Switch(false),
+    // numbers with units
+    'allow-number-unit-breaks': Switch(false),
+    'exponent-to-prefix': Switch(false),
+    'list-units': Choice('repeat', 'brackets', 'single'),
+    'multi-part-units': Choice('brackets', 'repeat', 'single'),
+    'number-unit-product': Literal('\\,'),
+    'product-units': Choice('repeat', 'brackets', 'brackets-power', 'power', 'single'),
+    'range-units': Choice('repeat', 'brackets', 'single')  // Tabular material (unlikely will ever be implemented) => not declared
+                                            // symbol options
+                                            /*   'math-angstrom': Literal('\text{\AA}'),
+                                            'math-arcminute': Literal('{}^{\prime}'),
+                                            'math-arcsecond': Literal('{}^{\prime\prime}'),
+                                            'math-celsius': Literal('{}^{\circ})\kern -\scriptspace \mathrm{C}'),
+                                            'math-degree': Literal('{}^{\circ}'),
+                                            'math-micro': Literal(''),
+                                            'math-ohm': Literal('\\Omega'),
+                                            'redefine-symbols': Switch(true),
+                                            'text-angstrom': Literal('\\AA'),
+                                            'text-arcminute': Literal('\ensuremath{{}^{\prime}}'),
+                                            'text-arcsecond': Literal('\ensuremath{{}^{\prime\prime}}'),
+                                            'text-celsius': Literal('\ensuremath{{}^{\circ}\kern -\scriptspace \text{C}}'),
+                                            'text-degree': Literal('\ensuremath{{}^{\circ}}'),
+                                            'text-micro': Literal(''),
+                                            'text-ohm': Literal('\ensuremath{\Omega}')
+                                            */
+  });
+  return SIunitxOptions;
+}(keyvalue_option_validation);
+unit_definitions = function () {
+  var exports = {};
+  var MML = MathJax.ElementJax.mml;
+  var UNITSMACROS = exports.UNITSMACROS = {
+    // powers
+    per: [
+      'Per',
+      -1
+    ],
+    square: [
+      'PowerPfx',
+      2
+    ],
+    cubic: [
+      'PowerPfx',
+      3
+    ],
+    raiseto: [
+      'PowerPfx',
+      undefined
+    ],
+    squared: [
+      'PowerSfx',
+      2
+    ],
+    cubed: [
+      'PowerSfx',
+      3
+    ],
+    tothe: [
+      'PowerSfx',
+      undefined
+    ],
+    // aliases
+    meter: [
+      'Macro',
+      '\\metre'
+    ],
+    deka: [
+      'Macro',
+      '\\deca'
+    ],
+    // abbreviations
+    celsius: [
+      'Macro',
+      '\\degreeCelsius'
+    ],
+    kg: [
+      'Macro',
+      '\\kilogram'
+    ],
+    amu: [
+      'Macro',
+      '\\atomicmassunit'
+    ],
+    kWh: [
+      'Macro',
+      '\\kilo\\watt\\hour'
+    ],
+    // not yet supported:
+    of: 'Of',
+    cancel: 'Unsupported',
+    highlight: 'Highlight'
+  };
+  // ******* SI prefixes *******************
+  var SIPrefixes = MathJax.Extension['TeX/siunitx'].SIPrefixes = exports.SIPrefixes = function (def) {
+    var ret = {};
+    for (var pfx in def) {
+      var data = def[pfx];
+      ret[pfx] = {
+        name: pfx,
+        power: data[0],
+        abbrev: data[1],
+        pfx: data.length >= 3 ? data[2] : data[1]
+      };
+    }
+    return ret;
+  }({
+    yocto: [
+      -24,
+      'y'
+    ],
+    zepto: [
+      -21,
+      'z'
+    ],
+    atto: [
+      -18,
+      'a'
+    ],
+    femto: [
+      -15,
+      'f'
+    ],
+    pico: [
+      -12,
+      'p'
+    ],
+    nano: [
+      -9,
+      'n'
+    ],
+    micro: [
+      -6,
+      'u',
+      MML.entity('#x03bc')
+    ],
+    milli: [
+      -3,
+      'm'
+    ],
+    centi: [
+      -2,
+      'c'
+    ],
+    deci: [
+      -1,
+      'd'
+    ],
+    deca: [
+      1,
+      'da'
+    ],
+    hecto: [
+      2,
+      'h'
+    ],
+    kilo: [
+      3,
+      'k'
+    ],
+    mega: [
+      6,
+      'M'
+    ],
+    giga: [
+      9,
+      'G'
+    ],
+    tera: [
+      12,
+      'T'
+    ],
+    peta: [
+      15,
+      'P'
+    ],
+    exa: [
+      18,
+      'E'
+    ],
+    zetta: [
+      21,
+      'Z'
+    ],
+    yotta: [
+      24,
+      'Y'
+    ]
+  });
+  for (var pfx in SIPrefixes) {
+    pfx = SIPrefixes[pfx];
+    UNITSMACROS[pfx.name] = [
+      'SIPrefix',
+      pfx
+    ];
+  }
+  // ******* SI units *******************
+  function _BuildUnits(category, defs) {
+    var units = [];
+    for (var unit in defs) {
+      var def = defs[unit];
+      units.push({
+        name: unit,
+        category: category,
+        symbol: def[0],
+        abbrev: def[1]
+      });
+    }
+    return units;
+  }
+  var SIUnits = MathJax.Extension['TeX/siunitx'].SIUnits = exports.SIUnits = function (arr) {
+    var ret = {};
+    arr.forEach(function (unit) {
+      ret[unit.name] = unit;
+    });
+    return ret;
+  }([].concat(_BuildUnits('SI base', {
+    ampere: [
+      'A',
+      'A'
+    ],
+    candela: ['cd'],
+    kelvin: [
+      'K',
+      'K'
+    ],
+    kilogram: ['kg'],
+    gram: [
+      'g',
+      'g'
+    ],
+    metre: [
+      'm',
+      'm'
+    ],
+    mole: [
+      'mol',
+      'mol'
+    ],
+    second: [
+      's',
+      's'
+    ]
+  }), _BuildUnits('coherent derived', {
+    becquerel: ['Bq'],
+    degreeCelsius: [MML.entity('#x2103')],
+    coulomb: ['C'],
+    farad: [
+      'F',
+      'F'
+    ],
+    gray: ['Gy'],
+    hertz: [
+      'Hz',
+      'Hz'
+    ],
+    henry: ['H'],
+    joule: [
+      'J',
+      'J'
+    ],
+    katal: ['kat'],
+    lumen: ['lm'],
+    lux: ['lx'],
+    newton: [
+      'N',
+      'N'
+    ],
+    ohm: [
+      MML.entity('#x03a9'),
+      'ohm'
+    ],
+    pascal: [
+      'Pa',
+      'Pa'
+    ],
+    radian: ['rad'],
+    siemens: ['S'],
+    sievert: ['Sv'],
+    steradian: ['sr'],
+    tesla: ['T'],
+    volt: [
+      'V',
+      'V'
+    ],
+    watt: [
+      'W',
+      'W'
+    ],
+    weber: ['Wb']
+  }), _BuildUnits('accepted non-SI', {
+    day: ['d'],
+    degree: [MML.entity('#x00b0')],
+    hectare: ['ha'],
+    hour: ['h'],
+    litre: [
+      'l',
+      'l'
+    ],
+    liter: [
+      'L',
+      'L'
+    ],
+    arcminute: [MML.entity('#x2032')],
+    // plane angle;
+    minute: ['min'],
+    arcsecond: [MML.entity('#x2033')],
+    // plane angle;
+    tonne: ['t']
+  }), _BuildUnits('experimental non-SI', {
+    astronomicalunit: ['ua'],
+    atomicmassunit: ['u'],
+    bohr: [MML.msub(MML.mi(MML.chars('a')).With({ mathvariant: MML.VARIANT.NORMAL }), MML.mn(0))],
+    // TODO: fix this
+    clight: ['c0'],
+    // TODO: proper subscript
+    dalton: ['Da'],
+    electronmass: ['me'],
+    // TODO: proper subscript
+    electronvolt: [
+      'eV',
+      'eV'
+    ],
+    elementarycharge: ['e'],
+    hartree: ['Eh'],
+    // TODO: proper subscript
+    planckbar: [MML.entity('#x0127')]
+  }), _BuildUnits('other non-SI', {
+    angstrom: [MML.entity('#x212b')],
+    bar: ['bar'],
+    barn: ['b'],
+    bel: ['B'],
+    decibel: [
+      'dB',
+      'dB'
+    ],
+    knot: ['kn'],
+    mmHg: ['mmHg'],
+    nauticmile: [';'],
+    neper: ['Np']
+  })));
+  // special units
+  SIUnits.percent = {
+    name: 'percent',
+    symbol: '%',
+    category: 'non-unit',
+    abbrev: undefined
+  };
+  for (var unit in SIUnits) {
+    unit = SIUnits[unit];
+    UNITSMACROS[unit.name] = [
+      'SIUnit',
+      unit
+    ];
+  }
+  // ******* unit abbreviations *******************
+  /*
+   * I'm too lazy to write all of the abbreviations by hand now, so here it is
+   * programmatically.
+   */
+  var AbbrevPfx = {};
+  for (var pfx in SIPrefixes) {
+    pfx = SIPrefixes[pfx];
+    if (pfx.abbrev) {
+      AbbrevPfx[pfx.abbrev] = pfx.name;
+    }
+  }
+  var AbbrevUnits = {};
+  for (var unit in SIUnits) {
+    unit = SIUnits[unit];
+    if (unit.abbrev) {
+      AbbrevUnits[unit.abbrev] = unit.name;
+    }
+  }
+  function _ParseAbbrev(abbrev) {
+    var unit = AbbrevUnits[abbrev];
+    var repl = '';
+    if (unit === undefined) {
+      unit = AbbrevUnits[abbrev.slice(1)];
+      if (unit === undefined) {
+        // should never happen!
+        console.log('cannot parse abbreviation', abbrev);
+        return;
+      }
+      repl = AbbrevPfx[abbrev[0]];
+      if (repl === undefined) {
+        // should never happen!
+        console.log('cannot parse prefix ', abbrev[0], ' on unit ', unit, ' (', abbrev, ')');
+        return;
+      }
+      repl = '\\' + repl;
+    }
+    repl += '\\' + unit;
+    return repl;
+  }
+  // install a number of abbrevs as macros, the same as siunitx does.
+  [
+    'fg pg ng ug mg g',
+    'pm nm um mm cm dm m km',
+    'as fs ps ns us ms s',
+    'fmol pmol nmol umol mmol mol kmol',
+    'pA nA uA mA A kA',
+    'ul ml l hl uL mL L hL',
+    'mHz Hz kHz MHz GHz THz',
+    'mN N kN MN',
+    'Pa kPa MPa GPa',
+    'mohm kohm Mohm',
+    'pV nV uV mV V kV',
+    'uW mW W kW MW GW',
+    'J kJ',
+    'meV eV keV MeV GeV TeV',
+    'fF pF F',
+    'K',
+    'dB'
+  ].forEach(function (abbrset) {
+    abbrset.split(' ').forEach(function (abbrev) {
+      UNITSMACROS[abbrev] = [
+        'Macro',
+        _ParseAbbrev(abbrev)
+      ];
+    });
+  });
+  return exports;
+}();
+unit_parser = function (UNITDEFS) {
+  var TEX = MathJax.InputJax.TeX;
+  var STACK = TEX.Stack;
+  var STACKITEM = STACK.Item;
+  var MML = MathJax.ElementJax.mml;
+  var UNITSMACROS = UNITDEFS.UNITSMACROS;
+  var SIUnitParser = MathJax.Extension['TeX/siunitx'].SIUnitParser = TEX.Parse.Subclass({
+    Init: function (string, options, env) {
+      this.cur_prefix = undefined;
+      this.cur_pfxpow = undefined;
+      this.per_active = false;
+      this.has_literal = false;
+      // Set to true if non-siunitx LaTeX is encountered in input
+      this.literal_chars = '';
+      // building unit char by char
+      this.units = [];
+      this.options = options;
+      arguments.callee.SUPER.Init.call(this, string, env);  /*	  if(this.has_literal){
+                                                            console.log('Unit "',string,'" was parsed literally ',this.units);
+                                                            } else {
+                                                            console.log('Unit "',string,'" was parsed as these units: ',this.units);
+                                                            }*/
+    },
+    mml: function () {
+      if (!this.has_literal) {
+        // no literal, all information in this.units
+        // => generate fresh MML here
+        var stack = TEX.Stack({}, true);
+        var permode = this.options['per-mode'];
+        var mythis = this;
+        var all = [];
+        var norm = [];
+        var recip = [];
+        this.units.forEach(function (unit) {
+          var power = unit.power === undefined ? 1 : unit.power;
+          if (unit.inverse)
+            power = -power;
+          if (power > 0) {
+            norm.push(unit);
+          } else {
+            recip.push(unit);
+          }
+          all.push(unit);
+        });
+        if (permode === 'reciprocal' || !recip.length) {
+          all.forEach(function (u) {
+            stack.Push(mythis.UnitMML(u));
+          });
+        } else if (permode === 'symbol') {
+          norm.forEach(function (u) {
+            stack.Push(mythis.UnitMML(u));
+          });
+          stack.Push(this.mmlToken(MML.mo(MML.chars(this.options['per-symbol']).With({
+            fence: false,
+            stretchy: false
+          }))));
+          if (recip.length === 1) {
+            var u = recip[0];
+            u.inverse = false;
+            stack.Push(this.UnitMML(u));
+          } else {
+            stack.Push(this.mmlToken(MML.mo(MML.chars('(').With({
+              fence: false,
+              stretchy: false
+            }))));
+            recip.forEach(function (u) {
+              u.inverse = false;
+              stack.Push(mythis.UnitMML(u));
+            });
+            stack.Push(this.mmlToken(MML.mo(MML.chars(')').With({
+              fence: false,
+              stretchy: false
+            }))));
+          }
+        } else if (permode === 'fraction') {
+          var num = TEX.Stack({}, true);
+          var den = TEX.Stack({}, true);
+          norm.forEach(function (u) {
+            num.Push(mythis.UnitMML(u));
+          });
+          recip.forEach(function (u) {
+            u.inverse = false;
+            den.Push(mythis.UnitMML(u));
+          });
+          num.Push(STACKITEM.stop());
+          den.Push(STACKITEM.stop());
+          stack.Push(MML.mfrac(num.Top().data[0], den.Top().data[0]));
+        } else {
+          TEX.Error('Unimplemented per-mode ' + permode);
+        }
+        stack.Push(STACKITEM.stop());
+        if (stack.Top().type !== 'mml') {
+          return null;
+        }
+        return stack.Top().data[0];
+      }
+      if (this.stack.Top().type !== 'mml') {
+        return null;
+      }
+      return this.stack.Top().data[0];
+    },
+    // This is used to identify non-siunitx LaTeX in the input
+    Push: function () {
+      this.finishLiteralUnit();
+      // in case we're still caching some chars
+      for (var idx = 0; idx < arguments.length; idx++) {
+        var arg = arguments[idx];
+        if (!(arg instanceof STACKITEM.stop)) {
+          //                console.log('litera linput ',arg);
+          this.has_literal = true;
+        }
+        this.stack.Push.call(this.stack, arg);
+      }
+    },
+    // While literal fall-back output from proper unit macros use this path
+    PushUnitFallBack: function () {
+      this.stack.Push.apply(this.stack, arguments);
+    },
+    csFindMacro: function (name) {
+      this.finishLiteralUnit();
+      // any macro should finish previous units
+      var macro = UNITSMACROS[name];
+      if (macro)
+        return macro;
+      return arguments.callee.SUPER.csFindMacro.call(this, name);
+    },
+    /*
+     *  Handle a single letter
+     */
+    Variable: function (c) {
+      this.literal_chars += c;
+    },
+    // the dot ('.') is considered a number!
+    Number: function (c) {
+      if (c == '.')
+        return this.finishLiteralUnit();
+      arguments.callee.SUPER.Number.call(this, c);
+    },
+    // here, it's a unit separator
+    Tilde: function (c) {
+      this.finishLiteralUnit();
+    },
+    /*
+     *  Handle ^, _, and '
+     */
+    Superscript: function (c) {
+      this.finishLiteralUnit();
+      arguments.callee.SUPER.Superscript.call(this, c);
+    },
+    Subscript: function (c) {
+      this.finishLiteralUnit();
+      arguments.callee.SUPER.Subscript.call(this, c);
+    },
+    Unsupported: function () {
+    },
+    // ignore this macro
+    Of: function (name) {
+      var what = this.GetArgument(name);
+      if (this.has_literal) {
+        // unit is already gone, best we can do is add a superscript
+        TEX.Error([
+          'SIunitx',
+          'NotImplementedYet'
+        ]);
+      }
+      if (!this.units.length) {
+        TEX.Error([
+          'SIunitx',
+          'Qualification suffix with no unit'
+        ]);
+      }
+      var unit = this.units[this.units.length - 1];
+      if (unit.power !== undefined) {
+        TEX.Error([
+          'SIunitx',
+          'double qualification',
+          unit.qual,
+          what
+        ]);
+      }
+      unit.qual = what;
+    },
+    Highlight: function (name) {
+      var color = this.GetArgument(name);
+      this.cur_highlight = color;
+    },
+    Per: function (name) {
+      if (this.per_active) {
+        TEX.Error([
+          'SIunitx',
+          'double \\per'
+        ]);
+        return;
+      }
+      this.per_active = true;
+    },
+    PowerPfx: function (name, pow) {
+      if (pow === undefined) {
+        pow = this.GetArgument(name);
+      }
+      if (this.cur_pfxpow) {
+        TEX.Error([
+          'SIunitx',
+          'double power prefix',
+          this.cur_pfxpow,
+          pow
+        ]);
+      }
+      this.cur_pfxpow = pow;
+    },
+    PowerSfx: function (name, pow) {
+      if (pow === undefined) {
+        pow = this.GetArgument(name);
+      }
+      if (this.has_literal) {
+        // unit is already gone, best we can do is add a superscript
+        TEX.Error([
+          'SIunitx',
+          'NotImplementedYet'
+        ]);
+      }
+      if (!this.units.length) {
+        TEX.Error([
+          'SIunitx',
+          'Power suffix with no unit'
+        ]);
+      }
+      var unit = this.units[this.units.length - 1];
+      if (unit.power !== undefined) {
+        TEX.Error([
+          'SIunitx',
+          'double power',
+          unit.power,
+          pow
+        ]);
+      }
+      unit.power = pow;
+    },
+    SIPrefix: function (name, pfx) {
+      if (this.cur_prefix) {
+        TEX.Error([
+          'SIunitx',
+          'double SI prefix',
+          this.cur_prefix,
+          pfx
+        ]);
+      }
+      this.cur_prefix = pfx;
+    },
+    UnitMML: function (unit) {
+      var parts = [];
+      if (unit.prefix)
+        parts = parts.concat(unit.prefix.pfx);
+      parts = parts.concat(unit.unit.symbol);
+      var curstring = '';
+      var content = [];
+      parts.forEach(function (p) {
+        if (typeof p == 'string' || p instanceof String) {
+          curstring += p;
+        } else {
+          if (curstring) {
+            content.push(MML.chars(curstring));
+            curstring = '';
+          }
+          content.push(p);
+        }
+      });
+      if (curstring)
+        content.push(MML.chars(curstring));
+      var def = { mathvariant: MML.VARIANT.NORMAL };
+      var mml = MML.mi.apply(MML.mi, content).With(def);
+      var power = unit.power === undefined ? 1 : unit.power;
+      if (unit.inverse)
+        power = -power;
+      if (power != 1) {
+        if (unit.qual === undefined)
+          mml = MML.msup(mml, MML.mn(power));
+        else
+          mml = MML.msubsup(mml, MML.mtext(unit.qual), MML.mn(power));
+      } else if (unit.qual !== undefined) {
+        mml = MML.msub(mml, MML.mtext(unit.qual));
+      }
+      return this.mmlToken(mml);
+    },
+    SIUnit: function (name, unit) {
+      this.pushUnit(unit);
+    },
+    finishLiteralUnit: function () {
+      if (!this.literal_chars)
+        return;
+      this.pushUnit({
+        symbol: this.literal_chars,
+        name: undefined,
+        category: 'literal',
+        abbrev: this.literal_chars
+      });
+      this.literal_chars = '';
+    },
+    pushUnit: function (unit) {
+      // Add to units
+      this.units.push({
+        unit: unit,
+        prefix: this.cur_prefix,
+        power: this.cur_pfxpow,
+        inverse: this.per_active,
+        qual: undefined  // qualification
+      });
+      // And process fall-back
+      var parts = [];
+      if (this.cur_prefix)
+        parts = parts.concat(this.cur_prefix.pfx);
+      parts = parts.concat(unit.symbol);
+      var curstring = '';
+      var content = [];
+      parts.forEach(function (p) {
+        if (typeof p == 'string' || p instanceof String) {
+          curstring += p;
+        } else {
+          if (curstring) {
+            content.push(MML.chars(curstring));
+            curstring = '';
+          }
+          content.push(p);
+        }
+      });
+      if (curstring)
+        content.push(MML.chars(curstring));
+      var def = { mathvariant: MML.VARIANT.NORMAL };
+      this.PushUnitFallBack(this.mmlToken(MML.mi.apply(MML.mi, content).With(def)));
+      this.cur_prefix = undefined;
+      this.cur_pfxpow = undefined;
+      if (!this.options['sticky-per'])
+        this.per_active = false;
+    }
+  });
+  return SIUnitParser;
+}(unit_definitions);
+number_parser_peg = function () {
+  'use strict';
+  /*
+   * Generated by PEG.js 0.9.0.
+   *
+   * http://pegjs.org/
+   */
+  function peg$subclass(child, parent) {
+    function ctor() {
+      this.constructor = child;
+    }
+    ctor.prototype = parent.prototype;
+    child.prototype = new ctor();
+  }
+  function peg$SyntaxError(message, expected, found, location) {
+    this.message = message;
+    this.expected = expected;
+    this.found = found;
+    this.location = location;
+    this.name = 'SyntaxError';
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, peg$SyntaxError);
+    }
+  }
+  peg$subclass(peg$SyntaxError, Error);
+  function peg$parse(input) {
+    var options = arguments.length > 1 ? arguments[1] : {}, parser = this, peg$FAILED = {}, peg$startRuleIndices = { start: 0 }, peg$startRuleIndex = 0, peg$consts = [
+        function (prod) {
+          return prod;
+        },
+        {
+          type: 'other',
+          description: 'complex root'
+        },
+        function (s) {
+          return options['input-complex-roots'].indexOf(s) >= 0;
+        },
+        function (s) {
+          return s;
+        },
+        {
+          type: 'other',
+          description: 'decimal marker'
+        },
+        function (s) {
+          return options['input-decimal-markers'].indexOf(s) >= 0;
+        },
+        {
+          type: 'other',
+          description: 'exponent marker'
+        },
+        function (s) {
+          return options['input-exponent-markers'].indexOf(s) >= 0;
+        },
+        {
+          type: 'any',
+          description: 'any character'
+        },
+        function (head, tail) {
+          var ret = [head];
+          tail.forEach(function (f) {
+            ret.push(f[1]);
+          });
+          return ret;
+        },
+        'x',
+        {
+          type: 'literal',
+          value: 'x',
+          description: '"x"'
+        },
+        function (num) {
+          return num;
+        },
+        '/',
+        {
+          type: 'literal',
+          value: '/',
+          description: '"/"'
+        },
+        function (num, denom) {
+          return {
+            num: num,
+            denom: denom && denom[3]
+          };
+        },
+        function (rel, mantissa, exp) {
+          mantissa.exp = exp && exp[1];
+          mantissa.rel = rel && rel[0];
+          return mantissa;
+        },
+        function (rel, sign, exp) {
+          var ret = {
+            sign: sign && sign[0],
+            exp: exp,
+            rel: rel && rel[0]
+          };
+          return ret;
+        },
+        function (re, im) {
+          var res = re[0] && re[0][0];
+          re = re[1];
+          re.sign = res;
+          var ims = im && im[1];
+          im = im && im[3];
+          if (im)
+            im.sign = ims;
+          return {
+            re: re,
+            im: im
+          };
+        },
+        function (sign, num) {
+          num.sign = sign && sign[0];
+          return { re: num };
+        },
+        function (sign, num, uncert) {
+          var n = num.frac.length;
+          var m = uncert.frac.length;
+          num.frac = num.frac + repeat('0', Math.max(0, m - n));
+          uncert.frac = uncert.frac + repeat('0', Math.max(0, n - m));
+          num.uncert = uncert.int + uncert.frac;
+          num.sign = sign && sign[0];
+          return { re: num };
+        },
+        function (num, root) {
+          num.root = root;
+          return num;
+        },
+        function (root, num) {
+          num.root = root;
+          return num;
+        },
+        function (sign, exponent) {
+          exponent.sign = sign && sign[0];
+          return exponent;
+        },
+        /^[+\-]/,
+        {
+          type: 'class',
+          value: '[+-]',
+          description: '[+-]'
+        },
+        function () {
+          return text();
+        },
+        '+-',
+        {
+          type: 'literal',
+          value: '+-',
+          description: '"+-"'
+        },
+        '\\pm',
+        {
+          type: 'literal',
+          value: '\\pm',
+          description: '"\\\\pm"'
+        },
+        function () {
+          return '\\pm';
+        },
+        '-+',
+        {
+          type: 'literal',
+          value: '-+',
+          description: '"-+"'
+        },
+        '\\mp',
+        {
+          type: 'literal',
+          value: '\\mp',
+          description: '"\\\\mp"'
+        },
+        function () {
+          return '\\mp';
+        },
+        '<<',
+        {
+          type: 'literal',
+          value: '<<',
+          description: '"<<"'
+        },
+        '\\ll',
+        {
+          type: 'literal',
+          value: '\\ll',
+          description: '"\\\\ll"'
+        },
+        function () {
+          return '\\ll';
+        },
+        '<',
+        {
+          type: 'literal',
+          value: '<',
+          description: '"<"'
+        },
+        function () {
+          return '<';
+        },
+        '<=',
+        {
+          type: 'literal',
+          value: '<=',
+          description: '"<="'
+        },
+        '\\le',
+        {
+          type: 'literal',
+          value: '\\le',
+          description: '"\\\\le"'
+        },
+        'q',
+        {
+          type: 'literal',
+          value: 'q',
+          description: '"q"'
+        },
+        function () {
+          return '\\le';
+        },
+        '>>',
+        {
+          type: 'literal',
+          value: '>>',
+          description: '">>"'
+        },
+        '\\gg',
+        {
+          type: 'literal',
+          value: '\\gg',
+          description: '"\\\\gg"'
+        },
+        function () {
+          return '\\gg';
+        },
+        '>',
+        {
+          type: 'literal',
+          value: '>',
+          description: '">"'
+        },
+        function () {
+          return '>';
+        },
+        '>=',
+        {
+          type: 'literal',
+          value: '>=',
+          description: '">="'
+        },
+        '\\ge',
+        {
+          type: 'literal',
+          value: '\\ge',
+          description: '"\\\\ge"'
+        },
+        function () {
+          return '\\ge';
+        },
+        '(',
+        {
+          type: 'literal',
+          value: '(',
+          description: '"("'
+        },
+        ')',
+        {
+          type: 'literal',
+          value: ')',
+          description: '")"'
+        },
+        function (num, uncert) {
+          uncert = uncert && uncert[3];
+          num.uncert = uncert;
+          return num;
+        },
+        {
+          type: 'other',
+          description: 'decimal'
+        },
+        function (int, rest) {
+          var sep = rest && rest[1];
+          var frac = rest && rest[2] && rest[2][1];
+          return {
+            int: int,
+            sep: sep,
+            frac: frac || ''
+          };
+        },
+        function (sep, frac) {
+          return {
+            int: '',
+            sep: sep,
+            frac: frac
+          };
+        },
+        {
+          type: 'other',
+          description: 'integer'
+        },
+        function () {
+          return parseInt(text(), 10);
+        },
+        /^[0-9]/,
+        {
+          type: 'class',
+          value: '[0-9]',
+          description: '[0-9]'
+        },
+        function () {
+          return text();
+        },
+        {
+          type: 'other',
+          description: 'whitespace'
+        },
+        /^[ \t\n\r]/,
+        {
+          type: 'class',
+          value: '[ \\t\\n\\r]',
+          description: '[ \\t\\n\\r]'
+        }
+      ], peg$bytecode = [
+        peg$decode('%;D/:#;%/1$;D/($8#: #!!)(#\'#("\'#&\'#'),
+        peg$decode('<%;$/<#9:" ! -""&!&#/($8":#"!!)("\'#&\'#=." 7!'),
+        peg$decode('<%;$/<#9:% ! -""&!&#/($8":#"!!)("\'#&\'#=." 7$'),
+        peg$decode('<%;$/<#9:\' ! -""&!&#/($8":#"!!)("\'#&\'#=." 7&'),
+        peg$decode('1""5!7('),
+        peg$decode('%;\'/_#$%;D/,#;&/#$+")("\'#&\'#06*%;D/,#;&/#$+")("\'#&\'#&/)$8":)""! )("\'#&\'#'),
+        peg$decode('%2*""6*7+/:#;D/1$;\'/($8#:,#! )(#\'#("\'#&\'#'),
+        peg$decode('%;(/b#%;D/D#2-""6-7./5$;D/,$;(/#$+$)($\'#(#\'#("\'#&\'#." &"/)$8":/""! )("\'#&\'#'),
+        peg$decode(';*.# &;)'),
+        peg$decode('%%;=/,#;D/#$+")("\'#&\'#." &"/T#;+/K$%;D/,#;2/#$+")("\'#&\'#." &"/*$8#:0##"! )(#\'#("\'#&\'#'),
+        peg$decode('%%;=/,#;D/#$+")("\'#&\'#." &"/T#%;6/,#;D/#$+")("\'#&\'#." &"/3$;2/*$8#:1##"! )(#\'#("\'#&\'#'),
+        peg$decode(';,.) &;..# &;-'),
+        peg$decode('%%%;6/,#;D/#$+")("\'#&\'#." &"/,#;>/#$+")("\'#&\'#/W#%;D/>#;6/5$;D/,$;//#$+$)($\'#(#\'#("\'#&\'#/)$8":2""! )("\'#&\'#'),
+        peg$decode('%%;6/,#;D/#$+")("\'#&\'#." &"/2#;>/)$8":3""! )("\'#&\'#'),
+        peg$decode('%%;6/,#;D/#$+")("\'#&\'#." &"/W#;?/N$;D/E$;4/<$;D/3$;?/*$8&:4&#%$ )(&\'#(%\'#($\'#(#\'#("\'#&\'#'),
+        peg$decode(';0.# &;1'),
+        peg$decode('%;>/;#;D/2$;!/)$8#:5#"" )(#\'#("\'#&\'#'),
+        peg$decode('%;!/;#;D/2$;>/)$8#:6#"" )(#\'#("\'#&\'#'),
+        peg$decode('%;#/\\#;D/S$%;3/,#;D/#$+")("\'#&\'#." &"/2$;?/)$8$:7$"! )($\'#(#\'#("\'#&\'#'),
+        peg$decode('%48""5!79/& 8!::! )'),
+        peg$decode('%2;""6;7<.) &2=""6=7>/& 8!:?! )'),
+        peg$decode('%2@""6@7A.) &2B""6B7C/& 8!:D! )'),
+        peg$decode(';4.) &;5.# &;3'),
+        peg$decode('%2E""6E7F.) &2G""6G7H/& 8!:I! )'),
+        peg$decode('%2J""6J7K/& 8!:L! )'),
+        peg$decode('%2M""6M7N.G &%2O""6O7P/7#2Q""6Q7R." &"/#$+")("\'#&\'#/& 8!:S! )'),
+        peg$decode('%2T""6T7U.) &2V""6V7W/& 8!:X! )'),
+        peg$decode('%2Y""6Y7Z/& 8!:[! )'),
+        peg$decode('%2\\""6\\7].G &%2^""6^7_/7#2Q""6Q7R." &"/#$+")("\'#&\'#/& 8!:`! )'),
+        peg$decode(';7.; &;9.5 &;8./ &;:.) &;<.# &;;'),
+        peg$decode('%;?/z#%;D/\\#2a""6a7b/M$;D/D$;C/;$;D/2$2c""6c7d/#$+&)(&\'#(%\'#($\'#(#\'#("\'#&\'#." &"/)$8":e""! )("\'#&\'#'),
+        peg$decode('<;@.# &;A=." 7f'),
+        peg$decode('%;C/k#%;D/M#;"/D$%;D/,#;C/#$+")("\'#&\'#." &"/#$+#)(#\'#("\'#&\'#." &"/)$8":g""! )("\'#&\'#'),
+        peg$decode('%;"/;#;D/2$;C/)$8#:h#"" )(#\'#("\'#&\'#'),
+        peg$decode('<%;C/& 8!:j! )=." 7i'),
+        peg$decode('%$4k""5!7l/,#0)*4k""5!7l&&&#/& 8!:m! )'),
+        peg$decode('<$4o""5!7p0)*4o""5!7p&=." 7n')
+      ], peg$currPos = 0, peg$savedPos = 0, peg$posDetailsCache = [{
+          line: 1,
+          column: 1,
+          seenCR: false
+        }], peg$maxFailPos = 0, peg$maxFailExpected = [], peg$silentFails = 0, peg$result;
+    if ('startRule' in options) {
+      if (!(options.startRule in peg$startRuleIndices)) {
+        throw new Error('Can\'t start parsing from rule "' + options.startRule + '".');
+      }
+      peg$startRuleIndex = peg$startRuleIndices[options.startRule];
+    }
+    function text() {
+      return input.substring(peg$savedPos, peg$currPos);
+    }
+    function location() {
+      return peg$computeLocation(peg$savedPos, peg$currPos);
+    }
+    function expected(description) {
+      throw peg$buildException(null, [{
+          type: 'other',
+          description: description
+        }], input.substring(peg$savedPos, peg$currPos), peg$computeLocation(peg$savedPos, peg$currPos));
+    }
+    function error(message) {
+      throw peg$buildException(message, null, input.substring(peg$savedPos, peg$currPos), peg$computeLocation(peg$savedPos, peg$currPos));
+    }
+    function peg$computePosDetails(pos) {
+      var details = peg$posDetailsCache[pos], p, ch;
+      if (details) {
+        return details;
+      } else {
+        p = pos - 1;
+        while (!peg$posDetailsCache[p]) {
+          p--;
+        }
+        details = peg$posDetailsCache[p];
+        details = {
+          line: details.line,
+          column: details.column,
+          seenCR: details.seenCR
+        };
+        while (p < pos) {
+          ch = input.charAt(p);
+          if (ch === '\n') {
+            if (!details.seenCR) {
+              details.line++;
+            }
+            details.column = 1;
+            details.seenCR = false;
+          } else if (ch === '\r' || ch === '\u2028' || ch === '\u2029') {
+            details.line++;
+            details.column = 1;
+            details.seenCR = true;
+          } else {
+            details.column++;
+            details.seenCR = false;
+          }
+          p++;
+        }
+        peg$posDetailsCache[pos] = details;
+        return details;
+      }
+    }
+    function peg$computeLocation(startPos, endPos) {
+      var startPosDetails = peg$computePosDetails(startPos), endPosDetails = peg$computePosDetails(endPos);
+      return {
+        start: {
+          offset: startPos,
+          line: startPosDetails.line,
+          column: startPosDetails.column
+        },
+        end: {
+          offset: endPos,
+          line: endPosDetails.line,
+          column: endPosDetails.column
+        }
+      };
+    }
+    function peg$fail(expected) {
+      if (peg$currPos < peg$maxFailPos) {
+        return;
+      }
+      if (peg$currPos > peg$maxFailPos) {
+        peg$maxFailPos = peg$currPos;
+        peg$maxFailExpected = [];
+      }
+      peg$maxFailExpected.push(expected);
+    }
+    function peg$buildException(message, expected, found, location) {
+      function cleanupExpected(expected) {
+        var i = 1;
+        expected.sort(function (a, b) {
+          if (a.description < b.description) {
+            return -1;
+          } else if (a.description > b.description) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        while (i < expected.length) {
+          if (expected[i - 1] === expected[i]) {
+            expected.splice(i, 1);
+          } else {
+            i++;
+          }
+        }
+      }
+      function buildMessage(expected, found) {
+        function stringEscape(s) {
+          function hex(ch) {
+            return ch.charCodeAt(0).toString(16).toUpperCase();
+          }
+          return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\x08/g, '\\b').replace(/\t/g, '\\t').replace(/\n/g, '\\n').replace(/\f/g, '\\f').replace(/\r/g, '\\r').replace(/[\x00-\x07\x0B\x0E\x0F]/g, function (ch) {
+            return '\\x0' + hex(ch);
+          }).replace(/[\x10-\x1F\x80-\xFF]/g, function (ch) {
+            return '\\x' + hex(ch);
+          }).replace(/[\u0100-\u0FFF]/g, function (ch) {
+            return '\\u0' + hex(ch);
+          }).replace(/[\u1000-\uFFFF]/g, function (ch) {
+            return '\\u' + hex(ch);
+          });
+        }
+        var expectedDescs = new Array(expected.length), expectedDesc, foundDesc, i;
+        for (i = 0; i < expected.length; i++) {
+          expectedDescs[i] = expected[i].description;
+        }
+        expectedDesc = expected.length > 1 ? expectedDescs.slice(0, -1).join(', ') + ' or ' + expectedDescs[expected.length - 1] : expectedDescs[0];
+        foundDesc = found ? '"' + stringEscape(found) + '"' : 'end of input';
+        return 'Expected ' + expectedDesc + ' but ' + foundDesc + ' found.';
+      }
+      if (expected !== null) {
+        cleanupExpected(expected);
+      }
+      return new peg$SyntaxError(message !== null ? message : buildMessage(expected, found), expected, found, location);
+    }
+    function peg$decode(s) {
+      var bc = new Array(s.length), i;
+      for (i = 0; i < s.length; i++) {
+        bc[i] = s.charCodeAt(i) - 32;
+      }
+      return bc;
+    }
+    function peg$parseRule(index) {
+      var bc = peg$bytecode[index], ip = 0, ips = [], end = bc.length, ends = [], stack = [], params, i;
+      while (true) {
+        while (ip < end) {
+          switch (bc[ip]) {
+          case 0:
+            stack.push(peg$consts[bc[ip + 1]]);
+            ip += 2;
+            break;
+          case 1:
+            stack.push(void 0);
+            ip++;
+            break;
+          case 2:
+            stack.push(null);
+            ip++;
+            break;
+          case 3:
+            stack.push(peg$FAILED);
+            ip++;
+            break;
+          case 4:
+            stack.push([]);
+            ip++;
+            break;
+          case 5:
+            stack.push(peg$currPos);
+            ip++;
+            break;
+          case 6:
+            stack.pop();
+            ip++;
+            break;
+          case 7:
+            peg$currPos = stack.pop();
+            ip++;
+            break;
+          case 8:
+            stack.length -= bc[ip + 1];
+            ip += 2;
+            break;
+          case 9:
+            stack.splice(-2, 1);
+            ip++;
+            break;
+          case 10:
+            stack[stack.length - 2].push(stack.pop());
+            ip++;
+            break;
+          case 11:
+            stack.push(stack.splice(stack.length - bc[ip + 1], bc[ip + 1]));
+            ip += 2;
+            break;
+          case 12:
+            stack.push(input.substring(stack.pop(), peg$currPos));
+            ip++;
+            break;
+          case 13:
+            ends.push(end);
+            ips.push(ip + 3 + bc[ip + 1] + bc[ip + 2]);
+            if (stack[stack.length - 1]) {
+              end = ip + 3 + bc[ip + 1];
+              ip += 3;
+            } else {
+              end = ip + 3 + bc[ip + 1] + bc[ip + 2];
+              ip += 3 + bc[ip + 1];
+            }
+            break;
+          case 14:
+            ends.push(end);
+            ips.push(ip + 3 + bc[ip + 1] + bc[ip + 2]);
+            if (stack[stack.length - 1] === peg$FAILED) {
+              end = ip + 3 + bc[ip + 1];
+              ip += 3;
+            } else {
+              end = ip + 3 + bc[ip + 1] + bc[ip + 2];
+              ip += 3 + bc[ip + 1];
+            }
+            break;
+          case 15:
+            ends.push(end);
+            ips.push(ip + 3 + bc[ip + 1] + bc[ip + 2]);
+            if (stack[stack.length - 1] !== peg$FAILED) {
+              end = ip + 3 + bc[ip + 1];
+              ip += 3;
+            } else {
+              end = ip + 3 + bc[ip + 1] + bc[ip + 2];
+              ip += 3 + bc[ip + 1];
+            }
+            break;
+          case 16:
+            if (stack[stack.length - 1] !== peg$FAILED) {
+              ends.push(end);
+              ips.push(ip);
+              end = ip + 2 + bc[ip + 1];
+              ip += 2;
+            } else {
+              ip += 2 + bc[ip + 1];
+            }
+            break;
+          case 17:
+            ends.push(end);
+            ips.push(ip + 3 + bc[ip + 1] + bc[ip + 2]);
+            if (input.length > peg$currPos) {
+              end = ip + 3 + bc[ip + 1];
+              ip += 3;
+            } else {
+              end = ip + 3 + bc[ip + 1] + bc[ip + 2];
+              ip += 3 + bc[ip + 1];
+            }
+            break;
+          case 18:
+            ends.push(end);
+            ips.push(ip + 4 + bc[ip + 2] + bc[ip + 3]);
+            if (input.substr(peg$currPos, peg$consts[bc[ip + 1]].length) === peg$consts[bc[ip + 1]]) {
+              end = ip + 4 + bc[ip + 2];
+              ip += 4;
+            } else {
+              end = ip + 4 + bc[ip + 2] + bc[ip + 3];
+              ip += 4 + bc[ip + 2];
+            }
+            break;
+          case 19:
+            ends.push(end);
+            ips.push(ip + 4 + bc[ip + 2] + bc[ip + 3]);
+            if (input.substr(peg$currPos, peg$consts[bc[ip + 1]].length).toLowerCase() === peg$consts[bc[ip + 1]]) {
+              end = ip + 4 + bc[ip + 2];
+              ip += 4;
+            } else {
+              end = ip + 4 + bc[ip + 2] + bc[ip + 3];
+              ip += 4 + bc[ip + 2];
+            }
+            break;
+          case 20:
+            ends.push(end);
+            ips.push(ip + 4 + bc[ip + 2] + bc[ip + 3]);
+            if (peg$consts[bc[ip + 1]].test(input.charAt(peg$currPos))) {
+              end = ip + 4 + bc[ip + 2];
+              ip += 4;
+            } else {
+              end = ip + 4 + bc[ip + 2] + bc[ip + 3];
+              ip += 4 + bc[ip + 2];
+            }
+            break;
+          case 21:
+            stack.push(input.substr(peg$currPos, bc[ip + 1]));
+            peg$currPos += bc[ip + 1];
+            ip += 2;
+            break;
+          case 22:
+            stack.push(peg$consts[bc[ip + 1]]);
+            peg$currPos += peg$consts[bc[ip + 1]].length;
+            ip += 2;
+            break;
+          case 23:
+            stack.push(peg$FAILED);
+            if (peg$silentFails === 0) {
+              peg$fail(peg$consts[bc[ip + 1]]);
+            }
+            ip += 2;
+            break;
+          case 24:
+            peg$savedPos = stack[stack.length - 1 - bc[ip + 1]];
+            ip += 2;
+            break;
+          case 25:
+            peg$savedPos = peg$currPos;
+            ip++;
+            break;
+          case 26:
+            params = bc.slice(ip + 4, ip + 4 + bc[ip + 3]);
+            for (i = 0; i < bc[ip + 3]; i++) {
+              params[i] = stack[stack.length - 1 - params[i]];
+            }
+            stack.splice(stack.length - bc[ip + 2], bc[ip + 2], peg$consts[bc[ip + 1]].apply(null, params));
+            ip += 4 + bc[ip + 3];
+            break;
+          case 27:
+            stack.push(peg$parseRule(bc[ip + 1]));
+            ip += 2;
+            break;
+          case 28:
+            peg$silentFails++;
+            ip++;
+            break;
+          case 29:
+            peg$silentFails--;
+            ip++;
+            break;
+          default:
+            throw new Error('Invalid opcode: ' + bc[ip] + '.');
+          }
+        }
+        if (ends.length > 0) {
+          end = ends.pop();
+          ip = ips.pop();
+        } else {
+          break;
+        }
+      }
+      return stack[0];
+    }
+    /* eslint-env amd */
+    /* eslint no-control-regex: "warn", no-constant-condition: "warn" */
+    // These are mainly here to experiment with the parser in peg's online playground
+    var default_options = {
+      'input-complex-roots': 'ij',
+      'input-decimal-markers': '.,',
+      'input-exponent-markers': 'eEdD'
+    };
+    // var options = default_options;
+    function repeat(pattern, count) {
+      if (count < 1)
+        return '';
+      var result = '';
+      while (count > 1) {
+        if (count & 1)
+          result += pattern;
+        count >>= 1, pattern += pattern;
+      }
+      return result + pattern;
+    }
+    peg$result = peg$parseRule(peg$startRuleIndex);
+    if (peg$result !== peg$FAILED && peg$currPos === input.length) {
+      return peg$result;
+    } else {
+      if (peg$result !== peg$FAILED && peg$currPos < input.length) {
+        peg$fail({
+          type: 'end',
+          description: 'end of input'
+        });
+      }
+      throw peg$buildException(null, peg$maxFailExpected, peg$maxFailPos < input.length ? input.charAt(peg$maxFailPos) : null, peg$maxFailPos < input.length ? peg$computeLocation(peg$maxFailPos, peg$maxFailPos + 1) : peg$computeLocation(peg$maxFailPos, peg$maxFailPos));
+    }
+  }
+  return {
+    SyntaxError: peg$SyntaxError,
+    parse: peg$parse
+  };
+}();
+number_preformatter = function () {
+  var TEX = MathJax.InputJax.TeX;
+  // this is mainly here for documentation purposes
+  var default_options = {
+    'explicit-sign': null,
+    // which sign to place explicitly if one is missing
+    'retain-explicit-plus': false,
+    'add-integer-zero': false,
+    'add-decimal-zero': false,
+    'minimum-integer-digits': 0,
+    'round-mode': 'off',
+    // or 'figures', 'places'
+    'round-precision': 3,
+    'round-half': 'even',
+    // or 'up',
+    'round-integer-to-decimal': false,
+    'zero-decimal-to-integer': false,
+    'group-digits': null,
+    // or 'true','integer','decimal'
+    'group-minimum-digits': 3,
+    'group-separator': '\\,',
+    'copy-decimal-marker': true,
+    'output-decimal-marker': '.',
+    'bracket-numbers': true,
+    'open-bracket': '(',
+    'close-bracket': ')',
+    'copy-complex-root': true,
+    'output-complex-root': 'i',
+    'complex-root-position': 'before-number',
+    'output-exponent-marker': false,
+    // or an explicit marker, e.g. 'e'
+    'exponent-product': '\\times',
+    'exponent-base': '10'
+  };
+  function incIntStr(str) {
+    var m = str.length;
+    var k = m - 1;
+    while (k >= 0 && str[k] === '9')
+      k--;
+    if (k >= 0) {
+      str = str.slice(0, k) + '123456789'[parseInt(str[k])] + '0'.repeat(m - k - 1);
+    } else
+      str = '1' + '0'.repeat(m);
+    return str;
+  }
+  function postprocDecimal(options, num, no_rounding, retain_plus) {
+    console.log(num);
+    if (!num)
+      return;
+    var n;
+    // -- explicit signs
+    if (num.sign === null)
+      num.sign = options['explicit-sign'];
+    else if (!retain_plus && num.sign === '+' && !options['retain-explicit-plus'])
+      num.sign = null;
+    // -- remove leading zeros
+    num.int = num.int.replace(/^00*/, '');
+    // -- missing zeros
+    if (!num.int && options['add-integer-zero'])
+      num.int = '0';
+    if (num.sep && !num.frac && options['add-decimal-zero'])
+      num.frac = '0';
+    // -- minimum integer digits
+    n = options['minimum-integer-digits'] - num.int.length;
+    if (n > 0)
+      num.int = '0'.repeat(n) + num.int;
+    // -- rounding
+    // TODO: disable rounding when non-digits present in number
+    if (!no_rounding && num.uncert === null && options['round-mode'] !== 'off') {
+      if (options['round-mode'] === 'figures') {
+        n = num.int.replace(/^00*/, '').length;
+        if (n)
+          n += num.frac.length;
+        else
+          n = num.frac.replace(/^00*/, '').length;
+      } else
+        n = num.frac.length;
+      // round-mode = places
+      n -= options['round-precision'];
+      switch (Math.sign(n)) {
+      case 1:
+        // Too many digits
+        var comb = num.int + num.frac;
+        var dir = Math.sign(parseInt(comb[comb.length - n]) - 5);
+        if (!dir && n > 1 && parseInt(comb.slice(1 - n)))
+          dir = 1;
+        comb = comb.slice(0, -n);
+        if (!dir) {
+          // exactly half
+          switch (options['round-half']) {
+          case 'up':
+            // actually: up in magnitude
+            dir = 1;
+            break;
+          default:
+          case 'even':
+            dir = parseInt(comb[comb.length - 1]) & 1 ? 1 : -1;
+            break;
+          }
+        }
+        if (dir === 1)
+          comb = incIntStr(comb);
+        if (n < num.frac.length) {
+          // decimal result
+          num.int = comb.slice(0, n - num.frac.length);
+          num.frac = comb.slice(n - num.frac.length);
+        } else {
+          // integer result
+          num.int = comb + '0'.repeat(n - num.frac.length);
+          num.sep = null;
+          num.frac = '';
+        }
+        break;
+      case -1:
+        // Too few digits
+        if (num.sep || options['round-integer-to-decimal']) {
+          num.sep = num.sep || options['output-decimal-marker'];
+          num.frac += '0'.repeat(-n);
+        }
+        break;
+      }
+    }
+    if (options['zero-decimal-to-integer'] && !(num.frac && parseInt(num.frac))) {
+      num.frac = null;
+      num.sep = null;
+    }
+  }
+  function postprocComplExp(options, num) {
+    postprocDecimal(options, num.re);
+    postprocDecimal(options, num.im, false, true);
+    postprocDecimal(options, num.exp, true);
+  }
+  function postprocAll(options, nums) {
+    nums.forEach(function (quot) {
+      [
+        quot.num,
+        quot.denom
+      ].forEach(function (num) {
+        if (!num)
+          return;
+        postprocComplExp(options, num);
+      });
+    });
+  }
+  function fmtDecimal(options, num) {
+    var integer = num.int;
+    var fractional = num.frac;
+    var gd = options['group-digits'];
+    var md = options['group-minimum-digits'];
+    var gs = '{' + options['group-separator'] + '}';
+    var dm = '{' + (options['copy-decimal-marker'] ? num.sep : options['output-decimal-marker']) + '}';
+    var sign = num.sign || '';
+    //  integer = integer || '0';
+    var l = integer.length;
+    if (l >= md && (gd === 'true' || gd === 'integer')) {
+      l -= 3;
+      for (; l > 0; l -= 3) {
+        integer = integer.slice(0, l) + gs + integer.slice(l);
+      }
+    }
+    if (!num.sep)
+      return sign + integer;
+    l = fractional.length;
+    if (l >= md && (gd === 'true' || gd === 'decimal')) {
+      l -= 1 + (l - 1) % 3;
+      for (; l > 0; l -= 3) {
+        fractional = fractional.slice(0, l) + gs + fractional.slice(l);
+      }
+    }
+    return sign + integer + dm + fractional;
+  }
+  function fmtComplExp(options, num) {
+    var ob = '', cb = '';
+    if (num.exp && options['bracket-numbers']) {
+      ob = (options['open-bracket'] || '(') + ' ';
+      cb = ' ' + (options['close-bracket'] || ')');
+    }
+    var re = num.re && fmtDecimal(options, num.re);
+    var im = null;
+    if (num.im) {
+      var cr = options['copy-complex-root'] ? num.im.root : options['output-complex-root'];
+      im = fmtDecimal(options, num.im);
+      if (options['complex-root-position'] === 'before-number')
+        im = cr + im;
+      else
+        im = im + cr;
+    }
+    var ret = num.rel ? num.rel + ' ' : '';
+    if (re) {
+      if (!im)
+        ret += re;
+      else
+        ret += ob + re + ' ' + im + cb;
+    } else if (im)
+      ret += im;
+    if (num.sign) {
+      // num.sign only for lone signs without any number
+      if (num.re || num.im)
+        TEX.Error('sign but also re or im given');
+      // should never happen
+      ret += ' ' + num.sign;
+    }
+    if (num.exp) {
+      var exp = fmtDecimal(options, num.exp);
+      var oem = options['output-exponent-marker'];
+      if (oem)
+        ret += ' ' + oem + ' ' + exp;
+      else
+        ret += ' ' + (re || im ? options['exponent-product'] || '\\times' : '') + ' ' + (options['exponent-base'] || '10') + '^{' + exp + '}';
+    }
+    return ret;
+  }
+  function processAll(options, nums) {
+    return nums.map(function (quot) {
+      var formatted = [
+        quot.num,
+        quot.denom
+      ].map(function (num) {
+        if (!num)
+          return num;
+        var numcopy = {};
+        for (var k in num)
+          if (num.hasOwnProperty(k))
+            numcopy[k] = num;
+        postprocComplExp(options, num);
+        return fmtComplExp(options, num);
+      });
+      var num = formatted[0];
+      var denom = formatted[1];
+      if (denom === null)
+        return num;
+      if (options['quotient-mode'] == 'symbol')
+        return num + options['output-quotient'] + denom;
+      return options['fraction-function'] + '{' + num + '}{' + denom + '}';
+    });
+  }
+  return {
+    postprocDecimal: postprocDecimal,
+    postprocComplExp: postprocComplExp,
+    postprocAll: postprocAll,
+    fmtDecimal: fmtDecimal,
+    fmtComplExp: fmtComplExp,
+    processAll: processAll
+  };
+}();
+number_parser = function (SIunitxOptions, PARSER, FORMATTER) {
+  var exports = {};
+  var TEX = MathJax.InputJax.TeX;
+  var replacements = {
+    '+-': '\\pm',
+    '-+': '\\mp',
+    '<=': '\\leq',
+    '>=': '\\geq',
+    '<<': '\\ll',
+    '>>': '\\gg'
+  };
+  function preprocess(str) {
+    str = str.replace(/\s+/gi, '');
+    for (var key in replacements)
+      if (replacements.hasOwnProperty(key)) {
+        str = str.replace(key, replacements[key]);
+      }
+    return str;
+  }
+  exports.SINumberParser = function SINumberParser(string, options) {
+    var str = preprocess(string);
+    var parsed = PARSER.parse(str, options);
+    var preformatted = FORMATTER.processAll(options, parsed);
+    return preformatted;
+  };
+  exports.SINumberListParser = function SINumberListParser(string, options) {
+    var ret = string.split(';').map(function (str) {
+      str = preprocess(str);
+      var parsed = PARSER.parse(str, options);
+      var preformatted = FORMATTER.processAll(options, parsed);
+      return preformatted;
+    });
+    return ret;
+  };
+  return exports;
+}(siunitx_options_definition, number_parser_peg, number_preformatter);
+siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSER) {
+  var TEX = MathJax.InputJax.TeX;
+  var MML = MathJax.ElementJax.mml;
+  var UNITSMACROS = UNITDEFS.UNITSMACROS;
+  var SINumberParser = NUMBERPARSER.SINumberParser;
+  var SINumberListParser = NUMBERPARSER.SINumberListParser;
+  var SIunitxCommands = MathJax.Extension['TeX/siunitx'].SIunitxCommands = {
+    sisetup: function (name) {
+      var options = this.GetArgument(name);
+    },
+    si: function (name) {
+      var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
+      var units = this.GetArgument(name);
+      //      console.log('>> si(',name,'){',units,'}');
+      this.Push(SIUnitParser(units, options, this.stack.env).mml());
+    },
+    SI: function (name) {
+      var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
+      var num = this.GetArgument(name);
+      var preunits = this.GetBrackets(name, '');
+      var units = this.GetArgument(name);
+      var factors = SINumberParser(num, options);
+      //     console.log('>> SI(',name,'){',num,'}{',units,'}');
+      var that = this;
+      factors.forEach(function (num, i) {
+        if (i)
+          that.Push(TEX.Parse(options['output-product']).mml());
+        if (preunits) {
+          that.Push(SIUnitParser(preunits, options, that.stack.env).mml());
+          that.Push(MML.mspace().With({
+            width: MML.LENGTH.MEDIUMMATHSPACE,
+            mathsize: MML.SIZE.NORMAL,
+            scriptlevel: 0
+          }));
+        }
+        that.Push(TEX.Parse(num).mml());
+        that.Push(MML.mspace().With({
+          width: MML.LENGTH.MEDIUMMATHSPACE,
+          mathsize: MML.SIZE.NORMAL,
+          scriptlevel: 0
+        }));
+        that.Push(SIUnitParser(units, options, that.stack.env).mml());
+      });
+    },
+    SIlist: function (name) {
+      var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
+      var num = this.GetArgument(name);
+      var preunits = this.GetBrackets(name, '');
+      var units = this.GetArgument(name);
+      if (preunits) {
+        preunits = SIUnitParser(preunits, options, this.stack.env);
+      }
+      var preformatted = SINumberListParser(num, options).map(function (num) {
+        return num.join(options['output-product']);
+      });
+      units = SIUnitParser(units, options, this.stack.env);
+      function medspace() {
+        return MML.mspace().With({
+          width: MML.LENGTH.MEDIUMMATHSPACE,
+          mathsize: MML.SIZE.NORMAL,
+          scriptlevel: 0
+        });
+      }
+      var that = this;
+      preformatted.forEach(function (num, i) {
+        if (i) {
+          if (preformatted.length > 2) {
+            if (i < preformatted.length - 1)
+              that.Push(TEX.Parse('\\text{' + options['list-separator'] + '}').mml());
+            else
+              that.Push(TEX.Parse('\\text{' + options['list-final-separator'] + '}').mml());
+          } else {
+            that.Push(TEX.Parse('\\text{' + options['list-pair-separator'] + '}').mml());
+          }
+        }
+        if (preunits) {
+          that.Push(preunits.mml());
+          that.Push(medspace());
+        }
+        that.Push(TEX.Parse(num).mml());
+        that.Push(medspace());
+        that.Push(units.mml());
+      });
+    },
+    SIrange: function (name) {
+      var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
+      var num1 = this.GetArgument(name);
+      var num2 = this.GetArgument(name);
+      var preunits = this.GetBrackets(name, '');
+      var units = this.GetArgument(name);
+      units = SIUnitParser(units, options, this.stack.env);
+      if (preunits)
+        preunits = SIUnitParser(preunits, options, this.stack.env);
+      if (preunits) {
+        this.Push(preunits.mml());
+        this.Push(MML.mspace().With({
+          width: MML.LENGTH.MEDIUMMATHSPACE,
+          mathsize: MML.SIZE.NORMAL,
+          scriptlevel: 0
+        }));
+      }
+      this.Push(TEX.Parse(SINumberParser(num1, options).join(options['output-product'])).mml());
+      this.Push(MML.mspace().With({
+        width: MML.LENGTH.MEDIUMMATHSPACE,
+        mathsize: MML.SIZE.NORMAL,
+        scriptlevel: 0
+      }));
+      this.Push(units.mml());
+      this.Push(TEX.Parse('\\text{' + options['range-phrase'] + '}').mml());
+      if (preunits) {
+        this.Push(preunits.mml());
+        this.Push(MML.mspace().With({
+          width: MML.LENGTH.MEDIUMMATHSPACE,
+          mathsize: MML.SIZE.NORMAL,
+          scriptlevel: 0
+        }));
+      }
+      this.Push(TEX.Parse(SINumberParser(num2, options).join(options['output-product'])).mml());
+      this.Push(MML.mspace().With({
+        width: MML.LENGTH.MEDIUMMATHSPACE,
+        mathsize: MML.SIZE.NORMAL,
+        scriptlevel: 0
+      }));
+      this.Push(units.mml());
+    },
+    num: function (name) {
+      var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
+      var num = this.GetArgument(name);
+      var preformatted = SINumberParser(num, options).join(options['output-product']);
+      this.Push(TEX.Parse(preformatted).mml());
+    },
+    ang: function (name) {
+      var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
+      var num = this.GetArgument(name);
+      num = SINumberListParser(num, options, this.stack.env).parsed;
+      if (num.length > 5)
+        TEX.Error('More than three elements in angle specification');
+      var units = [
+        'degree',
+        undefined,
+        'arcminute',
+        undefined,
+        'arcsecond'
+      ];
+      var def = { mathvariant: MML.VARIANT.NORMAL };
+      for (var idx = 0; idx < num.length; ++idx) {
+        var n = num[idx];
+        if (idx & 1) {
+        } else {
+          if (!n)
+            continue;
+          this.Push(TEX.Parse(n).mml());
+          var u = UNITSMACROS[units[idx]][1];
+          // assumes that all symbol's we encounter are MML.entity
+          var mml = MML.mi.apply(MML.mi, [u.symbol]).With(def);
+          this.Push(this.mmlToken(mml));
+        }
+      }
+    },
+    numlist: function (name) {
+      var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
+      var num = this.GetArgument(name);
+      var preformatted = SINumberListParser(num, options).map(function (num) {
+        return num.join(options['output-product']);
+      });
+      var joined;
+      if (preformatted.length > 2) {
+        joined = preformatted.slice(0, -1).join('\\text{' + options['list-separator'] + '}');
+        joined += '\\text{' + options['list-final-separator'] + '}' + preformatted[preformatted.length - 1];
+      } else {
+        joined = preformatted.join('\\text{' + options['list-pair-separator'] + '}');
+      }
+      this.Push(TEX.Parse(joined).mml());
+    },
+    numrange: function (name) {
+      var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
+      var num1 = this.GetArgument(name);
+      var num2 = this.GetArgument(name);
+      var preformatted = SINumberParser(num1, options).join(options['output-product']) + '\\text{' + options['range-phrase'] + '}' + SINumberParser(num2, options).join(options['output-product']);
+      this.Push(TEX.Parse(preformatted).mml());
+    }
+  };
+  // ------ register the commands with MathJax
+  TEX.Definitions.Add({
+    macros: {
+      //
+      //  Set up the macros for SI units
+      //
+      sisetup: 'SIunitx',
+      si: 'SIunitx',
+      SI: 'SIunitx',
+      SIlist: 'SIunitx',
+      SIrange: 'SIunitx',
+      num: 'SIunitx',
+      ang: 'SIunitx',
+      numlist: 'SIunitx',
+      numrange: 'SIunitx'
+    }
+  }, null, true);
+  TEX.Parse.Augment({
+    //
+    //  Implements \SI and friends
+    //
+    SIunitx: function (name) {
+      SIunitxCommands[name.slice(1)].call(this, name);
+    }
+  });
+  //
+  //  Indicate that the extension is ready
+  //
+  MathJax.Hub.Startup.signal.Post('TeX siunitx Ready');
+  return SIunitxCommands;
+}(siunitx_options_definition, unit_definitions, unit_parser, number_parser);
+  // amd-replace-stop
+});
+
+MathJax.Ajax.loadComplete("[Contrib]/siunitx/siunitx.js");
+

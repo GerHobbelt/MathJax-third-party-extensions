@@ -50,6 +50,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+/* eslint-env amd */
 var keyvalue_option_validation, siunitx_options_definition, unit_definitions, unit_parser, number_parser_peg, number_preformatter, number_parser, siunitx_commands;
 keyvalue_option_validation = function () {
   var exports = {};
@@ -145,7 +146,7 @@ keyvalue_option_validation = function () {
     },
     Get: function (obj, name) {
       // TODO: find out how to clone Jax-MML, such that we can store the parsed MML instead
-      val = arguments.callee.SUPER.Get.call(this, obj, name);
+      var val = arguments.callee.SUPER.Get.call(this, obj, name);
       return TEX.Parse('\\text{' + val + '}').mml();
     }
   });
@@ -250,8 +251,8 @@ keyvalue_option_validation = function () {
         var val = parts.slice(1).join('=');
         var count = 0;
         var pos = -1;
-        while (true) {
-          while (true) {
+        for (;;) {
+          for (;;) {
             var start = pos + 1;
             var open = val.indexOf('{', start);
             var close = val.indexOf('}', start);
@@ -298,7 +299,7 @@ siunitx_options_definition = function (KEYVAL) {
   var Literal = KEYVAL.Literal;
   var Macro = KEYVAL.Macro;
   var Integer = KEYVAL.Integer;
-  var Math = KEYVAL.Math;
+  var MJMath = KEYVAL.Math;
   var TeXParsedLiteral = KEYVAL.TeXParsedLiteral;
   var SIunitxOptions = ConfigData.Define({
     // Font detection
@@ -378,7 +379,7 @@ siunitx_options_definition = function (KEYVAL) {
     'copy-decimal-marker': Switch(false),
     'exponent-base': Literal('10'),
     // done
-    'exponent-product': Math('\\times'),
+    'exponent-product': MJMath('\\times'),
     // done
     'group-digits': Choice('true', 'false', 'decimal', 'integer'),
     // done
@@ -404,7 +405,7 @@ siunitx_options_definition = function (KEYVAL) {
     // done
     'input-quotient': Literal('/'),
     // done
-    'output-product': Math('\\times'),
+    'output-product': MJMath('\\times'),
     // done
     'output-quotient': Literal('/'),
     // done
@@ -1914,6 +1915,8 @@ number_parser_peg = function () {
       }
       return stack[0];
     }
+    /* eslint-env amd */
+    /* eslint no-control-regex: "warn", no-constant-condition: "warn" */
     // These are mainly here to experiment with the parser in peg's online playground
     var default_options = {
       'input-complex-roots': 'ij',
@@ -1951,6 +1954,7 @@ number_parser_peg = function () {
   };
 }();
 number_preformatter = function () {
+  var TEX = MathJax.InputJax.TeX;
   // this is mainly here for documentation purposes
   var default_options = {
     'explicit-sign': null,
@@ -2147,7 +2151,7 @@ number_preformatter = function () {
     if (num.sign) {
       // num.sign only for lone signs without any number
       if (num.re || num.im)
-        error('sign but also re or im given');
+        TEX.Error('sign but also re or im given');
       // should never happen
       ret += ' ' + num.sign;
     }
@@ -2221,7 +2225,7 @@ number_parser = function (SIunitxOptions, PARSER, FORMATTER) {
   };
   exports.SINumberListParser = function SINumberListParser(string, options) {
     var ret = string.split(';').map(function (str) {
-      var str = preprocess(str);
+      str = preprocess(str);
       var parsed = PARSER.parse(str, options);
       var preformatted = FORMATTER.processAll(options, parsed);
       return preformatted;

@@ -1,3 +1,21 @@
+/*
+ *  ../../../../legacy/counters/counters.js
+ *
+ *  Copyright (c) 2009-2018 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 /*************************************************************
  *
  *  counters.js
@@ -56,8 +74,8 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   TEXDEF.macros.roman = 'ROMAN_counters';
   TEXDEF.macros.Roman = 'CAP_ROMAN_counters';
   
-  counterarray = [];
-  var dependencyarray = [];
+  var counterarray = {};          // hash table
+  var dependencyarray = {};       // hash table
 
   TEX.Parse.Augment({
 
@@ -88,7 +106,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     ARABIC_counters: function (name) {
       var cn = this.trimSpaces(this.GetArgument(name));
       if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
-      MML = MathJax.ElementJax.mml;
+      var MML = MathJax.ElementJax.mml;
       this.Push(this.mmlToken(MML.mo(''+counterarray[cn])));
     },
 
@@ -98,10 +116,11 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     ALPH_counters: function (name) {
       var cn = this.trimSpaces(this.GetArgument(name));
       if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
-      MML = MathJax.ElementJax.mml;
-      var n = counterarray[cn]; s = "";
+      var MML = MathJax.ElementJax.mml;
+      var n = counterarray[cn]; 
+      var s = "";
       while (n>0) {
-        y = ((n-1)%26)+1;
+        var y = ((n-1)%26)+1;
         // if (y==0) y=26;
         s = String.fromCharCode(96+y)+s;
         n = Math.floor((n-1)/26);
@@ -115,10 +134,11 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     CAP_ALPH_counters: function (name) {
       var cn = this.trimSpaces(this.GetArgument(name));
       if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
-      MML = MathJax.ElementJax.mml;
-      var n = counterarray[cn]; s = "";
+      var MML = MathJax.ElementJax.mml;
+      var n = counterarray[cn]; 
+      var s = "";
       while (n>0) {
-        y = ((n-1)%26)+1;
+        var y = ((n-1)%26)+1;
         // if (y==0) y=26;
         s = String.fromCharCode(64+y)+s;
         n = Math.floor((n-1)/26);
@@ -132,8 +152,9 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     CAP_ROMAN_counters: function (name) {
       var cn = this.trimSpaces(this.GetArgument(name));
       if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
-      MML = MathJax.ElementJax.mml;
-      var n = counterarray[cn]; s = "";
+      var MML = MathJax.ElementJax.mml;
+      var n = counterarray[cn]; 
+      var s = "";
       while (n>=1000) { s += "M"; n -= 1000; }
       if (n>=900) { s += "CM"; n -= 900; }
       if (n>=500) { s += "D"; n -= 500; }
@@ -156,8 +177,9 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
     ROMAN_counters: function (name) {
       var cn = this.trimSpaces(this.GetArgument(name));
       if (!cn.match(/^(.|[a-z]+)$/i)) {TEX.Error("Illegal counter name for "+name)}
-      MML = MathJax.ElementJax.mml;
-      var n = counterarray[cn]; s = "";
+      var MML = MathJax.ElementJax.mml;
+      var n = counterarray[cn]; 
+      var s = "";
       while (n>=1000) { s += "m"; n -= 1000; }
       if (n>=900) { s += "cm"; n -= 900; }
       if (n>=500) { s += "d"; n -= 500; }
@@ -210,7 +232,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       if (n === Number.NaN) {TEX.Error("Illegal number format")}
       counterarray[cn] += n;
       if (dependencyarray != null && dependencyarray[cn]!= null)
-        for (i=0;i<dependencyarray[cn].length;i++) {  
+        for (var i=0;i<dependencyarray[cn].length;i++) {  
           counterarray[dependencyarray[cn][i]]=1;
         } // ****
     }
@@ -221,5 +243,6 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
   
 }));
 
-MathJax.Ajax.loadComplete("[Contrib]/counters/counters.js");
+MathJax.Ajax.loadComplete("[Contrib]/counters/unpacked/counters.js");
+
 
