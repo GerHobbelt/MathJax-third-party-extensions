@@ -22,6 +22,8 @@
  *  limitations under the License.
  */
 
+/* eslint-env amd */
+
 define(
   ['./siunitx-options-definition','./unit-definitions','./unit-parser','./number-parser'],
   function(SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSER)

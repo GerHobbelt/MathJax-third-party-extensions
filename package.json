@@ -4,7 +4,7 @@
   "description": "A list of MathJax extensions provided by third-party contributors",
   "scripts": {
   	"build": "cd node_modules/@gerhobbelt/mathjax-dev/packer && make third-party-extensions",
-    "test": "npm run build && echo 'No tests here!'",
+    "test": "npm run build && npm run lint && echo 'No tests here!'",
     "lint": "eslint .",
     "fix": "eslint --fix .",
     "pub": "npm publish --access public"

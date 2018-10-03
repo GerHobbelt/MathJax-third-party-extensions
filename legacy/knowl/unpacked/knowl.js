@@ -38,6 +38,8 @@
  *
  */
 
+/* eslint-env jquery */
+
 MathJax.Extension.Knowl = {
   version: "2.0",
 

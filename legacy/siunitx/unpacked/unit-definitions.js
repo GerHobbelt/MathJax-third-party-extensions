@@ -21,6 +21,8 @@
  *  limitations under the License.
  */
 
+/* eslint-env amd */
+
 define(function() {
   var exports = {};
 

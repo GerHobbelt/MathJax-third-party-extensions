@@ -47,7 +47,7 @@ define([], function () { return (function() {
           function(s) {return options['input-exponent-markers'].indexOf(s)>=0;},
           { type: "any", description: "any character" },
           function(head, tail) {
-          	var ret=[head];
+              var ret=[head];
               tail.forEach(function(f){ret.push(f[1]);});
               return ret;
           },
@@ -57,12 +57,12 @@ define([], function () { return (function() {
           "/",
           { type: "literal", value: "/", description: "\"/\"" },
           function(num, denom) {
-          	return {num:num, denom:denom && denom[3]};
+              return {num:num, denom:denom && denom[3]};
           },
           function(rel, mantissa, exp) {
-          	mantissa.exp = exp && exp[1];
+              mantissa.exp = exp && exp[1];
               mantissa.rel = rel && rel[0];
-          	return mantissa;
+              return mantissa;
           },
           function(rel, sign, exp) {
               var ret = {
@@ -73,14 +73,14 @@ define([], function () { return (function() {
               return ret;
           },
           function(re, im) {
-          	var res = re[0] && re[0][0];
+              var res = re[0] && re[0][0];
               re = re[1];
               re.sign = res;
               var ims = im && im[1];
               im = im && im[3];
               if(im) im.sign = ims;
-          	return {
-              	re: re,
+              return {
+                  re: re,
                   im: im,
               }
           },
@@ -89,22 +89,22 @@ define([], function () { return (function() {
               return {re:num};
           },
           function(sign, num, uncert) {
-          	var n = num.frac.length;
+              var n = num.frac.length;
               var m = uncert.frac.length;
               num.frac = num.frac + repeat('0',Math.max(0,m-n));
               uncert.frac = uncert.frac + repeat('0',Math.max(0,n-m));
               num.uncert = uncert.int + uncert.frac;
               num.sign = sign && sign[0];
-          	return {re:num};
+              return {re:num};
           },
           function(num, root) {
-          	num.root = root; return num;
+              num.root = root; return num;
           },
           function(root, num) {
-          	num.root = root; return num;
+              num.root = root; return num;
           },
           function(sign, exponent) {
-          	exponent.sign = sign && sign[0];
+              exponent.sign = sign && sign[0];
               return exponent;
           },
           /^[+\-]/,
@@ -153,18 +153,18 @@ define([], function () { return (function() {
           ")",
           { type: "literal", value: ")", description: "\")\"" },
           function(num, uncert) {
-          	uncert = uncert && uncert[3];
+              uncert = uncert && uncert[3];
               num.uncert = uncert;
               return num;
           },
           { type: "other", description: "decimal" },
           function(int, rest) {
-          	var sep = rest && rest[1];
+              var sep = rest && rest[1];
               var frac = rest && rest[2] && rest[2][1];
               return {int: int, sep:sep, frac:frac || ''};
           },
           function(sep, frac) {
-          	return {int: '', sep:sep, frac:frac};
+              return {int: '', sep:sep, frac:frac};
           },
           { type: "other", description: "integer" },
           function() { return parseInt(text(), 10); },
@@ -675,6 +675,10 @@ define([], function () { return (function() {
       return stack[0];
     }
 
+
+
+    /* eslint-env amd */
+    /* eslint no-control-regex: "warn", no-constant-condition: "warn" */
 
     // These are mainly here to experiment with the parser in peg's online playground
     var default_options = {

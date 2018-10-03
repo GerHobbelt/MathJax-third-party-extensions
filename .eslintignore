@@ -13,8 +13,10 @@ legacy/mhchem/mhchem.js
 legacy/modifymenu/modifymenu.js
 legacy/physics/physics.js
 legacy/preamble/preamble.js
-legacy/siunitx/siunitx.js
 legacy/sqrtspacing/sqrtspacing.js
 legacy/toggles/toggles.js
 legacy/xyjax/xypic.js
+
+legacy/siunitx/siunitx.js
+
 node_modules/

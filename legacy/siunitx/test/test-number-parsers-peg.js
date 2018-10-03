@@ -2,6 +2,8 @@
  * Created by yves on 26/06/16.
  */
 
+/* eslint-env node, amd, mocha */
+
 var assert = require('chai').assert;
 var requirejs = require('requirejs');
 

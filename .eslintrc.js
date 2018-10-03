@@ -23,5 +23,7 @@ module.exports = {
     	"no-useless-escape": "off",
     	"no-empty": "off",
     	"no-unused-vars": "off",
+
+      "no-redeclare": "warn",
     },
 };

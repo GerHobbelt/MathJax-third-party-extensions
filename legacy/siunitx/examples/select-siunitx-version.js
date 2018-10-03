@@ -2,6 +2,8 @@
  * Created by yves on 27.06.16.
  */
 
+/* global requirejs: false */
+
 (function(){
     var script_path;
     var need_requirejs = false;
@@ -40,4 +42,3 @@
         MathJax.Hub.Configured();
     }
 })();
-

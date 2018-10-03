@@ -21,6 +21,8 @@
  *  limitations under the License.
  */
 
+/* eslint-env amd */
+
 define(['./unit-definitions'],function(UNITDEFS) {
   var TEX = MathJax.InputJax.TeX;
   var STACK = TEX.Stack;
