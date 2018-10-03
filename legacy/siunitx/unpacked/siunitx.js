@@ -27,7 +27,7 @@ MathJax.Extension["TeX/siunitx"] = {
 
 MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
   // amd-replace-start
-(function() {
+
 /*************************************************************
  *
  *  MathJax/extensions/TeX/siunitx/keyvalue-option-validation.js
@@ -50,7 +50,7 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-var keyvalue_option_validation, siunitx_options_definition, unit_definitions, unit_parser, number_parser_peg, number_formatter, number_parser, siunitx_commands;
+var keyvalue_option_validation, siunitx_options_definition, unit_definitions, unit_parser, number_parser_peg, number_preformatter, number_parser, siunitx_commands;
 keyvalue_option_validation = function () {
   var exports = {};
   var TEX = MathJax.InputJax.TeX;
@@ -416,7 +416,7 @@ siunitx_options_definition = function (KEYVAL) {
     // done
     'list-separator': Literal(', '),
     // done
-    'range-phrase': TeXParsedLiteral(' to '),
+    'range-phrase': Literal(' to '),
     // done
     // angle options
     'add-arc-degree-zero': Switch(false),
@@ -1950,7 +1950,7 @@ number_parser_peg = function () {
     parse: peg$parse
   };
 }();
-number_formatter = function () {
+number_preformatter = function () {
   // this is mainly here for documentation purposes
   var default_options = {
     'explicit-sign': null,
@@ -2176,10 +2176,13 @@ number_formatter = function () {
         postprocComplExp(options, num);
         return fmtComplExp(options, num);
       });
-      return {
-        num: formatted[0],
-        denom: formatted[1]
-      };
+      var num = formatted[0];
+      var denom = formatted[1];
+      if (denom === null)
+        return num;
+      if (options['quotient-mode'] == 'symbol')
+        return num + options['output-quotient'] + denom;
+      return options['fraction-function'] + '{' + num + '}{' + denom + '}';
     });
   }
   return {
@@ -2194,63 +2197,39 @@ number_formatter = function () {
 number_parser = function (SIunitxOptions, PARSER, FORMATTER) {
   var exports = {};
   var TEX = MathJax.InputJax.TeX;
-  var SINumberParser = exports.SINumberParser = MathJax.Object.Subclass({
-    Init: function (string, options) {
-      this.string = string;
-      this.i = 0;
-      if (options === undefined)
-        options = SIunitxOptions();
-      else if (!(options instanceof SIunitxOptions)) {
-        console.log(options, SIunitxOptions);
-        throw 'SINumberParser expects an options object';
+  var replacements = {
+    '+-': '\\pm',
+    '-+': '\\mp',
+    '<=': '\\leq',
+    '>=': '\\geq',
+    '<<': '\\ll',
+    '>>': '\\gg'
+  };
+  function preprocess(str) {
+    str = str.replace(/\s+/gi, '');
+    for (var key in replacements)
+      if (replacements.hasOwnProperty(key)) {
+        str = str.replace(key, replacements[key]);
       }
-      this.options = options;
-      this.Parse();
-    },
-    Parse: function () {
-      var str = this.string.replace(/\s+/gi, '');
-      var replacements = {
-        '+-': '\\pm',
-        '-+': '\\mp',
-        '<=': '\\leq',
-        '>=': '\\geq',
-        '<<': '\\ll',
-        '>>': '\\gg'
-      };
-      for (var key in replacements)
-        if (replacements.hasOwnProperty(key)) {
-          str = str.replace(key, replacements[key]);
-        }
-      this.parsed = PARSER.parse(str, this.options);
-      this.preformatted = FORMATTER.processAll(this.options, this.parsed);
-    }
-  });
-  var SINumberListParser = exports.SINumberListParser = SINumberParser.Subclass({
-    Parse: function () {
-      // TODO: do not process list separators via TeX parsing
-      var str = this.string.replace(/\s+/gi, '');
-      var numbers = str.split(';');
-      var parsed = [];
-      for (var idx = 0; idx < numbers.length; ++idx) {
-        if (idx == numbers.length - 1) {
-          if (idx == 1) {
-            parsed.push('\\text{' + this.options['list-pair-separator'] + '}');
-          } else if (idx) {
-            parsed.push('\\text{' + this.options['list-final-separator'] + '}');
-          }
-        } else if (idx) {
-          parsed.push('\\text{' + this.options['list-separator'] + '}');
-        }
-        parsed.push(this._parse_multi_part_number(numbers[idx]));
-      }
-      this.parsed = parsed;
-    },
-    mml: function () {
-      return TEX.Parse(this.parsed.join('')).mml();
-    }
-  });
+    return str;
+  }
+  exports.SINumberParser = function SINumberParser(string, options) {
+    var str = preprocess(string);
+    var parsed = PARSER.parse(str, options);
+    var preformatted = FORMATTER.processAll(options, parsed);
+    return preformatted;
+  };
+  exports.SINumberListParser = function SINumberListParser(string, options) {
+    var ret = string.split(';').map(function (str) {
+      var str = preprocess(str);
+      var parsed = PARSER.parse(str, options);
+      var preformatted = FORMATTER.processAll(options, parsed);
+      return preformatted;
+    });
+    return ret;
+  };
   return exports;
-}(siunitx_options_definition, number_parser_peg, number_formatter);
+}(siunitx_options_definition, number_parser_peg, number_preformatter);
 siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSER) {
   var TEX = MathJax.InputJax.TeX;
   var MML = MathJax.ElementJax.mml;
@@ -2272,22 +2251,28 @@ siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSE
       var num = this.GetArgument(name);
       var preunits = this.GetBrackets(name, '');
       var units = this.GetArgument(name);
+      var factors = SINumberParser(num, options);
       //     console.log('>> SI(',name,'){',num,'}{',units,'}');
-      if (preunits) {
-        this.Push(SIUnitParser(preunits, options, this.stack.env).mml());
-        this.Push(MML.mspace().With({
+      var that = this;
+      factors.forEach(function (num, i) {
+        if (i)
+          that.Push(TEX.Parse(options['output-product']).mml());
+        if (preunits) {
+          that.Push(SIUnitParser(preunits, options, that.stack.env).mml());
+          that.Push(MML.mspace().With({
+            width: MML.LENGTH.MEDIUMMATHSPACE,
+            mathsize: MML.SIZE.NORMAL,
+            scriptlevel: 0
+          }));
+        }
+        that.Push(TEX.Parse(num).mml());
+        that.Push(MML.mspace().With({
           width: MML.LENGTH.MEDIUMMATHSPACE,
           mathsize: MML.SIZE.NORMAL,
           scriptlevel: 0
         }));
-      }
-      this.Push(SINumberParser(num, options, this.stack.env).mml()[0].num);
-      this.Push(MML.mspace().With({
-        width: MML.LENGTH.MEDIUMMATHSPACE,
-        mathsize: MML.SIZE.NORMAL,
-        scriptlevel: 0
-      }));
-      this.Push(SIUnitParser(units, options, this.stack.env).mml());
+        that.Push(SIUnitParser(units, options, that.stack.env).mml());
+      });
     },
     SIlist: function (name) {
       var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
@@ -2297,7 +2282,9 @@ siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSE
       if (preunits) {
         preunits = SIUnitParser(preunits, options, this.stack.env);
       }
-      num = SINumberListParser(num, options, this.stack.env).parsed;
+      var preformatted = SINumberListParser(num, options).map(function (num) {
+        return num.join(options['output-product']);
+      });
       units = SIUnitParser(units, options, this.stack.env);
       function medspace() {
         return MML.mspace().With({
@@ -2306,22 +2293,26 @@ siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSE
           scriptlevel: 0
         });
       }
-      for (var idx = 0; idx < num.length; ++idx) {
-        var n = num[idx];
-        if (idx & 1) {
-          // this is a separator
-          this.Push(TEX.Parse(n).mml());
-        } else {
-          // this is a number
-          if (preunits) {
-            this.Push(preunits.mml());
-            this.Push(medspace());
+      var that = this;
+      preformatted.forEach(function (num, i) {
+        if (i) {
+          if (preformatted.length > 2) {
+            if (i < preformatted.length - 1)
+              that.Push(TEX.Parse('\\text{' + options['list-separator'] + '}').mml());
+            else
+              that.Push(TEX.Parse('\\text{' + options['list-final-separator'] + '}').mml());
+          } else {
+            that.Push(TEX.Parse('\\text{' + options['list-pair-separator'] + '}').mml());
           }
-          this.Push(TEX.Parse(n).mml());
-          this.Push(medspace());
-          this.Push(units.mml());
         }
-      }
+        if (preunits) {
+          that.Push(preunits.mml());
+          that.Push(medspace());
+        }
+        that.Push(TEX.Parse(num).mml());
+        that.Push(medspace());
+        that.Push(units.mml());
+      });
     },
     SIrange: function (name) {
       var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
@@ -2340,14 +2331,14 @@ siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSE
           scriptlevel: 0
         }));
       }
-      this.Push(SINumberParser(num1, options, this.stack.env).mml());
+      this.Push(TEX.Parse(SINumberParser(num1, options).join(options['output-product'])).mml());
       this.Push(MML.mspace().With({
         width: MML.LENGTH.MEDIUMMATHSPACE,
         mathsize: MML.SIZE.NORMAL,
         scriptlevel: 0
       }));
       this.Push(units.mml());
-      this.Push(options['range-phrase']);
+      this.Push(TEX.Parse('\\text{' + options['range-phrase'] + '}').mml());
       if (preunits) {
         this.Push(preunits.mml());
         this.Push(MML.mspace().With({
@@ -2356,7 +2347,7 @@ siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSE
           scriptlevel: 0
         }));
       }
-      this.Push(SINumberParser(num2, options, this.stack.env).mml());
+      this.Push(TEX.Parse(SINumberParser(num2, options).join(options['output-product'])).mml());
       this.Push(MML.mspace().With({
         width: MML.LENGTH.MEDIUMMATHSPACE,
         mathsize: MML.SIZE.NORMAL,
@@ -2367,13 +2358,7 @@ siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSE
     num: function (name) {
       var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
       var num = this.GetArgument(name);
-      var preformatted = SINumberParser(num, options, this.stack.env).preformatted.map(function (f) {
-        if (f.denom === null)
-          return f.num;
-        if (options['quotient-mode'] == 'symbol')
-          return f.num + options['output-quotient'] + f.denom;
-        return options['fraction-function'] + '{' + f.num + '}{' + f.denom + '}';
-      }).join(options['output-product']);
+      var preformatted = SINumberParser(num, options).join(options['output-product']);
       this.Push(TEX.Parse(preformatted).mml());
     },
     ang: function (name) {
@@ -2407,18 +2392,27 @@ siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSE
     numlist: function (name) {
       var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
       var num = this.GetArgument(name);
-      this.Push(SINumberListParser(num, options, this.stack.env).mml());
+      var preformatted = SINumberListParser(num, options).map(function (num) {
+        return num.join(options['output-product']);
+      });
+      var joined;
+      if (preformatted.length > 2) {
+        joined = preformatted.slice(0, -1).join('\\text{' + options['list-separator'] + '}');
+        joined += '\\text{' + options['list-final-separator'] + '}' + preformatted[preformatted.length - 1];
+      } else {
+        joined = preformatted.join('\\text{' + options['list-pair-separator'] + '}');
+      }
+      this.Push(TEX.Parse(joined).mml());
     },
     numrange: function (name) {
       var options = SIunitxOptions.ParseOptions(this.GetBrackets(name, ''));
       var num1 = this.GetArgument(name);
       var num2 = this.GetArgument(name);
-      this.Push(SINumberParser(num1, options, this.stack.env).mml());
-      this.Push(options['range-phrase']);
-      this.Push(SINumberParser(num2, options, this.stack.env).mml());
+      var preformatted = SINumberParser(num1, options).join(options['output-product']) + '\\text{' + options['range-phrase'] + '}' + SINumberParser(num2, options).join(options['output-product']);
+      this.Push(TEX.Parse(preformatted).mml());
     }
   };
-  // ------ regsiter the commands with MathJax
+  // ------ register the commands with MathJax
   TEX.Definitions.Add({
     macros: {
       //
@@ -2449,7 +2443,6 @@ siunitx_commands = function (SIunitxOptions, UNITDEFS, SIUnitParser, NUMBERPARSE
   MathJax.Hub.Startup.signal.Post('TeX siunitx Ready');
   return SIunitxCommands;
 }(siunitx_options_definition, unit_definitions, unit_parser, number_parser);
-}());
   // amd-replace-stop
 });
 
