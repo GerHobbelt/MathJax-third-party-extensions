@@ -16530,7 +16530,7 @@ MathJax.Hub.Register.StartupHook("SVG Xy-pic Require",function () {
   BBOX.PPATH = BBOX.Subclass({
     type: "path", removeable: false,
     Init: function (h,d,w,p,t,color,def) {
-      if (def == null) {def = {}}; def.fill = "none";
+      if (def == null) {def = {}} def.fill = "none";
       if (color) {def.stroke = color}
       def["stroke-width"] = t.toFixed(2).replace(/\.?0+$/,"");
       def.d = p;

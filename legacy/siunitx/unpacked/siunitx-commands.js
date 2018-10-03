@@ -92,7 +92,7 @@ define(
           mathsize: MML.SIZE.NORMAL,
           scriptlevel: 0
         });
-      };
+      }
       var that=this;
       preformatted.forEach(function(num,i){
         if(i){
@@ -103,8 +103,8 @@ define(
               that.Push(TEX.Parse(('\\text{'+options['list-final-separator']+'}')).mml());
           } else {
             that.Push(TEX.Parse(('\\text{'+options['list-pair-separator']+'}')).mml());
-          };
-        };
+          }
+        }
         if (preunits) {
           that.Push(preunits.mml());
           that.Push(medspace());

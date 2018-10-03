@@ -38,6 +38,6 @@
         pos.parentElement.insertBefore(requirejsel,before);
     } else {
         MathJax.Hub.Configured();
-    };
+    }
 })();
 

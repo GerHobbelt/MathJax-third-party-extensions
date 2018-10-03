@@ -60,7 +60,7 @@ MathJax.Hub.Register.StartupHook("TeX counters Ready",function () {
            i += step) {
         counterarray[ctrname] = i;
         this.Push(TEX.Parse(code).mml());        
-      };
+      }
     }, // end FORLOOP function def
 
     FORARRAY: function (name) {
@@ -81,7 +81,7 @@ MathJax.Hub.Register.StartupHook("TeX counters Ready",function () {
            i += step) {
         counterarray[ctrname] = i;
         row.push(MML.mtd.apply(MML,[TEX.Parse(code).mml()]));        
-      };
+      }
       forarraydepth--;
       if (forarraydepth==0) {
         this.Push(MML.mtable.apply(MML,table));

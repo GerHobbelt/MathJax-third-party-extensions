@@ -135,18 +135,18 @@ define([],function(){
                         num.frac += '0'.repeat(-n);
                     }
                     break
-            };
-        };
+            }
+        }
         if(
             options['zero-decimal-to-integer']
             && !(num.frac && parseInt(num.frac))
-        ) {num.frac=null;num.sep=null;};
-    };
+        ) {num.frac=null;num.sep=null;}
+    }
     function postprocComplExp(options,num){
         postprocDecimal(options,num.re);
         postprocDecimal(options,num.im,false,true);
         postprocDecimal(options,num.exp,true);
-    };
+    }
 
     function postprocAll(options,nums){
         nums.forEach(function(quot){
@@ -155,7 +155,7 @@ define([],function(){
                 postprocComplExp(options,num);
             })
         });
-    };
+    }
 
 
 
@@ -200,7 +200,7 @@ define([],function(){
             + dm
             + fractional
         );
-    };
+    }
 
     function fmtComplExp(options,num){
         var ob='',cb='';
@@ -250,7 +250,7 @@ define([],function(){
                 );
         }
         return ret;
-    };
+    }
 
 
     function processAll(options,nums){

@@ -27,7 +27,7 @@ MathJax.Extension["TeX/siunitx"] = {
 
 MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
   // amd-replace-start
-;(function() {
+(function() {
 /*************************************************************
  *
  *  MathJax/extensions/TeX/siunitx/keyvalue-option-validation.js

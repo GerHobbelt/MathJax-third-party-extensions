@@ -65,7 +65,7 @@ define(function() {
         pfx: data.length >= 3 ? data[2] : data[1]
       };
     }
-    ;
+    
     return ret;
   })({
     yocto: [-24, 'y'],
