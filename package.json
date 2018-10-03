@@ -2,16 +2,35 @@
   "name": "@gerhobbelt/mathjax-third-party-extensions",
   "version": "1.0.0-2",
   "description": "A list of MathJax extensions provided by third-party contributors",
+  "keywords": [
+    "math",
+    "svg",
+    "mathml",
+    "tex",
+    "latex",
+    "asciimath",
+    "browser",
+    "browser-only"
+  ],
+  "maintainers": [
+    "MathJax Consortium <info@mathjax.org> (http://www.mathjax.org) and others"
+  ],
+  "bugs": {
+    "url": "http://github.com/mathjax/mathjax-third-party-extensions/issues"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mathjax/mathjax-third-party-extensions.git"
+  },
   "scripts": {
-  	"build": "cd node_modules/@gerhobbelt/mathjax-dev/packer && make third-party-extensions",
+    "build": "cd node_modules/@gerhobbelt/mathjax-dev/packer && make third-party-extensions",
     "test": "npm run build && npm run lint && echo 'No tests here!'",
     "lint": "eslint .",
     "fix": "eslint --fix .",
-    "clean": "find ./legacy/ -name package-lock.json -delete  &&  find ./legacy/ -name '*.js' ! -path '*/unpacked/*' -a ! -path '*/node_modules/*'",
+    "clean": "find ./legacy/ -name package-lock.json -delete  &&  find ./legacy/ -name '*.js' ! -path '*/unpacked/*' -a ! -path '*/node_modules/*' && rm -rf ./legacy/siunitx/node_modules/",
     "pub": "npm publish --access public"
   },
-  "author": "MathJax Consortium and others",
-  "license": "MIT",
   "devDependencies": {
     "@gerhobbelt/mathjax-dev": "1.0.1-15",
     "eslint": "5.6.1"
