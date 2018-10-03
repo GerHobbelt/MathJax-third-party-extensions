@@ -1,6 +1,6 @@
 {
   "name": "@gerhobbelt/mathjax-third-party-extensions",
-  "version": "1.0.0-5",
+  "version": "1.0.0-6",
   "description": "A list of MathJax extensions provided by third-party contributors",
   "keywords": [
     "math",
