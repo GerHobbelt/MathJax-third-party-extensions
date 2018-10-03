@@ -21,6 +21,8 @@
  *  limitations under the License.
  */
 
+/* eslint-env amd */
+
 define(['./siunitx-options-definition','./number-parser-peg','./number-preformatter'],function(SIunitxOptions, PARSER, FORMATTER) {
     'use strict';
 
@@ -54,7 +56,7 @@ define(['./siunitx-options-definition','./number-parser-peg','./number-preformat
 
     exports.SINumberListParser = function SINumberListParser(string,options){
         var ret = string.split(';').map(function(str) {
-            var str = preprocess(str);
+            str = preprocess(str);
             var parsed = PARSER.parse(str, options);
             var preformatted = FORMATTER.processAll(options, parsed);
             return preformatted;

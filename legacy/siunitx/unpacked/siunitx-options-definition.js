@@ -21,6 +21,8 @@
  *  limitations under the License.
  */
 
+/* eslint-env amd */
+
 define(['./keyvalue-option-validation'],function(KEYVAL) {
   'use strict';
   
@@ -31,7 +33,7 @@ define(['./keyvalue-option-validation'],function(KEYVAL) {
   var Literal = KEYVAL.Literal;
   var Macro = KEYVAL.Macro;
   var Integer = KEYVAL.Integer;
-  var Math = KEYVAL.Math;
+  var MJMath = KEYVAL.Math;
   var TeXParsedLiteral = KEYVAL.TeXParsedLiteral;
 
 
@@ -117,7 +119,7 @@ define(['./keyvalue-option-validation'],function(KEYVAL) {
     'copy-complex-root': Switch(false),
     'copy-decimal-marker': Switch(false),
     'exponent-base': Literal('10'),				// done
-    'exponent-product': Math('\\times'),		// done
+    'exponent-product': MJMath('\\times'),		// done
     'group-digits': Choice('true', 'false', 'decimal', 'integer'),  // done
     'group-minimum-digits': Integer(5),         // done
     'group-separator': Literal('\\,'),          // done
@@ -136,7 +138,7 @@ define(['./keyvalue-option-validation'],function(KEYVAL) {
     'fraction-function': Macro('\\frac'),
     'input-product': Literal('x'),              // done
     'input-quotient': Literal('/'),             // done
-    'output-product': Math('\\times'),          // done
+    'output-product': MJMath('\\times'),          // done
     'output-quotient': Literal('/'),            // done
     'quotient-mode': Choice('symbol', 'fraction'),
 

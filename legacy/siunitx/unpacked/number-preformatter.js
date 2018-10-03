@@ -21,9 +21,12 @@
  *  limitations under the License.
  */
 
+/* eslint-env amd */
 
 define([],function(){
     'use strict';
+
+    var TEX = MathJax.InputJax.TeX;
 
     // this is mainly here for documentation purposes
     var default_options = {
@@ -230,7 +233,7 @@ define([],function(){
         } else if(im) ret += im;
         if(num.sign){
             // num.sign only for lone signs without any number
-            if(num.re || num.im) error('sign but also re or im given');  // should never happen
+            if(num.re || num.im) TEX.Error('sign but also re or im given');  // should never happen
             ret += ' ' + num.sign;
         }
 

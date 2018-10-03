@@ -21,6 +21,8 @@
  *  limitations under the License.
  */
 
+/* eslint-env amd */
+
 define(function() {
   var exports = {};
 
@@ -122,7 +124,7 @@ define(function() {
     },
     Get: function (obj, name) {
       // TODO: find out how to clone Jax-MML, such that we can store the parsed MML instead
-      val = arguments.callee.SUPER.Get.call(this, obj, name);
+      var val = arguments.callee.SUPER.Get.call(this, obj, name);
       return TEX.Parse('\\text{' + val + '}').mml();
     }
   });
@@ -228,8 +230,8 @@ define(function() {
 
         var count = 0;
         var pos = -1;
-        while (true) {
-          while (true) {
+        for (;;)  {
+          for (;;) {
             var start = pos + 1;
             var open = val.indexOf("{", start);
             var close = val.indexOf("}", start);
