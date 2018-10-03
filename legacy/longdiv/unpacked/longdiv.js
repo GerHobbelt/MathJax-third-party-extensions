@@ -51,7 +51,6 @@ MathJax.Extension["TeX/longdiv"] = {
         var jpadl = jstr.length + 1;
 
         var ans = "";
-        var work = "";
         var work = jstr + "& \\hspace{-0.5em} \\enclose{longdiv}{" + istr + "}";
         var pad = "";
 
