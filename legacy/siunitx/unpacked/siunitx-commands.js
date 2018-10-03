@@ -228,7 +228,7 @@ define(
 
   };
 
-  // ------ regsiter the commands with MathJax
+  // ------ register the commands with MathJax
   TEX.Definitions.Add({
     macros: {
       //
