@@ -38,6 +38,7 @@ MathJax.Hub.Register.StartupHook("TeX counters Ready",function () {
   TEXDEF.macros.ForArray = 'FORARRAY';
   var row = [], table = [];
   var forarraydepth = 0;
+  var counterarray = {};   // hash table
 
   TEX.Parse.Augment({
    
